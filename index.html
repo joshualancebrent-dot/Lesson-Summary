@@ -1,340 +1,76 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tara Study - DayBreak</title>
-    <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body {
-            background-color: #f8f9fa;
-            color: #1a202c;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-            overflow-x: hidden;
-        }
-
-        /* Navigation */
-        nav {
-            background: #ffffff;
-            border-bottom: 1px solid #e2e8f0;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #0d1b2a;
-            cursor: pointer;
-        }
-
-        .nav-links {
-            display: flex;
-            list-style: none;
-            gap: 1.5rem;
-            align-items: center;
-            flex-wrap: wrap;
-        }
-
-        .nav-links a {
-            text-decoration: none;
-            color: #4a5568;
-            font-weight: 500;
-            transition: color 0.2s;
-            cursor: pointer;
-        }
-
-        .nav-links a:hover, .nav-links a.active {
-            color: #0d1b2a;
-            font-weight: 700;
-        }
-
-        .btn-login {
-            background: #0d1b2a;
-            color: #ffffff !important;
-            padding: 0.5rem 1.25rem;
-            border-radius: 20px;
-        }
-
-        /* Content Sections Wrapper */
-        .content-container {
-            position: relative;
-            max-width: 1200px;
-            width: 100%;
-            margin: 0 auto;
-            flex: 1;
-            padding: 2rem;
-        }
-
-        .tab-content {
-            display: none;
-            opacity: 0;
-            transform: translateX(100%);
-            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
-            width: 100%;
-        }
-
-        .tab-content.active {
-            display: block;
-            opacity: 1;
-            transform: translateX(0);
-        }
-
-        /* Hero Layout */
-        .hero {
-            display: grid;
-            grid-template-columns: 2fr 1fr;
-            gap: 2rem;
-            align-items: center;
-            margin-bottom: 3rem;
-        }
-
-        .hero-content h1 {
-            font-size: 2.5rem;
-            color: #0d1b2a;
-            margin-bottom: 1rem;
-            line-height: 1.2;
-        }
-
-        .hero-content p {
-            font-size: 1.1rem;
-            color: #718096;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero-buttons {
-            display: flex;
-            gap: 1rem;
-            flex-wrap: wrap;
-        }
-
-        .btn-primary {
-            background: #0d1b2a;
-            color: #fff;
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .btn-secondary {
-            border: 2px solid #0d1b2a;
-            color: #0d1b2a;
-            padding: 0.75rem 1.5rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 600;
-        }
-
-        .hero-card {
-            background: #0d1b2a;
-            color: #fff;
-            padding: 2rem;
-            border-radius: 12px;
-            text-align: center;
-        }
-
-        /* Feature Cards */
-        .features {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-        }
-
-        .card {
-            background: #fff;
-            padding: 1.5rem;
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            border: 1px solid #e2e8f0;
-        }
-
-        .card h3 {
-            margin-bottom: 0.75rem;
-            color: #0d1b2a;
-        }
-
-        .card p {
-            color: #4a5568;
-            font-size: 0.95rem;
-            line-height: 1.5;
-        }
-
-        /* Sub-page Specific Styles */
-        .page-header {
-            margin-bottom: 2rem;
-            border-bottom: 2px solid #e2e8f0;
-            padding-bottom: 1rem;
-        }
-
-        .page-header h1 {
-            color: #0d1b2a;
-            font-size: 2.2rem;
-        }
-
-        /* Footer */
-        footer {
-            background: #0d1b2a;
-            color: #a0aec0;
-            text-align: center;
-            padding: 2rem;
-            margin-top: auto;
-        }
-
-        @media (max-width: 768px) {
-            .hero {
-                grid-template-columns: 1fr;
-            }
-
-            nav {
-                flex-direction: column;
-                align-items: flex-start;
-            }
-
-            .nav-links {
-                width: 100%;
-                justify-content: space-between;
-            }
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DayBreak</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-    <nav>
-        <div class="logo" onclick="switchTab('home-tab')">DayBreak</div>
-        <ul class="nav-links">
-            <li><a id="nav-home-tab" class="active" onclick="switchTab('home-tab')">Home</a></li>
-            <li><a id="nav-devotional-tab" onclick="switchTab('devotional-tab')">Daily Devotional</a></li>
-            <li><a id="nav-sabbath-tab" onclick="switchTab('sabbath-tab')">Sabbath School</a></li>
-            <li><a id="nav-resources-tab" onclick="switchTab('resources-tab')">Resources</a></li>
-            <li><a href="#" class="btn-login">Login</a></li>
-        </ul>
+  <!-- Fixed Header Navigation -->
+  <header class="navbar">
+    <div class="logo">DayBreak</div>
+    <nav class="nav-links">
+      <button class="nav-tab active" data-target="home">Home</button>
+      <button class="nav-tab" data-target="devotional">Daily Devotional</button>
+      <button class="nav-tab" data-target="sabbath">Sabbath School</button>
+      <button class="nav-tab" data-target="resources">Resources</button>
     </nav>
+    <button class="btn-login">Login</button>
+  </header>
 
-    <div class="content-container">
+  <!-- Content Container -->
+  <main class="content-container">
+    
+    <!-- Home Tab -->
+    <section id="home" class="tab-panel active">
+      <div class="hero-section">
+        <h1>Deepen Your Faith. Find Your Peace.</h1>
+        <p>Daily guidance, scripture, and lessons for your spiritual journey.</p>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="switchTab('devotional')">Read Today's Lesson</button>
+          <button class="btn-secondary" onclick="switchTab('devotional')">Start the Devotional</button>
+        </div>
+      </div>
+    </section>
 
-        <!-- HOME SECTION -->
-        <section id="home-tab" class="tab-content active">
-            <div class="hero">
-                <div class="hero-content">
-                    <p style="text-transform: uppercase; letter-spacing: 1px; font-weight: 600; color: #4a5568; margin-bottom: 0.5rem;">Explore Today's Scripture</p>
-                    <h1>Deepen Your Faith.<br>Find Your Peace.</h1>
-                    <p>Daily guidance, scripture, and lessons for your spiritual journey.</p>
-                    <div class="hero-buttons">
-                        <a onclick="switchTab('sabbath-tab')" class="btn-primary" style="cursor:pointer;">READ TODAY'S LESSON</a>
-                        <a onclick="switchTab('devotional-tab')" class="btn-secondary" style="cursor:pointer;">START THE DEVOTIONAL</a>
-                    </div>
-                </div>
-                <div class="hero-card">
-                    <h2>DayBreak</h2>
-                    <p style="margin: 1rem 0; color: #e2e8f0;">Deepen Your Faith. Find Your Peace.</p>
-                    <a onclick="switchTab('sabbath-tab')" style="color: #fff; font-size: 0.9rem; cursor:pointer;">READ TODAY'S LESSON &rarr;</a>
-                </div>
-            </div>
+    <!-- Devotional Tab -->
+    <section id="devotional" class="tab-panel">
+      <h2>Daily Devotional</h2>
+      <p class="subtitle">Scripture, reflections, and prayers for your morning quiet time.</p>
+      <div class="card">
+        <h3>Today's Reflection</h3>
+        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit...</p>
+      </div>
+    </section>
 
-            <div class="features">
-                <div class="card">
-                    <h3>Today's Focus</h3>
-                    <p><strong>Daily Devotional:</strong> Access daily spiritual reflections and scriptures tailored for your personal growth.</p>
-                    <br>
-                    <p><strong>Sabbath School Lesson:</strong> Dive deeper into structured weekly study topics with interactive resources.</p>
-                </div>
-                <div class="card">
-                    <h3>Join the Conversation</h3>
-                    <p>Connect with community members, share thoughts on daily readings, and participate in discussion forums.</p>
-                </div>
-                <div class="card">
-                    <h3>Upcoming Lessons</h3>
-                    <p>Check the schedule for upcoming study guides and daily devotionals for the month.</p>
-                </div>
-            </div>
-        </section>
+    <!-- Sabbath School Tab -->
+    <section id="sabbath" class="tab-panel">
+      <h2>Sabbath School Lessons</h2>
+      <p class="subtitle">Structured Bible studies and discussion materials for this quarter.</p>
+      <div class="card">
+        <h3>Current Quarter Study</h3>
+        <p>Explore in-depth weekly chapters designed to generate discussion.</p>
+      </div>
+    </section>
 
-        <!-- DAILY DEVOTIONAL SECTION -->
-        <section id="devotional-tab" class="tab-content">
-            <div class="page-header">
-                <h1>Daily Devotional</h1>
-                <p>Scripture, reflections, and prayers for your morning quiet time.</p>
-            </div>
-            <div class="card">
-                <h3>Today's Reflection</h3>
-                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-            </div>
-        </section>
+    <!-- Resources Tab -->
+    <section id="resources" class="tab-panel">
+      <h2>Resources</h2>
+      <p class="subtitle">Downloadable guides, reading plans, and extra study materials.</p>
+      <div class="card">
+        <h3>Study Guides & PDF Downloads</h3>
+        <p>Access supplementary tools and printable worksheets.</p>
+      </div>
+    </section>
 
-        <!-- SABBATH SCHOOL SECTION -->
-        <section id="sabbath-tab" class="tab-content">
-            <div class="page-header">
-                <h1>Sabbath School Lessons</h1>
-                <p>Structured Bible studies and discussion materials for this quarter.</p>
-            </div>
-            <div class="card">
-                <h3>Current Quarter Study</h3>
-                <p>Explore in-depth weekly chapters designed to build understanding and encourage group discussions.</p>
-            </div>
-        </section>
+  </main>
 
-        <!-- RESOURCES SECTION -->
-        <section id="resources-tab" class="tab-content">
-            <div class="page-header">
-                <h1>Resources</h1>
-                <p>Downloadable guides, reading plans, and extra study materials.</p>
-            </div>
-            <div class="card">
-                <h3>Study Guides & PDF Downloads</h3>
-                <p>Access supplementary tools, reference guides, and printable worksheets to enhance your daily readings.</p>
-            </div>
-        </section>
+  <footer>
+    <p>&copy; 2026 Daybreak Lessons. All rights reserved.</p>
+  </footer>
 
-    </div>
-
-    <footer>
-        <p>&copy; 2026 DayBreak Lessons. All rights reserved.</p>
-    </footer>
-
-    <script>
-        function switchTab(tabId) {
-            const tabs = document.querySelectorAll('.tab-content');
-            const navLinks = document.querySelectorAll('.nav-links a');
-
-            // Deactivate active link styling
-            navLinks.forEach(link => link.classList.remove('active'));
-
-            // Set clicked link as active
-            const activeNav = document.getElementById('nav-' + tabId);
-            if (activeNav) activeNav.classList.add('active');
-
-            tabs.forEach(tab => {
-                if (tab.id === tabId) {
-                    // Reset position off-screen right
-                    tab.style.display = 'block';
-                    setTimeout(() => {
-                        tab.classList.add('active');
-                    }, 10);
-                } else {
-                    tab.classList.remove('active');
-                    setTimeout(() => {
-                        tab.style.display = 'none';
-                    }, 500); // Matches CSS transition duration
-                }
-            });
-        }
-    </script>
-
+  <script src="script.js"></script>
 </body>
 </html>
