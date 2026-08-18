@@ -132,5 +132,26 @@
   </footer>
 
   <script src="script.js"></script>
+  <!-- Login Modal Overlay -->
+<div id="login-modal" class="modal-overlay">
+  <div class="modal-card">
+    <button class="modal-close" id="close-login">&times;</button>
+    <h2>Welcome Back</h2>
+    <p class="subtitle">Sign in to access your saved lessons and notes.</p>
+    
+    <form id="login-form">
+      <div class="form-group">
+        <label for="email">Email Address</label>
+        <input type="email" id="email" required placeholder="you@example.com">
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" id="password" required placeholder="••••••••">
+      </div>
+      <button type="submit" class="btn-primary btn-full">Sign In</button>
+    </form>
+  </div>
+</div>
+
 </body>
 </html>
