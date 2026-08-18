@@ -80,38 +80,68 @@ document.addEventListener('DOMContentLoaded', () => {
   const googleBtn = document.getElementById('google-login');
   const facebookBtn = document.getElementById('facebook-login');
 
-  // Toggle Modal Visibility
-  loginBtn.addEventListener('click', () => {
-    if (loginBtn.textContent === 'Logout') {
+  // Listen to Authentication State (Updates UI automatically when user signs in/out)
+  window.onAuthStateChanged(window.auth, (user) => {
+    if (user) {
+      // User is signed in
+      loginBtn.textContent = 'Logout';
+      modal.classList.remove('active');
+      console.log('User logged in:', user.email || user.displayName);
+    } else {
+      // User is signed out
       loginBtn.textContent = 'Login';
-      alert('You have been logged out.');
-      return;
     }
-    modal.classList.add('active');
   });
 
+  // Toggle Modal / Handle Logout
+  loginBtn.addEventListener('click', () => {
+    if (window.auth.currentUser) {
+      // Perform actual logout
+      window.signOut(window.auth).then(() => {
+        alert('You have logged out.');
+      });
+    } else {
+      modal.classList.add('active');
+    }
+  });
+
+  // Modal Close Handlers
   closeBtn.addEventListener('click', () => modal.classList.remove('active'));
   modal.addEventListener('click', (e) => {
     if (e.target === modal) modal.classList.remove('active');
   });
 
-  // Helper function to handle successful login
-  function completeLogin(providerName) {
-    loginBtn.textContent = 'Logout';
-    modal.classList.remove('active');
-    loginForm.reset();
-    alert(`Successfully signed in with ${providerName}`);
-  }
-
-  // Handle Standard Email Login
-  loginForm.addEventListener('submit', (e) => {
+  // Real Email/Password Login
+  loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const email = document.getElementById('email').value;
-    completeLogin(email);
+    const password = document.getElementById('password').value;
+
+    try {
+      await window.signInWithEmailAndPassword(window.auth, email, password);
+      loginForm.reset();
+    } catch (error) {
+      alert(`Login Failed: ${error.message}`);
+    }
   });
 
-  // Social Login Handlers
-  googleBtn.addEventListener('click', () => completeLogin('Google'));
-  facebookBtn.addEventListener('click', () => completeLogin('Facebook'));
-});
+  // Real Google Sign-In (Popup)
+  googleBtn.addEventListener('click', async () => {
+    const provider = new window.GoogleAuthProvider();
+    try {
+      await window.signInWithPopup(window.auth, provider);
+    } catch (error) {
+      alert(`Google Login Failed: ${error.message}`);
+    }
+  });
 
+  // Real Facebook Sign-In (Popup)
+  facebookBtn.addEventListener('click', async () => {
+    const provider = new window.FacebookAuthProvider();
+    try {
+      await window.signInWithPopup(window.auth, provider);
+    } catch (error) {
+      alert(`Facebook Login Failed: ${error.message}`);
+    }
+  });
+});
