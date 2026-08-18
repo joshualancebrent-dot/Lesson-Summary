@@ -16,6 +16,7 @@ body {
 
 /* Fixed Navigation Bar */
 .navbar {
+  background-color: #0f172a
   background: #ffffff;
   border-bottom: 1px solid #e2e8f0;
   padding: 1rem 2rem;
