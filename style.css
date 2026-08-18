@@ -332,3 +332,25 @@ footer {
 #disqus_thread {
   margin-top: 2rem;
 }
+/* Floating Box Container */
+.floating-box {
+  background-color: #ffffff;
+  padding: 1.5rem 2rem;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  
+  /* Soft shadow that creates the initial elevated/floating look */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  
+  /* Smooth animation transition */
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  
+  max-width: 500px; /* Adjust width as needed */
+  margin: 1rem 0;
+}
+
+/* Interactive Hover Lift Effect */
+.floating-box:hover {
+  transform: translateY(-5px); /* Lifts the box up by 5px */
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); /* Deepens shadow on hover */
+}
