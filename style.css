@@ -81,7 +81,7 @@ nav {
 
 /* Absolute Positioning Stacks Tabs Perfectly */
 .tab-content {
-    position: absolute;
+    position: relative;
     top: 2rem;
     left: 2rem;
     right: 2rem;
