@@ -18,6 +18,7 @@
             display: flex;
             flex-direction: column;
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         /* Navigation */
@@ -30,12 +31,16 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 1rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .logo {
             font-size: 1.5rem;
             font-weight: 700;
             color: #0d1b2a;
+            cursor: pointer;
         }
 
         .nav-links {
@@ -51,10 +56,12 @@
             color: #4a5568;
             font-weight: 500;
             transition: color 0.2s;
+            cursor: pointer;
         }
 
-        .nav-links a:hover {
+        .nav-links a:hover, .nav-links a.active {
             color: #0d1b2a;
+            font-weight: 700;
         }
 
         .btn-login {
@@ -64,15 +71,37 @@
             border-radius: 20px;
         }
 
-        /* Hero Section */
-        .hero {
+        /* Content Sections Wrapper */
+        .content-container {
+            position: relative;
             max-width: 1200px;
-            margin: 2rem auto;
+            width: 100%;
+            margin: 0 auto;
+            flex: 1;
             padding: 2rem;
+        }
+
+        .tab-content {
+            display: none;
+            opacity: 0;
+            transform: translateX(100%);
+            transition: transform 0.5s ease-out, opacity 0.5s ease-out;
+            width: 100%;
+        }
+
+        .tab-content.active {
+            display: block;
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        /* Hero Layout */
+        .hero {
             display: grid;
             grid-template-columns: 2fr 1fr;
             gap: 2rem;
             align-items: center;
+            margin-bottom: 3rem;
         }
 
         .hero-content h1 {
@@ -120,11 +149,8 @@
             text-align: center;
         }
 
-        /* Features Section */
+        /* Feature Cards */
         .features {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 2rem;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 2rem;
@@ -149,6 +175,18 @@
             line-height: 1.5;
         }
 
+        /* Sub-page Specific Styles */
+        .page-header {
+            margin-bottom: 2rem;
+            border-bottom: 2px solid #e2e8f0;
+            padding-bottom: 1rem;
+        }
+
+        .page-header h1 {
+            color: #0d1b2a;
+            font-size: 2.2rem;
+        }
+
         /* Footer */
         footer {
             background: #0d1b2a;
@@ -158,14 +196,9 @@
             margin-top: auto;
         }
 
-        /* Mobile Responsive Adjustments */
         @media (max-width: 768px) {
             .hero {
                 grid-template-columns: 1fr;
-            }
-
-            .hero-content h1 {
-                font-size: 2rem;
             }
 
             nav {
@@ -183,63 +216,125 @@
 <body>
 
     <nav>
-        <div class="logo">DayBreak</div>
+        <div class="logo" onclick="switchTab('home-tab')">DayBreak</div>
         <ul class="nav-links">
-            <li><a href="#">Home</a></li>
-            <li><a href="#">Daily Devotional</a></li>
-            <li><a href="#">Sabbath School</a></li>
-            <li><a href="#">Resources</a></li>
+            <li><a id="nav-home-tab" class="active" onclick="switchTab('home-tab')">Home</a></li>
+            <li><a id="nav-devotional-tab" onclick="switchTab('devotional-tab')">Daily Devotional</a></li>
+            <li><a id="nav-sabbath-tab" onclick="switchTab('sabbath-tab')">Sabbath School</a></li>
+            <li><a id="nav-resources-tab" onclick="switchTab('resources-tab')">Resources</a></li>
             <li><a href="#" class="btn-login">Login</a></li>
         </ul>
     </nav>
 
-    <main class="hero">
-        <div class="hero-content">
-            <p style="text-transform: uppercase; letter-spacing: 1px; font-weight: 600; color: #4a5568; margin-bottom: 0.5rem;">Explore Today's Scripture</p>
-            <h1>Deepen Your Faith.<br>Find Your Peace.</h1>
-            <p>Daily guidance, scripture, and lessons for your spiritual journey.</p>
-            <div class="hero-buttons">
-                <a href="#" class="btn-primary">READ TODAY'S LESSON</a>
-                <a href="#" class="btn-secondary">START THE DEVOTIONAL</a>
-            </div>
-        </div>
-        <div class="hero-card">
-            <h2>DayBreak</h2>
-            <p style="margin: 1rem 0; color: #e2e8f0;">Deepen Your Faith. Find Your Peace.</p>
-            <a href="#" style="color: #fff; font-size: 0.9rem;">READ TODAY'S LESSON &rarr;</a>
-        </div>
-    </main>
+    <div class="content-container">
 
-    <section class="features">
-        <div class="card">
-            <h3>Today's Focus</h3>
-            <p><strong>Daily Devotional:</strong> Access daily spiritual reflections and scriptures tailored for your personal growth.</p>
-            <br>
-            <p><strong>Sabbath School Lesson:</strong> Dive deeper into structured weekly study topics with interactive resources.</p>
-        </div>
-        <div class="card">
-            <h3>Join the Conversation</h3>
-            <p>Connect with community members, share thoughts on daily readings, and participate in discussion forums.</p>
-        </div>
-        <div class="card">
-            <h3>Upcoming Lessons</h3>
-            <p>Check the schedule for upcoming study guides and daily devotionals for the month.</p>
-        </div>
-    </section>
+        <!-- HOME SECTION -->
+        <section id="home-tab" class="tab-content active">
+            <div class="hero">
+                <div class="hero-content">
+                    <p style="text-transform: uppercase; letter-spacing: 1px; font-weight: 600; color: #4a5568; margin-bottom: 0.5rem;">Explore Today's Scripture</p>
+                    <h1>Deepen Your Faith.<br>Find Your Peace.</h1>
+                    <p>Daily guidance, scripture, and lessons for your spiritual journey.</p>
+                    <div class="hero-buttons">
+                        <a onclick="switchTab('sabbath-tab')" class="btn-primary" style="cursor:pointer;">READ TODAY'S LESSON</a>
+                        <a onclick="switchTab('devotional-tab')" class="btn-secondary" style="cursor:pointer;">START THE DEVOTIONAL</a>
+                    </div>
+                </div>
+                <div class="hero-card">
+                    <h2>DayBreak</h2>
+                    <p style="margin: 1rem 0; color: #e2e8f0;">Deepen Your Faith. Find Your Peace.</p>
+                    <a onclick="switchTab('sabbath-tab')" style="color: #fff; font-size: 0.9rem; cursor:pointer;">READ TODAY'S LESSON &rarr;</a>
+                </div>
+            </div>
+
+            <div class="features">
+                <div class="card">
+                    <h3>Today's Focus</h3>
+                    <p><strong>Daily Devotional:</strong> Access daily spiritual reflections and scriptures tailored for your personal growth.</p>
+                    <br>
+                    <p><strong>Sabbath School Lesson:</strong> Dive deeper into structured weekly study topics with interactive resources.</p>
+                </div>
+                <div class="card">
+                    <h3>Join the Conversation</h3>
+                    <p>Connect with community members, share thoughts on daily readings, and participate in discussion forums.</p>
+                </div>
+                <div class="card">
+                    <h3>Upcoming Lessons</h3>
+                    <p>Check the schedule for upcoming study guides and daily devotionals for the month.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- DAILY DEVOTIONAL SECTION -->
+        <section id="devotional-tab" class="tab-content">
+            <div class="page-header">
+                <h1>Daily Devotional</h1>
+                <p>Scripture, reflections, and prayers for your morning quiet time.</p>
+            </div>
+            <div class="card">
+                <h3>Today's Reflection</h3>
+                <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+            </div>
+        </section>
+
+        <!-- SABBATH SCHOOL SECTION -->
+        <section id="sabbath-tab" class="tab-content">
+            <div class="page-header">
+                <h1>Sabbath School Lessons</h1>
+                <p>Structured Bible studies and discussion materials for this quarter.</p>
+            </div>
+            <div class="card">
+                <h3>Current Quarter Study</h3>
+                <p>Explore in-depth weekly chapters designed to build understanding and encourage group discussions.</p>
+            </div>
+        </section>
+
+        <!-- RESOURCES SECTION -->
+        <section id="resources-tab" class="tab-content">
+            <div class="page-header">
+                <h1>Resources</h1>
+                <p>Downloadable guides, reading plans, and extra study materials.</p>
+            </div>
+            <div class="card">
+                <h3>Study Guides & PDF Downloads</h3>
+                <p>Access supplementary tools, reference guides, and printable worksheets to enhance your daily readings.</p>
+            </div>
+        </section>
+
+    </div>
 
     <footer>
         <p>&copy; 2026 DayBreak Lessons. All rights reserved.</p>
     </footer>
 
-</body>
-</html>
-        </section>
-
-    </main>
-
     <script>
-        /* JavaScript for the swipe/slide animations will go here */
+        function switchTab(tabId) {
+            const tabs = document.querySelectorAll('.tab-content');
+            const navLinks = document.querySelectorAll('.nav-links a');
+
+            // Deactivate active link styling
+            navLinks.forEach(link => link.classList.remove('active'));
+
+            // Set clicked link as active
+            const activeNav = document.getElementById('nav-' + tabId);
+            if (activeNav) activeNav.classList.add('active');
+
+            tabs.forEach(tab => {
+                if (tab.id === tabId) {
+                    // Reset position off-screen right
+                    tab.style.display = 'block';
+                    setTimeout(() => {
+                        tab.classList.add('active');
+                    }, 10);
+                } else {
+                    tab.classList.remove('active');
+                    setTimeout(() => {
+                        tab.style.display = 'none';
+                    }, 500); // Matches CSS transition duration
+                }
+            });
+        }
     </script>
+
 </body>
 </html>
-
