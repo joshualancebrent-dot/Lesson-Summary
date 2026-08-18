@@ -50,35 +50,63 @@
       <h2>Sabbath School Lessons</h2>
       <p class="subtitle">Structured Bible studies and discussion materials for this quarter.</p>
       <div class="card">
-        <ul class="sabbath-school-list">
-    <li>
-        <a href="#">The Power of Christ's Resurrection</a>
-        <br>
-        <em>1 Corinthians 15:14-17</em>
-    </li>
-    <li>
-        <a href="#">Love-driven Ministry</a>
-        <br>
-        <em>2 Corinthians 2:4</em>
-    </li>
-    <li>
-        <a href="#">Authentic Christian Ministry</a>
-        <br>
-        <em>2 Corinthians 4:8-10</em>
-    </li>
-    <li>
-        <a href="#">Stewardship and Mission</a>
-        <br>
-        <em>2 Corinthians 8:9</em>
-    </li>
-    <li>
-        <a href="#">Dealing With False Teachers</a>
-        <br>
-        <em>2 Corinthians 10:4</em>
-    </li>
-</ul>
+    <h3>Sabbath School Lessons</h3>
+    <p>Structured Bible studies and discussion materials for this quarter.</p>
+    
+    <!-- Clickable Lesson Titles -->
+    <ul class="sabbath-school-list">
+        <li>
+            <a href="material/resurrection.html">The Power of Christ's Resurrection</a>
+            <br>
+            <em>1 Corinthians 15:14-17</em>
+        </li>
+        <li>
+            <a href="material/love-driven-ministry.html">Love-driven Ministry</a>
+            <br>
+            <em>2 Corinthians 2:4</em>
+        </li>
+        <li>
+            <a href="material/authentic-ministry.html">Authentic Christian Ministry</a>
+            <br>
+            <em>2 Corinthians 4:8-10</em>
+        </li>
+        <li>
+            <a href="material/stewardship.html">Stewardship and Mission</a>
+            <br>
+            <em>2 Corinthians 8:9</em>
+        </li>
+        <li>
+            <a href="material/false-teachers.html">Dealing With False Teachers</a>
+            <br>
+            <em>2 Corinthians 10:4</em>
+        </li>
+    </ul>
 
-      </div>
+    <!-- Image, Explanation, & Download Section -->
+    <div class="lesson-material" style="margin-top: 20px;">
+        <img src="material/lesson-image.jpg" alt="Lesson Visual" style="max-width: 100%; height: auto; border-radius: 8px;">
+        
+        <p class="image-explanation" style="margin-top: 10px;">
+            Add your detailed explanation about the image and lesson context right here.
+        </p>
+
+        <a href="material/lesson-image.jpg" download class="btn-primary" style="display: inline-block; margin-top: 10px;">
+            Download Image
+        </a>
+    </div>
+
+    <!-- Disqus Comments Section -->
+    <div id="disqus_thread" style="margin-top: 30px;"></div>
+    <script>
+        (function() { 
+        var d = document, s = d.createElement('script');
+        s.src = 'https://YOUR_DISQUS_SHORTNAME.disqus.com/embed.js';
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+        })();
+    </script>
+</div>
+
     </section>
 
     <!-- Resources Tab -->
