@@ -1,39 +1,217 @@
-/* General page styling */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
 body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background-color: #f4f7f6;
-  color: #333333;
+    background-color: #f8f9fa;
+    color: #1a202c;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    overflow-x: hidden;
+    /* Extra padding at top so content isn't hidden under the fixed nav */
+    padding-top: 80px; 
 }
 
-/* Header & Navigation bar - Deep Blue Theme */
-header {
-  background-color: #0b2545;
-  color: #ffffff;
-  padding: 1rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+/* Fixed Navigation Bar */
+nav {
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 1rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1rem;
+    position: fixed; /* Holds header in place during transitions */
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
 }
 
-header h1 {
-  margin: 0;
-  font-size: 1.5rem;
+.logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0d1b2a;
+    cursor: pointer;
 }
 
-nav a {
-  color: #ffffff;
-  text-decoration: none;
-  margin-left: 1.5rem;
-  font-weight: bold;
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
 }
 
-nav a:hover {
-  color: #8da9c4;
+.nav-links a {
+    text-decoration: none;
+    color: #4a5568;
+    font-weight: 500;
+    transition: color 0.2s;
+    cursor: pointer;
 }
 
-/* Panoramic Slide Container */
-#panoramic-container {
+.nav-links a:hover, .nav-links a.active {
+    color: #0d1b2a;
+    font-weight: 700;
+}
+
+.btn-login {
+    background: #0d1b2a;
+    color: #ffffff !important;
+    padding: 0.5rem 1.25rem;
+    border-radius: 20px;
+}
+
+/* Content Container & Animations */
+.content-container {
+    position: relative;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    flex: 1;
+    padding: 2rem;
+}
+
+.tab-content {
+    display: none;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+    width: 100%;
+}
+
+.tab-content.active {
+    display: block;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* Hero Section Layout */
+.hero {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    color: #0d1b2a;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.hero-content p {
+    font-size: 1.1rem;
+    color: #718096;
+    margin-bottom: 1.5rem;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-primary {
+    background: #0d1b2a;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.btn-secondary {
+    border: 2px solid #0d1b2a;
+    color: #0d1b2a;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.hero-card {
+    background: #0d1b2a;
+    color: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+}
+
+/* Cards & Layout */
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.card h3 {
+    margin-bottom: 0.75rem;
+    color: #0d1b2a;
+}
+
+.card p {
+    color: #4a5568;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.page-header {
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 1rem;
+}
+
+.page-header h1 {
+    color: #0d1b2a;
+    font-size: 2.2rem;
+}
+
+/* Footer */
+footer {
+    background: #0d1b2a;
+    color: #a0aec0;
+    text-align: center;
+    padding: 2rem;
+    margin-top: auto;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    body {
+        padding-top: 140px; /* Expands top gap for stacked mobile nav */
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+    }
+
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
   width: 100%;
   overflow-x: auto;
   white-space: nowrap;
