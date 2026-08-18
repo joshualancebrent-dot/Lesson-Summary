@@ -304,3 +304,21 @@ footer {
   color: #718096;
   font-style: italic;
 }
+.lesson-material {
+  margin-top: 2rem;
+}
+
+.image-explanation {
+  margin-top: 0.75rem;
+  color: #4a5568;
+}
+
+.btn-download {
+  display: inline-block;
+  margin-top: 1rem;
+  text-decoration: none;
+}
+
+#disqus_thread {
+  margin-top: 2rem;
+}
