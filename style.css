@@ -209,8 +209,9 @@ footer {
 
 .lesson-img {
   width: 100%;
-  max-height: 400px;
-  object-fit: cover;
+  height: auto;           /* Allows full height without cropping */
+  max-height: none;       /* Removes the 400px height cap */
+  object-fit: contain;    /* Ensures full graphic fits inside container */
   border-radius: 8px;
 }
 
