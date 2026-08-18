@@ -1,0 +1,62 @@
+/* General page styling */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background-color: #f4f7f6;
+  color: #333333;
+}
+
+/* Header & Navigation bar - Deep Blue Theme */
+header {
+  background-color: #0b2545;
+  color: #ffffff;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+header h1 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+nav a {
+  color: #ffffff;
+  text-decoration: none;
+  margin-left: 1.5rem;
+  font-weight: bold;
+}
+
+nav a:hover {
+  color: #8da9c4;
+}
+
+/* Panoramic Slide Container */
+#panoramic-container {
+  width: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding: 2rem 0;
+  background-color: #eef4f8;
+}
+
+/* Main Content Sections */
+section {
+  display: inline-block;
+  width: 80%;
+  max-width: 800px;
+  margin: 0 1rem;
+  padding: 2rem;
+  background-color: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  vertical-align: top;
+  white-space: normal;
+}
+
+section h2 {
+  color: #134074;
+  border-bottom: 2px solid #8da9c4;
+  padding-bottom: 0.5rem;
+}
