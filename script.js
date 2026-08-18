@@ -34,3 +34,40 @@ document.querySelectorAll('.nav-tab').forEach(button => {
     switchTab(target);
   });
 });
+document.addEventListener('DOMContentLoaded', () => {
+  const loginBtn = document.querySelector('.btn-login');
+  const modal = document.getElementById('login-modal');
+  const closeBtn = document.getElementById('close-login');
+  const loginForm = document.getElementById('login-form');
+
+  // Open Modal
+  loginBtn.addEventListener('click', () => {
+    if (loginBtn.textContent === 'Logout') {
+      // Handle Logout State
+      loginBtn.textContent = 'Login';
+      alert('You have been logged out.');
+      return;
+    }
+    modal.classList.add('active');
+  });
+
+  // Close Modal
+  closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+  
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.classList.remove('active');
+  });
+
+  // Handle Form Submission
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+
+    // Toggle to Logged In state UI
+    loginBtn.textContent = 'Logout';
+    modal.classList.remove('active');
+    loginForm.reset();
+
+    alert(`Successfully signed in as ${email}`);
+  });
+});
