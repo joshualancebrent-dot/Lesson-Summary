@@ -249,3 +249,58 @@ footer {
 .media-actions a {
   text-decoration: none;
 }
+/* Sabbath School Floating Cards Container */
+.sabbath-school-list {
+  list-style: none; /* Removes standard bullet points */
+  padding: 0;
+  margin: 1.5rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem; /* Spacing between floating cards */
+}
+
+/* Floating Card Item */
+.lesson-card-item {
+  background: #ffffff;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Soft ambient shadow */
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+  overflow: hidden;
+}
+
+/* Hover Effect: Lifts card up to create a floating sensation */
+.lesson-card-item:hover {
+  transform: translateY(-4px); /* Moves up smoothly */
+  box-shadow: 0 12px 24px rgba(13, 43, 58, 0.12); /* Richer floating shadow */
+  border-color: #0d2b3a;
+}
+
+/* Make the entire card area clickable */
+.lesson-card-link {
+  display: flex;
+  flex-direction: column;
+  padding: 1.25rem 1.5rem;
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Lesson Title Styling */
+.lesson-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #0d2b3a;
+  margin-bottom: 0.3rem;
+  transition: color 0.2s ease;
+}
+
+.lesson-card-item:hover .lesson-card-title {
+  color: #1a567a; /* Subtle highlight on hover */
+}
+
+/* Scripture Reference Subtext */
+.lesson-card-ref {
+  font-size: 0.9rem;
+  color: #718096;
+  font-style: italic;
+}
