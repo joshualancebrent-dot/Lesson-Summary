@@ -71,3 +71,47 @@ document.addEventListener('DOMContentLoaded', () => {
     alert(`Successfully signed in as ${email}`);
   });
 });
+document.addEventListener('DOMContentLoaded', () => {
+  const loginBtn = document.querySelector('.btn-login');
+  const modal = document.getElementById('login-modal');
+  const closeBtn = document.getElementById('close-login');
+  const loginForm = document.getElementById('login-form');
+  
+  const googleBtn = document.getElementById('google-login');
+  const facebookBtn = document.getElementById('facebook-login');
+
+  // Toggle Modal Visibility
+  loginBtn.addEventListener('click', () => {
+    if (loginBtn.textContent === 'Logout') {
+      loginBtn.textContent = 'Login';
+      alert('You have been logged out.');
+      return;
+    }
+    modal.classList.add('active');
+  });
+
+  closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+  modal.addEventListener('click', (e) => {
+    if (e.target === modal) modal.classList.remove('active');
+  });
+
+  // Helper function to handle successful login
+  function completeLogin(providerName) {
+    loginBtn.textContent = 'Logout';
+    modal.classList.remove('active');
+    loginForm.reset();
+    alert(`Successfully signed in with ${providerName}`);
+  }
+
+  // Handle Standard Email Login
+  loginForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email').value;
+    completeLogin(email);
+  });
+
+  // Social Login Handlers
+  googleBtn.addEventListener('click', () => completeLogin('Google'));
+  facebookBtn.addEventListener('click', () => completeLogin('Facebook'));
+});
+
