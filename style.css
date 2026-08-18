@@ -12,7 +12,7 @@ body {
     flex-direction: column;
     min-height: 100vh;
     overflow-x: hidden;
-    /* Extra padding at top so content isn't hidden under the fixed nav */
+    overflow-y: scroll; /* Prevents layout jump caused by scrollbar toggling */
     padding-top: 80px; 
 }
 
@@ -26,7 +26,7 @@ nav {
     align-items: center;
     flex-wrap: wrap;
     gap: 1rem;
-    position: fixed; /* Holds header in place during transitions */
+    position: fixed;
     top: 0;
     left: 0;
     width: 100%;
@@ -34,6 +34,190 @@ nav {
 }
 
 .logo {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #0d1b2a;
+    cursor: pointer;
+}
+
+.nav-links {
+    display: flex;
+    list-style: none;
+    gap: 1.5rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.nav-links a {
+    text-decoration: none;
+    color: #4a5568;
+    font-weight: 500;
+    transition: color 0.2s;
+    cursor: pointer;
+}
+
+.nav-links a:hover, .nav-links a.active {
+    color: #0d1b2a;
+    font-weight: 700;
+}
+
+.btn-login {
+    background: #0d1b2a;
+    color: #ffffff !important;
+    padding: 0.5rem 1.25rem;
+    border-radius: 20px;
+}
+
+/* Content Container - Fixed Height Arena */
+.content-container {
+    position: relative;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
+    flex: 1;
+    padding: 2rem;
+    min-height: 550px; /* Prevents footer from jumping */
+}
+
+/* Absolute Positioning Stacks Tabs Perfectly */
+.tab-content {
+    position: absolute;
+    top: 2rem;
+    left: 2rem;
+    right: 2rem;
+    width: calc(100% - 4rem);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(100%);
+    transition: transform 0.4s ease-in-out, opacity 0.4s ease-in-out;
+}
+
+.tab-content.active {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateX(0);
+}
+
+/* Hero Section Layout */
+.hero {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 2rem;
+    align-items: center;
+    margin-bottom: 3rem;
+}
+
+.hero-content h1 {
+    font-size: 2.5rem;
+    color: #0d1b2a;
+    margin-bottom: 1rem;
+    line-height: 1.2;
+}
+
+.hero-content p {
+    font-size: 1.1rem;
+    color: #718096;
+    margin-bottom: 1.5rem;
+}
+
+.hero-buttons {
+    display: flex;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.btn-primary {
+    background: #0d1b2a;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.btn-secondary {
+    border: 2px solid #0d1b2a;
+    color: #0d1b2a;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.hero-card {
+    background: #0d1b2a;
+    color: #fff;
+    padding: 2rem;
+    border-radius: 12px;
+    text-align: center;
+}
+
+/* Cards & Layout */
+.features {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+}
+
+.card {
+    background: #fff;
+    padding: 1.5rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+    border: 1px solid #e2e8f0;
+}
+
+.card h3 {
+    margin-bottom: 0.75rem;
+    color: #0d1b2a;
+}
+
+.card p {
+    color: #4a5568;
+    font-size: 0.95rem;
+    line-height: 1.5;
+}
+
+.page-header {
+    margin-bottom: 2rem;
+    border-bottom: 2px solid #e2e8f0;
+    padding-bottom: 1rem;
+}
+
+.page-header h1 {
+    color: #0d1b2a;
+    font-size: 2.2rem;
+}
+
+/* Footer */
+footer {
+    background: #0d1b2a;
+    color: #a0aec0;
+    text-align: center;
+    padding: 2rem;
+    margin-top: auto;
+}
+
+/* Mobile Adjustments */
+@media (max-width: 768px) {
+    body {
+        padding-top: 140px;
+    }
+
+    .hero {
+        grid-template-columns: 1fr;
+    }
+
+    nav {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .nav-links {
+        width: 100%;
+        justify-content: space-between;
+    }
+}
     font-size: 1.5rem;
     font-weight: 700;
     color: #0d1b2a;
