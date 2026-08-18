@@ -206,15 +206,24 @@ footer {
   gap: 1rem;
   align-items: center;
 }
-
-.lesson-img {
+.lesson-img-link {
+  display: block;
   width: 100%;
-  height: auto;           /* Allows full height without cropping */
-  max-height: none;       /* Removes the 400px height cap */
-  object-fit: contain;    /* Ensures full graphic fits inside container */
-  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
 }
-
+.lesson-img {
+  width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  object-fit: contain !important;
+  border-radius: 8px;
+  display: block;
+  transition: opacity 0.2s ease;
+}
+.lesson-img-link:hover .lesson-img {
+  opacity: 0.92;
+}
 .media-actions {
   display: flex;
   gap: 1rem;
