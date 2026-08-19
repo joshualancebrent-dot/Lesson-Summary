@@ -9,10 +9,11 @@
   --text-muted: #64748B;
   --border-color: #E2E8F0;
   --radius-lg: 16px;
-  --radius-md: 10px;
-  --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
+  --radius-md: 12px;
+  --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
   --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
   --shadow-lg: 0 20px 30px -10px rgba(15, 23, 42, 0.15);
+  --shadow-float: 0 16px 32px -8px rgba(37, 99, 235, 0.22);
 }
 
 * {
@@ -34,7 +35,7 @@ body {
 }
 
 /* ----------------------------------------------------
-   Fixed Navigation Bar (Static layout, subtle hovers)
+   Fixed Navigation Bar (Static position, active hovers)
 ---------------------------------------------------- */
 .navbar {
   background: rgba(15, 23, 42, 0.95);
@@ -131,7 +132,7 @@ body {
   width: 100%;
 }
 
-/* Panoramic Animation trigger when active */
+/* Panoramic Entrance Animation */
 .tab-panel.active {
   display: block;
   animation: panoramicIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -150,7 +151,7 @@ body {
   }
 }
 
-/* Hero Section Box */
+/* Hero Section */
 .hero-section, .hero-card {
   background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
   color: #FFFFFF;
@@ -193,7 +194,7 @@ body {
   margin-bottom: 1.5rem;
 }
 
-/* Cards & Buttons */
+/* Card Components */
 .card {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
@@ -238,45 +239,64 @@ body {
   border-color: #FFFFFF;
 }
 
-/* Sabbath School List */
+/* ----------------------------------------------------
+   Floating Pop-Up Lesson Cards (Sabbath School)
+---------------------------------------------------- */
 .sabbath-school-list {
   list-style: none;
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .lesson-card-item {
   width: 100%;
 }
 
+/* Base floating box styling */
 .lesson-card-link {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 1.25rem;
-  background: var(--bg-main);
+  padding: 1.25rem 1.5rem;
+  background: #FFFFFF;
   border: 1px solid var(--border-color);
   border-radius: var(--radius-md);
   text-decoration: none;
   color: var(--text-main);
-  transition: all 0.25s ease;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
+              border-color 0.3s ease,
+              background-color 0.3s ease;
 }
 
+/* Pop-Up floating effect when cursor passes over */
 .lesson-card-link:hover {
+  transform: translateY(-6px) scale(1.015);
+  box-shadow: var(--shadow-float);
   border-color: var(--accent);
-  background: var(--accent-light);
-  transform: translateY(-2px);
+  background-color: var(--accent-light);
+  z-index: 10;
 }
 
 .lesson-card-title {
   font-weight: 700;
+  font-size: 1rem;
+  color: var(--text-main);
+  transition: color 0.2s ease;
+}
+
+.lesson-card-link:hover .lesson-card-title {
+  color: var(--accent);
 }
 
 .lesson-card-ref {
   color: var(--text-muted);
   font-size: 0.85rem;
+  font-weight: 600;
 }
 
 footer {
