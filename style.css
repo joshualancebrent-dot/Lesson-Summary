@@ -16,9 +16,8 @@ body {
 
 /* Fixed Navigation Bar */
 .navbar {
-  background-color: #0f172a
-  background: #ffffff;
-  border-bottom: 1px solid #e2e8f0;
+  background-color: #0f172a; /* Dark cold blue */
+  border-bottom: 1px solid #1e293b;
   padding: 1rem 2rem;
   display: flex;
   justify-content: space-between;
