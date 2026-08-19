@@ -9,6 +9,28 @@ import {
   GoogleAuthProvider, 
   FacebookAuthProvider 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { 
+  getFirestore, 
+  collection, 
+  addDoc, 
+  onSnapshot, 
+  query, 
+  orderBy, 
+  serverTimestamp,
+  doc,
+  setDoc
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// Firebase Config
+const firebaseConfig = {
+  apiKey: "AIzaSyAKsH40B0E-ytvtDBp5q0cCnAcrkfsDkxg",
+  authDomain: "day-break-7a1d2.firebaseapp.com",
+  projectId: "day-break-7a1d2",
+  storageBucket: "day-break-7a1d2.firebasestorage.app",
+  messagingSenderId: "374552344821",
+  appId: "1:374552344821:web:eb18d503f6eca8d7722dbc",
+  measurementId: "G-8YES7NF8D"
+};
 
 // Global Tab Switching Function
 window.switchTab = function(targetId) {
@@ -16,7 +38,7 @@ window.switchTab = function(targetId) {
   const targetPanel = document.getElementById(targetId);
   const tabs = document.querySelectorAll('.nav-tab');
 
-  if (currentActive === targetPanel) return;
+  if (!targetPanel || currentActive === targetPanel) return;
 
   tabs.forEach(tab => {
     if (tab.getAttribute('data-target') === targetId) {
@@ -28,53 +50,30 @@ window.switchTab = function(targetId) {
 
   if (currentActive) {
     currentActive.classList.remove('active');
-    currentActive.classList.add('exit-left');
-    setTimeout(() => currentActive.classList.remove('exit-left'), 400);
   }
 
-  if (targetPanel) {
-    targetPanel.classList.add('active');
-  }
+  targetPanel.classList.add('active');
 };
 
-// Initialize Navigation Event Listeners
-function setupNavigation() {
-  document.querySelectorAll('.nav-tab').forEach(button => {
-    button.addEventListener('click', () => {
-      const target = button.getAttribute('data-target');
-      window.switchTab(target);
-    });
+// Tab Click Listeners
+document.querySelectorAll('.nav-tab').forEach(button => {
+  button.addEventListener('click', () => {
+    const target = button.getAttribute('data-target');
+    window.switchTab(target);
   });
-}
+});
 
-// Run UI Setup immediately
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', setupNavigation);
-} else {
-  setupNavigation();
-}
-
-// Firebase Configuration & Initialization
-const firebaseConfig = {
-  apiKey: "AIzaSyAKsH40B0E-ytvtDBp5q0cCnAcrkfsDkxg",
-  authDomain: "day-break-7a1d2.firebaseapp.com",
-  projectId: "day-break-7a1d2",
-  storageBucket: "day-break-7a1d2.firebasestorage.app",
-  messagingSenderId: "374552344821",
-  appId: "1:374552344821:web:eb18d503f6eca8d7722dbc",
-  measurementId: "G-8YES7NF8D"
-};
-
-let app, auth;
-
+// Initialize Firebase
+let app, auth, db;
 try {
   app = initializeApp(firebaseConfig);
   auth = getAuth(app);
-} catch (error) {
-  console.warn("Firebase failed to initialize:", error);
+  db = getFirestore(app);
+} catch (e) {
+  console.warn("Firebase initialization skipped or encountered network issue:", e);
 }
 
-// Authentication & Modal Handlers
+// Global Auth Modal Handler
 document.addEventListener('DOMContentLoaded', () => {
   const loginBtn = document.querySelector('.btn-login');
   const modal = document.getElementById('login-modal');
@@ -82,53 +81,32 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('login-form');
   const googleBtn = document.getElementById('google-login');
   const facebookBtn = document.getElementById('facebook-login');
-
-  const modalTitle = document.getElementById('modal-title');
-  const modalSubtitle = document.getElementById('modal-subtitle');
-  const formSubmitBtn = document.getElementById('form-submit-btn');
   const toggleAuthBtn = document.getElementById('toggle-auth-btn');
-  const toggleText = document.getElementById('toggle-text');
 
   let isSignUpMode = false;
 
-  // Toggle between Sign In and Sign Up UI
   if (toggleAuthBtn) {
     toggleAuthBtn.addEventListener('click', () => {
       isSignUpMode = !isSignUpMode;
-
-      if (isSignUpMode) {
-        modalTitle.textContent = 'Create an Account';
-        modalSubtitle.textContent = 'Sign up to start saving your progress and notes.';
-        formSubmitBtn.textContent = 'Create Account';
-        toggleText.textContent = 'Already have an account?';
-        toggleAuthBtn.textContent = 'Sign In';
-      } else {
-        modalTitle.textContent = 'Welcome Back';
-        modalSubtitle.textContent = 'Sign in to access your saved lessons and notes.';
-        formSubmitBtn.textContent = 'Sign In';
-        toggleText.textContent = "Don't have an account?";
-        toggleAuthBtn.textContent = 'Create one';
-      }
+      document.getElementById('modal-title').textContent = isSignUpMode ? 'Create an Account' : 'Welcome Back';
+      document.getElementById('form-submit-btn').textContent = isSignUpMode ? 'Create Account' : 'Sign In';
+      toggleAuthBtn.textContent = isSignUpMode ? 'Sign In' : 'Create one';
     });
   }
 
-  // Monitor Authentication State
   if (auth) {
     onAuthStateChanged(auth, (user) => {
-      if (user) {
-        loginBtn.textContent = 'Logout';
-        if (modal) modal.classList.remove('active');
-      } else {
-        loginBtn.textContent = 'Login';
+      if (loginBtn) {
+        loginBtn.textContent = user ? 'Logout' : 'Login';
       }
+      if (user && modal) modal.classList.remove('active');
     });
   }
 
-  // Open/Close Modal & Logout
   if (loginBtn) {
     loginBtn.addEventListener('click', () => {
       if (auth && auth.currentUser) {
-        signOut(auth).then(() => alert('You have logged out.'));
+        signOut(auth).then(() => alert('Successfully logged out.'));
       } else if (modal) {
         modal.classList.add('active');
       }
@@ -142,55 +120,159 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Email Sign In OR Sign Up Form Handler
-  if (loginForm) {
+  if (loginForm && auth) {
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      if (!auth) {
-        alert("Authentication service is currently unavailable.");
-        return;
-      }
-
       const email = document.getElementById('email').value;
       const password = document.getElementById('password').value;
 
       try {
         if (isSignUpMode) {
           await createUserWithEmailAndPassword(auth, email, password);
-          alert('Account created successfully!');
         } else {
           await signInWithEmailAndPassword(auth, email, password);
         }
         loginForm.reset();
-      } catch (error) {
-        alert(`Authentication Error: ${error.message}`);
+      } catch (err) {
+        alert("Authentication Error: " + err.message);
       }
     });
   }
 
-  // Google Sign-In
-  if (googleBtn) {
+  if (googleBtn && auth) {
     googleBtn.addEventListener('click', async () => {
-      if (!auth) return alert("Authentication service unavailable.");
-      const provider = new GoogleAuthProvider();
       try {
-        await signInWithPopup(auth, provider);
-      } catch (error) {
-        alert(`Google Login Failed: ${error.message}`);
+        await signInWithPopup(auth, new GoogleAuthProvider());
+      } catch (err) {
+        alert("Google Login Error: " + err.message);
       }
     });
   }
 
-  // Facebook Sign-In
-  if (facebookBtn) {
+  if (facebookBtn && auth) {
     facebookBtn.addEventListener('click', async () => {
-      if (!auth) return alert("Authentication service unavailable.");
-      const provider = new FacebookAuthProvider();
       try {
-        await signInWithPopup(auth, provider);
-      } catch (error) {
-        alert(`Facebook Login Failed: ${error.message}`);
+        await signInWithPopup(auth, new FacebookAuthProvider());
+      } catch (err) {
+        alert("Facebook Login Error: " + err.message);
       }
+    });
+  }
+
+  // -------------------------------------------------------------
+  // FIRESTORE COMMENTS & REACTIONS FOR LESSON PAGES
+  // -------------------------------------------------------------
+  const commentForm = document.getElementById('comment-form');
+  const commentsList = document.getElementById('comments-list');
+
+  if (db && commentsList) {
+    // Dynamic Lesson ID detection
+    const pagePath = window.location.pathname.split("/").pop().replace(".html", "") || "resurrection";
+    const currentLessonId = pagePath.length > 0 ? pagePath : "resurrection";
+
+    const commentsRef = collection(db, "lessons", currentLessonId, "comments");
+    const q = query(commentsRef, orderBy("createdAt", "desc"));
+
+    // Realtime Comments
+    onSnapshot(q, (snapshot) => {
+      commentsList.innerHTML = "";
+      if (snapshot.empty) {
+        commentsList.innerHTML = `<div class="empty-state"><p>No comments yet. Be the first to start the conversation!</p></div>`;
+        return;
+      }
+
+      snapshot.forEach((docSnap) => {
+        const data = docSnap.data();
+        const dateStr = data.createdAt ? new Date(data.createdAt.toDate()).toLocaleDateString(undefined, {
+          month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        }) : "Just now";
+
+        const card = document.createElement('div');
+        card.className = 'comment-card';
+        card.innerHTML = `
+          <div class="comment-avatar">${(data.userName || 'U')[0].toUpperCase()}</div>
+          <div class="comment-content">
+            <div class="comment-header">
+              <span class="comment-author">${data.userName || 'Anonymous User'}</span>
+              <span class="comment-date">${dateStr}</span>
+            </div>
+            <p class="comment-text">${data.text}</p>
+          </div>
+        `;
+        commentsList.appendChild(card);
+      });
+    });
+
+    // Submit Comment
+    if (commentForm) {
+      commentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const user = auth ? auth.currentUser : null;
+
+        if (!user) {
+          alert("Please log in to share your thoughts.");
+          if (modal) modal.classList.add('active');
+          return;
+        }
+
+        const input = document.getElementById('comment-input');
+        const text = input.value.trim();
+        if (!text) return;
+
+        try {
+          await addDoc(commentsRef, {
+            userId: user.uid,
+            userName: user.displayName || user.email.split('@')[0],
+            text: text,
+            createdAt: serverTimestamp()
+          });
+          input.value = "";
+        } catch (err) {
+          alert("Could not post comment: " + err.message);
+        }
+      });
+    }
+
+    // Reactions Realtime & Clicks
+    const reactionsRef = collection(db, "lessons", currentLessonId, "reactions");
+    onSnapshot(reactionsRef, (snapshot) => {
+      let counts = { amen: 0, heart: 0, insight: 0 };
+      snapshot.forEach(docSnap => {
+        const type = docSnap.data().type;
+        if (counts[type] !== undefined) counts[type]++;
+      });
+
+      const amenEl = document.getElementById('count-amen');
+      const heartEl = document.getElementById('count-heart');
+      const insightEl = document.getElementById('count-insight');
+
+      if (amenEl) amenEl.textContent = counts.amen;
+      if (heartEl) heartEl.textContent = counts.heart;
+      if (insightEl) insightEl.textContent = counts.insight;
+    });
+
+    document.querySelectorAll('.btn-reaction').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const user = auth ? auth.currentUser : null;
+        if (!user) {
+          alert("Please log in to react.");
+          if (modal) modal.classList.add('active');
+          return;
+        }
+
+        const type = btn.getAttribute('data-type');
+        const userReactionDoc = doc(db, "lessons", currentLessonId, "reactions", user.uid);
+
+        try {
+          await setDoc(userReactionDoc, {
+            type: type,
+            userId: user.uid,
+            updatedAt: serverTimestamp()
+          });
+        } catch (err) {
+          alert("Reaction error: " + err.message);
+        }
+      });
     });
   }
 });
