@@ -170,3 +170,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+// Recommended Production Rule
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Anyone can read comments and reactions
+    match /lessons/{lessonId}/{document=**} {
+      allow read: if true;
+      // Only logged-in users can write or comment
+      allow write: if request.auth != null;
+    }
+  }
+}
