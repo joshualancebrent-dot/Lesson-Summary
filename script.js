@@ -333,3 +333,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 });
+// Automatically creates a unique lesson ID based on the filename (e.g., "resurrection")
+const pagePath = window.location.pathname.split("/").pop().replace(".html", "") || "home";
+const currentLessonId = pagePath.length > 0 ? pagePath : "resurrection";
