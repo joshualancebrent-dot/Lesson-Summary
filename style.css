@@ -34,6 +34,7 @@ body {
   font-weight: 700;
   color: #ffffff;
 }
+
 .nav-links {
   display: flex;
   gap: 1.5rem;
@@ -42,7 +43,7 @@ body {
 .nav-tab {
   background: none;
   border: none;
-  color: #ffffff; /* Muted light gray */
+  color: #94a3b8; /* Muted light gray */
   font-size: 1rem;
   font-weight: 500;
   cursor: pointer;
@@ -155,142 +156,32 @@ footer {
   padding: 2rem;
   margin-top: auto;
 }
-/* Styling specific to Lesson Detail pages */
-.lesson-container {
-  max-width: 850px; /* Slightly narrower for optimal reading line length */
-  margin-top: 100px;
-}
 
-.lesson-header {
-  margin-bottom: 1.5rem;
-}
-
-.badge {
-  display: inline-block;
-  background: #e2e8f0;
-  color: #0d2b3a;
-  padding: 0.25rem 0.75rem;
-  border-radius: 12px;
-  font-size: 0.85rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-
-.scripture-ref {
-  color: #4a5568;
-  font-size: 1.1rem;
-  margin-top: 0.5rem;
-}
-
-/* Scripture Callout Box */
-.scripture-quote {
-  background: #f0f4f8;
-  border-left: 4px solid #0d2b3a;
-  padding: 1.25rem;
-  font-style: italic;
-  font-size: 1.15rem;
-  color: #2d3748;
-  border-radius: 0 8px 8px 0;
-  margin-bottom: 2rem;
-}
-
-.scripture-quote cite {
-  display: block;
-  font-style: normal;
-  font-weight: 600;
-  font-size: 0.95rem;
-  color: #0d2b3a;
-  margin-top: 0.5rem;
-}
-
-/* Media Card Styling */
-.lesson-media {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  align-items: center;
-}
-.lesson-img-link {
-  display: block;
-  width: 100%;
-  text-decoration: none;
-  cursor: pointer;
-}
-.lesson-img {
-  width: 100% !important;
-  height: auto !important;
-  max-height: none !important;
-  object-fit: contain !important;
-  border-radius: 8px;
-  display: block;
-  transition: opacity 0.2s ease;
-}
-.lesson-img-link:hover .lesson-img {
-  opacity: 0.92;
-}
-.media-actions {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-}
-
-/* Lesson Article Content */
-.lesson-body h2, .lesson-body h3 {
-  color: #0d2b3a;
-  margin-top: 1.5rem;
-  margin-bottom: 0.75rem;
-}
-
-.lesson-body p {
-  line-height: 1.7;
-  color: #2d3748;
-  margin-bottom: 1rem;
-}
-
-.lesson-points, .discussion-list {
-  padding-left: 1.5rem;
-  margin-bottom: 1.5rem;
-  line-height: 1.6;
-}
-
-.lesson-points li, .discussion-list li {
-  margin-bottom: 0.5rem;
-}
-
-/* Buttons overriding/extending standard buttons */
-.media-actions a {
-  text-decoration: none;
-}
 /* Sabbath School Floating Cards Container */
 .sabbath-school-list {
-  list-style: none; /* Removes standard bullet points */
+  list-style: none;
   padding: 0;
   margin: 1.5rem 0;
   display: flex;
   flex-direction: column;
-  gap: 1rem; /* Spacing between floating cards */
+  gap: 1rem;
 }
 
-/* Floating Card Item */
 .lesson-card-item {
   background: #ffffff;
   border-radius: 12px;
   border: 1px solid #e2e8f0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* Soft ambient shadow */
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
   transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
   overflow: hidden;
 }
 
-/* Hover Effect: Lifts card up to create a floating sensation */
 .lesson-card-item:hover {
-  transform: translateY(-4px); /* Moves up smoothly */
-  box-shadow: 0 12px 24px rgba(13, 43, 58, 0.12); /* Richer floating shadow */
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(13, 43, 58, 0.12);
   border-color: #0d2b3a;
 }
 
-/* Make the entire card area clickable */
 .lesson-card-link {
   display: flex;
   flex-direction: column;
@@ -299,7 +190,6 @@ footer {
   color: inherit;
 }
 
-/* Lesson Title Styling */
 .lesson-card-title {
   font-size: 1.1rem;
   font-weight: 600;
@@ -309,55 +199,15 @@ footer {
 }
 
 .lesson-card-item:hover .lesson-card-title {
-  color: #1a567a; /* Subtle highlight on hover */
+  color: #1a567a;
 }
 
-/* Scripture Reference Subtext */
 .lesson-card-ref {
   font-size: 0.9rem;
   color: #718096;
   font-style: italic;
 }
-.lesson-material {
-  margin-top: 2rem;
-}
 
-.image-explanation {
-  margin-top: 0.75rem;
-  color: #4a5568;
-}
-
-.btn-download {
-  display: inline-block;
-  margin-top: 1rem;
-  text-decoration: none;
-}
-
-#disqus_thread {
-  margin-top: 2rem;
-}
-/* Floating Box Container */
-.floating-box {
-  background-color: #ffffff;
-  padding: 1.5rem 2rem;
-  border-radius: 12px;
-  border: 1px solid #e2e8f0;
-  
-  /* Soft shadow that creates the initial elevated/floating look */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  
-  /* Smooth animation transition */
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-  
-  max-width: 500px; /* Adjust width as needed */
-  margin: 1rem 0;
-}
-
-/* Interactive Hover Lift Effect */
-.floating-box:hover {
-  transform: translateY(-5px); /* Lifts the box up by 5px */
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15); /* Deepens shadow on hover */
-}
 /* Modal Overlay & Card Styling */
 .modal-overlay {
   position: fixed;
@@ -438,7 +288,7 @@ footer {
   width: 100%;
   margin-top: 0.5rem;
 }
-/* Social Login & Divider UI */
+
 .social-login-group {
   display: flex;
   flex-direction: column;
@@ -501,7 +351,7 @@ footer {
   color: #94a3b8;
   text-transform: lowercase;
 }
-/* Auth Toggle Link */
+
 .auth-toggle {
   margin-top: 1.25rem;
   text-align: center;
