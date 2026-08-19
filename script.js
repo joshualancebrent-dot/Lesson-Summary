@@ -1,4 +1,3 @@
-// Import Firebase modules directly inside module script
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { 
   getAuth, 
@@ -10,7 +9,7 @@ import {
   FacebookAuthProvider 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// Your web app's Firebase configuration
+// Your Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAKsH40B0E-ytvtDBp5q0cCnAcrkfsDkxg",
   authDomain: "day-break-7a1d2.firebaseapp.com",
@@ -26,14 +25,13 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 
 // Tab Navigation Logic
-function switchTab(targetId) {
+window.switchTab = function(targetId) {
   const currentActive = document.querySelector('.tab-panel.active');
   const targetPanel = document.getElementById(targetId);
   const tabs = document.querySelectorAll('.nav-tab');
 
   if (currentActive === targetPanel) return;
 
-  // Update navigation active states
   tabs.forEach(tab => {
     if (tab.getAttribute('data-target') === targetId) {
       tab.classList.add('active');
@@ -42,66 +40,53 @@ function switchTab(targetId) {
     }
   });
 
-  // Slide current panel out
   if (currentActive) {
     currentActive.classList.remove('active');
     currentActive.classList.add('exit-left');
-    setTimeout(() => {
-      currentActive.classList.remove('exit-left');
-    }, 400);
+    setTimeout(() => currentActive.classList.remove('exit-left'), 400);
   }
 
-  // Slide new panel in
   if (targetPanel) {
     targetPanel.classList.add('active');
   }
-}
+};
 
-// Event Listeners for Navigation Buttons
 document.querySelectorAll('.nav-tab').forEach(button => {
   button.addEventListener('click', () => {
     const target = button.getAttribute('data-target');
-    switchTab(target);
+    window.switchTab(target);
   });
 });
 
-// Authentication & Modal Handlers
+// Authentication & Modal Logic
 document.addEventListener('DOMContentLoaded', () => {
   const loginBtn = document.querySelector('.btn-login');
   const modal = document.getElementById('login-modal');
   const closeBtn = document.getElementById('close-login');
   const loginForm = document.getElementById('login-form');
-  
   const googleBtn = document.getElementById('google-login');
   const facebookBtn = document.getElementById('facebook-login');
 
-  // Listen to Authentication State
+  // Monitor Authentication State
   onAuthStateChanged(auth, (user) => {
     if (user) {
-      // User is signed in
       loginBtn.textContent = 'Logout';
       if (modal) modal.classList.remove('active');
-      console.log('User logged in:', user.email || user.displayName);
     } else {
-      // User is signed out
       loginBtn.textContent = 'Login';
     }
   });
 
-  // Toggle Modal / Handle Logout
   if (loginBtn) {
     loginBtn.addEventListener('click', () => {
       if (auth.currentUser) {
-        signOut(auth).then(() => {
-          alert('You have logged out.');
-        });
+        signOut(auth).then(() => alert('You have logged out.'));
       } else if (modal) {
         modal.classList.add('active');
       }
     });
   }
 
-  // Modal Close Handlers
   if (closeBtn && modal) {
     closeBtn.addEventListener('click', () => modal.classList.remove('active'));
     modal.addEventListener('click', (e) => {
@@ -109,7 +94,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Real Email/Password Login
   if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -125,7 +109,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Real Google Sign-In (Popup)
   if (googleBtn) {
     googleBtn.addEventListener('click', async () => {
       const provider = new GoogleAuthProvider();
@@ -137,7 +120,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Real Facebook Sign-In (Popup)
   if (facebookBtn) {
     facebookBtn.addEventListener('click', async () => {
       const provider = new FacebookAuthProvider();
