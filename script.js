@@ -145,3 +145,13 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 });
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAKsH40B0E-ytvtDBp5q0cCnAcrkfsDkxg",
+  authDomain: "day-break-7a1d2.firebaseapp.com",
+  projectId: "day-break-7a1d2",
+  storageBucket: "day-break-7a1d2.firebasestorage.app",
+  messagingSenderId: "374552344821",
+  appId: "1:374552344821:web:eb18d503f6eca8d7722dbc",
+  measurementId: "G-8YES7NF8D"
+};
