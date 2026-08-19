@@ -5,45 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>DayBreak</title>
   <link rel="stylesheet" href="style.css">
-  <!-- Firebase Web SDK v9+ (Modular scripts) -->
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-  import { 
-    getAuth, 
-    signInWithEmailAndPassword, 
-    createUserWithEmailAndPassword,
-    GoogleAuthProvider, 
-    FacebookAuthProvider,
-    signInWithPopup,
-    signOut,
-    onAuthStateChanged 
-  } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-
-  // Replace this with your actual configuration object from Firebase Console settings
-  const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT_ID.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const auth = getAuth(app);
-
-  // Make auth functions globally accessible for script.js
-  window.auth = auth;
-  window.signInWithEmailAndPassword = signInWithEmailAndPassword;
-  window.createUserWithEmailAndPassword = createUserWithEmailAndPassword;
-  window.GoogleAuthProvider = GoogleAuthProvider;
-  window.FacebookAuthProvider = FacebookAuthProvider;
-  window.signInWithPopup = signInWithPopup;
-  window.signOut = signOut;
-  window.onAuthStateChanged = onAuthStateChanged;
-</script>
-
 </head>
 <body>
 
@@ -84,75 +45,50 @@
       </div>
     </section>
 
-  <!-- Sabbath School Tab -->
-<section id="sabbath" class="tab-panel">
-  <h2>Sabbath School Lessons</h2>
-  <p class="subtitle">Structured Bible studies and discussion materials for this quarter.</p>
-  
-  <div class="card">
-    <!-- Premium Floating Lesson Cards -->
-    <ul class="sabbath-school-list">
-      <li class="lesson-card-item">
-        <a href="material/resurrection.html" class="lesson-card-link">
-          <span class="lesson-card-title">The Power of Christ's Resurrection</span>
-          <span class="lesson-card-ref">1 Corinthians 15:14-17</span>
-        </a>
-      </li>
+    <!-- Sabbath School Tab -->
+    <section id="sabbath" class="tab-panel">
+      <h2>Sabbath School Lessons</h2>
+      <p class="subtitle">Structured Bible studies and discussion materials for this quarter.</p>
+      
+      <div class="card">
+        <ul class="sabbath-school-list">
+          <li class="lesson-card-item">
+            <a href="material/resurrection.html" class="lesson-card-link">
+              <span class="lesson-card-title">The Power of Christ's Resurrection</span>
+              <span class="lesson-card-ref">1 Corinthians 15:14-17</span>
+            </a>
+          </li>
 
-      <li class="lesson-card-item">
-        <a href="material/love-driven-ministry.html" class="lesson-card-link">
-          <span class="lesson-card-title">Love-driven Ministry</span>
-          <span class="lesson-card-ref">2 Corinthians 2:4</span>
-        </a>
-      </li>
+          <li class="lesson-card-item">
+            <a href="material/love-driven-ministry.html" class="lesson-card-link">
+              <span class="lesson-card-title">Love-driven Ministry</span>
+              <span class="lesson-card-ref">2 Corinthians 2:4</span>
+            </a>
+          </li>
 
-      <li class="lesson-card-item">
-        <a href="material/authentic-ministry.html" class="lesson-card-link">
-          <span class="lesson-card-title">Authentic Christian Ministry</span>
-          <span class="lesson-card-ref">2 Corinthians 4:8-10</span>
-        </a>
-      </li>
+          <li class="lesson-card-item">
+            <a href="material/authentic-ministry.html" class="lesson-card-link">
+              <span class="lesson-card-title">Authentic Christian Ministry</span>
+              <span class="lesson-card-ref">2 Corinthians 4:8-10</span>
+            </a>
+          </li>
 
-      <li class="lesson-card-item">
-        <a href="material/stewardship.html" class="lesson-card-link">
-          <span class="lesson-card-title">Stewardship and Mission</span>
-          <span class="lesson-card-ref">2 Corinthians 8:9</span>
-        </a>
-      </li>
+          <li class="lesson-card-item">
+            <a href="material/stewardship.html" class="lesson-card-link">
+              <span class="lesson-card-title">Stewardship and Mission</span>
+              <span class="lesson-card-ref">2 Corinthians 8:9</span>
+            </a>
+          </li>
 
-      <li class="lesson-card-item">
-        <a href="material/false-teachers.html" class="lesson-card-link">
-          <span class="lesson-card-title">Dealing With False Teachers</span>
-          <span class="lesson-card-ref">2 Corinthians 10:4</span>
-        </a>
-      </li>
-    </ul>
-
-    <!-- Image, Explanation, & Download Section -->
-    <div class="lesson-material">
-        <img src="material/lesson-image.jpg" alt="Lesson Visual" class="lesson-img">
-        
-        <p class="image-explanation">
-            Add your detailed explanation about the image and lesson context right here.
-        </p>
-
-        <a href="material/lesson-image.jpg" download class="btn-primary btn-download">
-            Download Image
-        </a>
-    </div>
-
-    <!-- Disqus Comments Section -->
-    <div id="disqus_thread"></div>
-    <script>
-        (function() { 
-        var d = document, s = d.createElement('script');
-        s.src = 'https://YOUR_DISQUS_SHORTNAME.disqus.com/embed.js';
-        s.setAttribute('data-timestamp', +new Date());
-        (d.head || d.body).appendChild(s);
-        })();
-    </script>
-  </div>
-</section>
+          <li class="lesson-card-item">
+            <a href="material/false-teachers.html" class="lesson-card-link">
+              <span class="lesson-card-title">Dealing With False Teachers</span>
+              <span class="lesson-card-ref">2 Corinthians 10:4</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
 
     <!-- Resources Tab -->
     <section id="resources" class="tab-panel">
@@ -170,46 +106,46 @@
     <p>&copy; 2026 Daybreak Lessons. All rights reserved.</p>
   </footer>
 
-  <script src="script.js"></script>
-<!-- Login Modal Overlay -->
-<div id="login-modal" class="modal-overlay">
-  <div class="modal-card">
-    <button class="modal-close" id="close-login">&times;</button>
-    <h2>Welcome Back</h2>
-    <p class="subtitle">Sign in to access your saved lessons and notes.</p>
-    
-    <!-- Social Login Buttons -->
-    <div class="social-login-group">
-      <button class="btn-social btn-google" id="google-login">
-        <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3h3.88c2.27-2.09 3.665-5.17 3.665-9.12z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.26v3.09C3.25 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.62H1.26C.46 8.22 0 10.06 0 12s.46 3.78 1.26 5.38l4.02-3.09z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.7 1.26 6.62l4.02 3.09c.95-2.85 3.6-4.96 6.72-4.96z"/></svg>
-        Continue with Google
-      </button>
+  <!-- Login Modal Overlay -->
+  <div id="login-modal" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close" id="close-login">&times;</button>
+      <h2>Welcome Back</h2>
+      <p class="subtitle">Sign in to access your saved lessons and notes.</p>
+      
+      <!-- Social Login Buttons -->
+      <div class="social-login-group">
+        <button class="btn-social btn-google" id="google-login">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3h3.88c2.27-2.09 3.665-5.17 3.665-9.12z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.26v3.09C3.25 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.62H1.26C.46 8.22 0 10.06 0 12s.46 3.78 1.26 5.38l4.02-3.09z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.7 1.26 6.62l4.02 3.09c.95-2.85 3.6-4.96 6.72-4.96z"/></svg>
+          Continue with Google
+        </button>
 
-      <button class="btn-social btn-facebook" id="facebook-login">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="#ffffff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
-        Continue with Facebook
-      </button>
-    </div>
-
-    <div class="divider">
-      <span>or sign in with email</span>
-    </div>
-
-    <!-- Email Form -->
-    <form id="login-form">
-      <div class="form-group">
-        <label for="email">Email Address</label>
-        <input type="email" id="email" required placeholder="you@example.com">
+        <button class="btn-social btn-facebook" id="facebook-login">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#ffffff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Continue with Facebook
+        </button>
       </div>
-      <div class="form-group">
-        <label for="password">Password</label>
-        <input type="password" id="password" required placeholder="••••••••">
+
+      <div class="divider">
+        <span>or sign in with email</span>
       </div>
-      <button type="submit" class="btn-primary btn-full">Sign In</button>
-    </form>
+
+      <!-- Email Form -->
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn-primary btn-full">Sign In</button>
+      </form>
+    </div>
   </div>
-</div>
 
-
+  <!-- Module Script Import -->
+  <script type="module" src="script.js"></script>
 </body>
 </html>
