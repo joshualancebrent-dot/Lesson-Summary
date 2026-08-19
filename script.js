@@ -182,3 +182,154 @@ service cloud.firestore {
     }
   }
 }
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { 
+  getAuth, 
+  onAuthStateChanged, 
+  signOut, 
+  signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword,
+  signInWithPopup, 
+  GoogleAuthProvider, 
+  FacebookAuthProvider 
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+import { 
+  getFirestore, 
+  collection, 
+  addDoc, 
+  onSnapshot, 
+  query, 
+  orderBy, 
+  serverTimestamp,
+  doc,
+  setDoc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+// Firebase Configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyAKsH40B0E-ytvtDBp5q0cCnAcrkfsDkxg",
+  authDomain: "day-break-7a1d2.firebaseapp.com",
+  projectId: "day-break-7a1d2",
+  storageBucket: "day-break-7a1d2.firebasestorage.app",
+  messagingSenderId: "374552344821",
+  appId: "1:374552344821:web:eb18d503f6eca8d7722dbc",
+  measurementId: "G-8YES7NF8D"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+const currentLessonId = "lesson-1"; // ID for current lesson
+
+document.addEventListener('DOMContentLoaded', () => {
+  const commentForm = document.getElementById('comment-form');
+  const commentInput = document.getElementById('comment-input');
+  const commentsList = document.getElementById('comments-list');
+  const reactionBtns = document.querySelectorAll('.btn-reaction');
+
+  // -------------------------------------------------------------
+  // 1. REAL-TIME COMMENTS LISTENER
+  // -------------------------------------------------------------
+  const commentsRef = collection(db, "lessons", currentLessonId, "comments");
+  const q = query(commentsRef, orderBy("createdAt", "desc"));
+
+  onSnapshot(q, (snapshot) => {
+    commentsList.innerHTML = "";
+    if (snapshot.empty) {
+      commentsList.innerHTML = "<p class='loading-text'>No comments yet. Be the first to start the conversation!</p>";
+      return;
+    }
+
+    snapshot.forEach((docSnap) => {
+      const data = docSnap.data();
+      const dateStr = data.createdAt ? new Date(data.createdAt.toDate()).toLocaleString() : "Just now";
+
+      const card = document.createElement('div');
+      card.className = 'comment-card';
+      card.innerHTML = `
+        <div class="comment-header">
+          <span class="comment-author">${data.userName}</span>
+          <span class="comment-date">${dateStr}</span>
+        </div>
+        <p class="comment-text">${data.text}</p>
+      `;
+      commentsList.appendChild(card);
+    });
+  });
+
+  // -------------------------------------------------------------
+  // 2. SUBMIT A NEW COMMENT
+  // -------------------------------------------------------------
+  if (commentForm) {
+    commentForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+
+      if (!user) {
+        alert("Please log in to leave a comment.");
+        document.getElementById('login-modal').classList.add('active');
+        return;
+      }
+
+      const text = commentInput.value.trim();
+      if (!text) return;
+
+      try {
+        await addDoc(commentsRef, {
+          userId: user.uid,
+          userName: user.displayName || user.email.split('@')[0],
+          text: text,
+          createdAt: serverTimestamp()
+        });
+        commentInput.value = "";
+      } catch (err) {
+        alert("Could not post comment: " + err.message);
+      }
+    });
+  }
+
+  // -------------------------------------------------------------
+  // 3. REAL-TIME REACTIONS LISTENER & CLICK HANDLER
+  // -------------------------------------------------------------
+  const reactionsRef = collection(db, "lessons", currentLessonId, "reactions");
+
+  onSnapshot(reactionsRef, (snapshot) => {
+    let counts = { amen: 0, heart: 0, insight: 0 };
+
+    snapshot.forEach(docSnap => {
+      const type = docSnap.data().type;
+      if (counts[type] !== undefined) counts[type]++;
+    });
+
+    document.getElementById('count-amen').textContent = counts.amen;
+    document.getElementById('count-heart').textContent = counts.heart;
+    document.getElementById('count-insight').textContent = counts.insight;
+  });
+
+  reactionBtns.forEach(btn => {
+    btn.addEventListener('click', async () => {
+      const user = auth.currentUser;
+      if (!user) {
+        alert("Please log in to react.");
+        document.getElementById('login-modal').classList.add('active');
+        return;
+      }
+
+      const type = btn.getAttribute('data-type');
+      const userReactionDoc = doc(db, "lessons", currentLessonId, "reactions", user.uid);
+
+      try {
+        await setDoc(userReactionDoc, {
+          type: type,
+          userId: user.uid,
+          updatedAt: serverTimestamp()
+        });
+      } catch (err) {
+        alert("Reaction failed: " + err.message);
+      }
+    });
+  });
+});
