@@ -4,12 +4,13 @@ import {
   onAuthStateChanged, 
   signOut, 
   signInWithEmailAndPassword, 
+  createUserWithEmailAndPassword,
   signInWithPopup, 
   GoogleAuthProvider, 
   FacebookAuthProvider 
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 
-// Your Firebase configuration
+// Firebase Configuration
 const firebaseConfig = {
   apiKey: "AIzaSyAKsH40B0E-ytvtDBp5q0cCnAcrkfsDkxg",
   authDomain: "day-break-7a1d2.firebaseapp.com",
@@ -58,7 +59,7 @@ document.querySelectorAll('.nav-tab').forEach(button => {
   });
 });
 
-// Authentication & Modal Logic
+// Authentication & Modal Handlers
 document.addEventListener('DOMContentLoaded', () => {
   const loginBtn = document.querySelector('.btn-login');
   const modal = document.getElementById('login-modal');
@@ -66,6 +67,35 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('login-form');
   const googleBtn = document.getElementById('google-login');
   const facebookBtn = document.getElementById('facebook-login');
+
+  const modalTitle = document.getElementById('modal-title');
+  const modalSubtitle = document.getElementById('modal-subtitle');
+  const formSubmitBtn = document.getElementById('form-submit-btn');
+  const toggleAuthBtn = document.getElementById('toggle-auth-btn');
+  const toggleText = document.getElementById('toggle-text');
+
+  let isSignUpMode = false;
+
+  // Toggle between Sign In and Sign Up UI
+  if (toggleAuthBtn) {
+    toggleAuthBtn.addEventListener('click', () => {
+      isSignUpMode = !isSignUpMode;
+
+      if (isSignUpMode) {
+        modalTitle.textContent = 'Create an Account';
+        modalSubtitle.textContent = 'Sign up to start saving your progress and notes.';
+        formSubmitBtn.textContent = 'Create Account';
+        toggleText.textContent = 'Already have an account?';
+        toggleAuthBtn.textContent = 'Sign In';
+      } else {
+        modalTitle.textContent = 'Welcome Back';
+        modalSubtitle.textContent = 'Sign in to access your saved lessons and notes.';
+        formSubmitBtn.textContent = 'Sign In';
+        toggleText.textContent = "Don't have an account?";
+        toggleAuthBtn.textContent = 'Create one';
+      }
+    });
+  }
 
   // Monitor Authentication State
   onAuthStateChanged(auth, (user) => {
@@ -77,6 +107,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
+  // Open/Close Modal & Logout
   if (loginBtn) {
     loginBtn.addEventListener('click', () => {
       if (auth.currentUser) {
@@ -94,6 +125,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Email Sign In OR Sign Up Form Handler
   if (loginForm) {
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -101,14 +133,20 @@ document.addEventListener('DOMContentLoaded', () => {
       const password = document.getElementById('password').value;
 
       try {
-        await signInWithEmailAndPassword(auth, email, password);
+        if (isSignUpMode) {
+          await createUserWithEmailAndPassword(auth, email, password);
+          alert('Account created successfully!');
+        } else {
+          await signInWithEmailAndPassword(auth, email, password);
+        }
         loginForm.reset();
       } catch (error) {
-        alert(`Login Failed: ${error.message}`);
+        alert(`Authentication Error: ${error.message}`);
       }
     });
   }
 
+  // Google Sign-In
   if (googleBtn) {
     googleBtn.addEventListener('click', async () => {
       const provider = new GoogleAuthProvider();
@@ -120,6 +158,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Facebook Sign-In
   if (facebookBtn) {
     facebookBtn.addEventListener('click', async () => {
       const provider = new FacebookAuthProvider();
