@@ -739,47 +739,13 @@ body {
   transform: translateY(-1px);
 }
 
-/* Container to keep everything neat */
-.lesson-container {
-  font-family: Arial, sans-serif;
-  max-width: 800px; /* Prevents text from stretching too wide on big screens */
-  margin: 0 auto; 
-  line-height: 1.6;
-}
-
-/* Forces the text inside to be centered */
-.center-text {
-  text-align: center;
-}
-
-/* Forces the text inside to be left-aligned! */
-.left-text {
-  text-align: left;
-}
-
-/* Adds space below the summary */
-.center-text h2 {
-  margin-bottom: 10px;
-}
-
-/* Spaces out the 4 key themes */
-.theme-item {
-  margin-bottom: 25px;
-}
-
-.theme-item strong {
-  font-size: 1.1em;
-  color: #111;
-}
-
-.theme-item p {
-  margin: 8px 0; /* Adds spacing between paragraphs */
-}
-
-/* Styles the teaching point to match your screenshot (italicized) */
-.teaching-point {
-  font-style: italic;
-  color: #444; 
+/* Content Container & Tabs */
+.content-container {
+  max-width: 1100px;
+  margin: 100px auto 40px auto;
+  padding: 0 1.5rem;
+  flex: 1;
+  width: 100%;
 }
 
 .tab-panel {
