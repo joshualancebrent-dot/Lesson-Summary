@@ -847,7 +847,35 @@ body {
   gap: 1.25rem;
   margin-top: 1.5rem;
 }
+/* ----------------------------------------------------
+   Lesson Points (Left-Aligned List)
+---------------------------------------------------- */
+.lesson-points {
+  text-align: left; /* Forces the text to the left */
+  list-style: none; /* Removes standard bullet points since you are using emojis */
+  padding: 0;
+  margin: 1.5rem 0;
+}
 
+.lesson-points li {
+  margin-bottom: 2rem; /* Adds breathing room between each point */
+}
+
+.lesson-points strong {
+  font-size: 1.1rem;
+  color: var(--text-main);
+  display: block; /* Puts the paragraph on a new line below the title */
+  margin-bottom: 0.5rem;
+}
+
+/* Styles the Teaching Note like a blockquote */
+.lesson-points .teaching-note {
+  background-color: var(--bg-main); 
+  border-left: 4px solid var(--accent); /* Uses your blue accent color */
+  padding: 10px 15px;
+  margin-top: 10px;
+  color: var(--text-muted);
+}
 .lesson-card {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
