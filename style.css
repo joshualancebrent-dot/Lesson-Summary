@@ -856,7 +856,10 @@ body {
   padding: 0;
   margin: 1.5rem 0;
 }
-
+.text-highlight {
+  color: var(--accent); /* This automatically uses the exact blue from your website's theme */
+  font-weight: bold; /* Optional: makes it bold so it stands out even more */
+}
 .lesson-points li {
   margin-bottom: 2rem; /* Adds breathing room between each point */
 }
