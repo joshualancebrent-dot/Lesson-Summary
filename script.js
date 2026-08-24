@@ -276,3 +276,62 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+// Global Copy Text Function
+window.copyLessonText = function() {
+  // Uses 'lesson-content' for new pages, but falls back to 'ministry-content' just in case!
+  const content = document.getElementById("lesson-content") || document.getElementById("ministry-content");
+  
+  if (!content) {
+    console.error("Could not find the content to copy.");
+    return;
+  }
+
+  const clonedContent = content.cloneNode(true);
+  const buttonToRemove = clonedContent.querySelector('#copy-btn');
+  if (buttonToRemove) {
+    buttonToRemove.parentElement.remove();
+  }
+
+  const textToCopy = clonedContent.innerText;
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(textToCopy)
+      .then(showSuccess)
+      .catch(() => fallbackCopy(textToCopy)); 
+  } else {
+    fallbackCopy(textToCopy);
+  }
+
+  function fallbackCopy(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.opacity = "0"; 
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+      document.execCommand('copy');
+      showSuccess();
+    } catch (err) {
+      alert("Your browser is blocking the copy function. Please select the text manually.");
+    }
+    document.body.removeChild(textArea);
+  }
+
+  function showSuccess() {
+    const btn = document.getElementById("copy-btn");
+    if (!btn) return;
+    const originalText = "📋 Copy Text"; 
+    btn.innerHTML = "✅ Copied!";
+    btn.style.backgroundColor = "#10B981"; 
+    
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.style.backgroundColor = ""; 
+    }, 2000);
+  }
+};
