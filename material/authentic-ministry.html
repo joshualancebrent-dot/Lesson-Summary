@@ -373,13 +373,13 @@
       const data = lessonTranslations[language];
       const html = `
         <div class="card lesson-media translation-media">
-          <a href="authentic.png" target="_blank" class="lesson-img-link">
-            <img src="authentic.png" alt="Authentic Christian Ministry lesson visual" class="lesson-img">
-          </a>
+          <a href="${data.image}" target="_blank" class="lesson-img-link">
+  <img src="${data.image}" alt="${language} lesson visual" class="lesson-img">
+</a>
           <div class="media-actions">
-            <a href="authentic.png" download class="btn-primary">
-              📥 Download Lesson Visual
-            </a>
+            <a href="${data.image}" download class="btn-primary">
+  📥 Download Lesson Visual
+</a>
           </div>
         </div>
 
