@@ -335,3 +335,15 @@ window.copyLessonText = function() {
     }, 2000);
   }
 };
+function switchLanguage(index, btnElement) {
+      // Move the track horizontally
+      const track = document.getElementById('sliderTrack');
+      track.style.transform = `translateX(-${index * 20}%)`;
+
+      // Update button colors (active state)
+      const buttons = document.querySelectorAll('.lang-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      if (btnElement) {
+        btnElement.classList.add('active');
+      }
+    }
