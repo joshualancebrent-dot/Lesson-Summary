@@ -576,7 +576,21 @@ body {
 .lesson-card-item {
   width: 100%;
 }
+.slider-viewport {
+  width: 100%;
+  overflow: hidden; /* Hides the off-screen languages */
+}
 
+.slider-track {
+  display: flex;
+  width: 500%; /* 100% per language option */
+  transition: transform 0.5s ease-in-out; /* Smooth sliding animation */
+}
+
+.slide {
+  width: 20%; /* 100% divided by 5 slides */
+  flex-shrink: 0;
+}
 /* Base floating box styling */
 .lesson-card-link {
   display: flex;
