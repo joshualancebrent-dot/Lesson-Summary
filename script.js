@@ -335,8 +335,3 @@ window.copyLessonText = function() {
     }, 2000);
   }
 };
-function switchLanguage(index) {
-  const track = document.getElementById('sliderTrack');
-  // Slides horizontally based on the selected index (0%, -20%, -40%, etc.)
-  track.style.transform = `translateX(-${index * 20}%)`;
-}
