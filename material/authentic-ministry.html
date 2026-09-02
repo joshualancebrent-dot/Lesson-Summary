@@ -8,91 +8,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
-
-  <style>
-    .translation-selector {
-      margin: 24px 0 30px;
-      width: 100%;
-      overflow-x: auto;
-      overflow-y: hidden;
-      -webkit-overflow-scrolling: touch;
-      scrollbar-width: thin;
-    }
-
-    .translation-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 14px;
-      min-width: max-content;
-      padding: 4px 8px;
-    }
-
-    .translation-btn {
-      appearance: none;
-      border: 3px solid #ff8a3d;
-      background: #fff;
-      color: #111827;
-      min-width: 145px;
-      padding: 10px 20px;
-      border-radius: 6px;
-      font: inherit;
-      font-weight: 700;
-      cursor: pointer;
-      transition: background-color .2s ease, color .2s ease, transform .2s ease;
-    }
-
-    .translation-btn:hover {
-      transform: translateY(-1px);
-    }
-
-    .translation-btn.active {
-      background: #ff8a3d;
-      color: #fff;
-    }
-
-    .translation-viewport {
-      position: relative;
-      overflow: hidden;
-      width: 100%;
-      touch-action: pan-y;
-    }
-
-    .translation-panel {
-      width: 100%;
-      transform: translateX(0);
-      will-change: transform;
-    }
-
-    .translation-panel.is-sliding {
-      transition: transform .36s cubic-bezier(.22, .61, .36, 1);
-    }
-
-    .translation-media {
-      margin: 0 0 28px;
-    }
-
-    .translation-media .lesson-img {
-      display: block;
-      width: 100%;
-      height: auto;
-    }
-
-    @media (max-width: 700px) {
-      .translation-selector {
-        margin-left: -8px;
-        width: calc(100% + 16px);
-      }
-
-      .translation-buttons {
-        justify-content: flex-start;
-      }
-
-      .translation-btn {
-        min-width: 125px;
-        padding: 9px 16px;
-      }
-    }
-  </style>
 </head>
 <body>
 
@@ -125,27 +40,115 @@
 
   <main class="content-container lesson-container">
     
-    <!-- Language Selector -->
-    <nav class="translation-selector" aria-label="Lesson translations">
-      <div class="translation-buttons" id="translation-buttons">
-        <button type="button" class="translation-btn active" data-language="english" aria-current="true">English</button>
-        <button type="button" class="translation-btn" data-language="tagalog">Tagalog</button>
-        <button type="button" class="translation-btn" data-language="cebuano">Cebuano</button>
-        <button type="button" class="translation-btn" data-language="ilocano">Ilocano</button>
+    <!-- Lesson Visual / Download -->
+    <div class="card lesson-media">
+      <a href="authentic.png" target="_blank" class="lesson-img-link">
+        <img src="authentic.png" alt="Love-driven Ministry" class="lesson-img">
+      </a>
+      <div class="media-actions">
+        <a href="authentic.png" download class="btn-primary">
+          📥 Download Lesson Visual
+        </a>
       </div>
-    </nav>
+    </div>
 
     <!-- Lesson Body -->
-    <article class="card lesson-body translation-card" id="ministry-content">
-      <div class="translation-viewport" id="translation-viewport">
-        <div id="lesson-content" class="translation-panel" aria-live="polite"></div>
+    <article class="card lesson-body" id="ministry-content">
+      <h2>Lesson Summary</h2>
+      <blockquote class="quote-block">
+       “We are afflicted in every way, but not crushed; perplexed, but not driven to despair; persecuted, but not forsaken; struck down, but not destroyed; always carrying in the body the death of Jesus, so that the life of Jesus may also be manifested in our bodies.”
+  <cite>— 2 Corinthians 4:8–10</cite>
+</blockquote>
+      <h3>Main Idea:</h3>
+      <p>
+Authentic Christian ministry is not about human ability, recognition, or personal gain; it is about allowing Christ to work through His servants to transform lives, endure suffering faithfully, reconcile people to God, and lead them into holiness and restoration.      </p>
+
+      <h3>Key Points in Summary</h3>
+      
+      <ul class="lesson-points">
+       
+        <li>
+          <strong>1. Fruits of an Authentic Ministry</strong> 
+          <p>The evidence of authentic ministry is not the minister's credentials but the transformed lives of the people he serves.
+Paul describes the Corinthians as his “letter of Christ.” Their changed lives demonstrated that his ministry was genuine. He did not attribute this transformation to his intelligence or personal ability, but to God's work through the Spirit.</p>
+          <div class="takeaway-box">
+             <em><strong> <span class="text-highlight">Key Takeaway:</span></strong> A successful ministry is not measured first by how many people know the minister, but by how clearly Christ is being formed in the people.</em>
+             <strong>Question: </strong> 
+          <em>When people encounter my ministry, do they see more of me—or more of Christ?</em>
+
+          </div>
+        </li>
+
+        <li>
+          <strong>2. Suffering and Glory</strong> 
+          <p>Authentic ministry does not eliminate suffering; it demonstrates God's power in the midst of human weakness.
+Paul describes himself as a fragile “jar of clay.” He experienced affliction, perplexity, persecution, and being struck down, yet he was not ultimately defeated. His suffering became a context in which “the life of Jesus” could be manifested through him.
+Paul endured because he looked beyond present circumstances to the resurrection and the eternal glory that awaits believers.</p>
+          <div class="takeaway-box">
+           <em><strong> <span class="text-highlight">Key Takeaway:</span></strong>
+            Weakness does not disqualify us from ministry; surrendered weakness can become the stage on which God's power is revealed. </em>
+            <strong>Question:</strong> <em>Can I remain faithful when ministry becomes painful, difficult, and unseen?</em> </div>
+        </li>
+
+        <li>
+          <strong>3. Self-Sacrificing Generosity</strong> The third point concerns giving for the benefit of others rather than for personal gain.
+          The image summarizes this as Paul not seeking their money but their blessing. This connects with the lesson's broader picture of Paul's ministry: his concern was not self-interest but the spiritual welfare of the Corinthians.
+          Paul's ministry involved sacrifice. He endured suffering, hardship, anxiety, and inconvenience because he cared deeply about the churches. The PDF emphasizes that Paul carried a “deep concern” for the churches even while experiencing tremendous personal difficulties.
+          This helps us understand generosity more broadly. Generosity is not limited to giving money. We can give our time, energy, attention, encouragement, resources, and even our comfort for the sake of helping someone else.
+          The lesson's discussion of Paul's ministry also contrasts a faithful servant with someone who treats ministry as a means of personal advantage. Paul says that the faithful servant speaks the Word of God sincerely and out of love for Christ rather than for selfish purposes.
+          
+          <div class="takeaway-box">
+            <em><strong> <span class="text-highlight">Key Takeaway:</span></strong> Love asks, “How can I bless others?” rather than, “What can I get from serving them?”
+            </em></div>
+        </li>
+
+        <li>
+          <strong>4. Restoration Out of Love</strong> The fourth point is perhaps the most important because it shows that Christian love does not ignore sin, but it also does not abandon the sinner.
+          Paul had written a very strong letter to the Corinthians because serious problems needed to be addressed. His correction caused them pain, but his purpose was not to destroy or shame them. He wanted them to respond properly and be restored. When Titus later brought Paul the news that the Corinthians had responded positively, Paul was greatly encouraged.
+          The lesson then discusses church discipline. It explains that discipline should have restoration as its goal. When someone has sinned and has responded appropriately, the church should not continue treating that person as though he or she is permanently rejected.
+          Paul therefore tells the Corinthians to forgive and reaffirm their love for the person. 
+          
+          <div class="takeaway-box">
+            <em><strong> <span class="text-highlight">Key Takeaway:</span></strong>
+            <ul>
+              <p>Love does not ignore wrongdoing.</p>
+              <p>Correction may sometimes be necessary.</p>
+              <p>Correction should not be motivated by hatred or revenge.</p>
+              <p>When repentance occurs, forgiveness and restoration should follow.</p>
+              <p>The ultimate goal is to help the person return to spiritual health and fellowship.</p>
+            </ul>
+          </div>
+        </li>
+      </ul>
+
+      <div class="summary-section">
+        <h3>Putting the Four Points Together</h3>
+        <p class="subtext">Four different expressions of Christlike ministry:</p>
+        
+        <p><strong>1. Comfort →</strong> When people suffer, we don't leave them alone. We share the comfort God has given us.</p>
+        <p><strong>2. Integrity →</strong> When we serve, our motives must be genuine. We should not manipulate people or serve for selfish reasons.</p>
+        <p><strong>3. Sacrifice →</strong> Love is willing to give time, effort, resources, and personal comfort for the good of others.</p>
+        <p><strong>4. Restoration →</strong> When people fall into sin, love does not simply condemn them. It confronts wrongdoing appropriately and seeks to bring the person back through forgiveness and love.</p>
       </div>
 
+      <div class="floating-box">
+        <h3>Closing Thought:</h3>
+        <p>Paul's ministry was not driven by personal advantage, popularity, or convenience. It was driven by the love of Christ. Because he loved the Corinthians, he comforted them, dealt honestly with them, sacrificed for their good, corrected them when necessary, and welcomed them back when they responded.</p>
+      </div>
+
+   <!-- Existing Discussion Questions -->
+      <h3>Discussion Questions</h3>
+      <ol class="discussion-list">
+        <li>How can we ensure our service in church and community is driven by love rather than duty?</li>
+        <li>Why is vulnerability and genuine care essential when helping others through spiritual struggles?</li>
+      </ol>
+
+      <!-- ADD THIS NEW BUTTON HERE -->
       <div style="margin-top: 25px; text-align: left;">
-        <button id="copy-btn" class="btn-primary" onclick="window.copyLessonText()">📋 Copy Text</button>
+        <button id="copy-btn" class="btn-primary">📋 Copy Text</button>
       </div>
+      
     </article>
-
    <!-- Reactions -->
       <div class="reactions-container">
         <h3>Reactions</h3>
@@ -242,267 +245,6 @@
       </div>
     </div>
   </div>
-
-
-  <script>
-    const lessonTranslations = {
-      english: {
-        image: 'authentic.png'
-        title: 'Lesson Summary',
-        scripture: '“We are afflicted in every way, but not crushed; perplexed, but not driven to despair; persecuted, but not forsaken; struck down, but not destroyed; always carrying in the body the death of Jesus, so that the life of Jesus may also be manifested in our bodies.”',
-        scriptureRef: '— 2 Corinthians 4:8–10',
-        mainIdea: 'Authentic Christian ministry is not about human ability, recognition, or personal gain; it is about allowing Christ to work through His servants to transform lives, endure suffering faithfully, reconcile people to God, and lead them into holiness and restoration.',
-        pointsHeading: 'Key Points in Summary',
-        points: [
-          ['1. Fruits of an Authentic Ministry', 'The evidence of authentic ministry is not the minister\'s credentials but the transformed lives of the people he serves. Paul describes the Corinthians as his “letter of Christ.” Their changed lives demonstrated that his ministry was genuine. He did not attribute this transformation to his intelligence or personal ability, but to God\'s work through the Spirit.', 'Key Takeaway: A successful ministry is not measured first by how many people know the minister, but by how clearly Christ is being formed in the people.', 'When people encounter my ministry, do they see more of me—or more of Christ?'],
-          ['2. Suffering and Glory', 'Authentic ministry does not eliminate suffering; it demonstrates God\'s power in the midst of human weakness. Paul describes himself as a fragile “jar of clay.” He experienced affliction, perplexity, persecution, and being struck down, yet he was not ultimately defeated. His suffering became a context in which “the life of Jesus” could be manifested through him. Paul endured because he looked beyond present circumstances to the resurrection and the eternal glory that awaits believers.', 'Key Takeaway: Weakness does not disqualify us from ministry; surrendered weakness can become the stage on which God\'s power is revealed.', 'Can I remain faithful when ministry becomes painful, difficult, and unseen?'],
-          ['3. Ministry Motivated by Christ’s Love', 'Authentic ministry is Christ-centered, not self-centered. Paul knew that he was accountable to Christ, and his ministry was driven by reverence for Christ and love for Christ. He refused to make himself the center of his ministry. His focus was the cross and the gospel. Christ reconciled us to God and then entrusted us with the ministry of reconciliation. Therefore, believers become “ambassadors for Christ.”', 'Key Takeaway: We are not called to build our own kingdom; we are called to represent the King.', 'Am I serving Christ—or quietly using ministry to build my own name?'],
-          ['4. Paul’s Heart of Love and Restoration', 'The fourth point is perhaps the most important because it shows that Christian love does not ignore sin, but it also does not abandon the sinner. Paul had written a very strong letter to the Corinthians because serious problems needed to be addressed. His correction caused them pain, but his purpose was not to destroy or shame them. He wanted them to respond properly and be restored. When Titus later brought Paul the news that the Corinthians had responded positively, Paul was greatly encouraged. The lesson then discusses church discipline. It explains that discipline should have restoration as its goal. When someone has sinned and has responded appropriately, the church should not continue treating that person as though he or she is permanently rejected. Paul therefore tells the Corinthians to forgive and reaffirm their love for the person.', 'Teaching point: The goal of correction is not humiliation; it is healing, repentance, restoration, and spiritual maturity.', 'When I confront someone, am I trying to prove that I am right—or trying to help restore them?']
-        ],
-        synthesisTitle: '🔑 Put the Four Points Together',
-        synthesisSubtext: 'These four points form one complete picture of authentic Christian ministry:',
-        synthesis: [
-          ['1. Transformation', 'When people suffer, we don\'t leave them alone. We share the comfort God has given us.'],
-          ['2. Faithfulness in suffering', 'When we serve, our motives must be genuine. We should not manipulate people or serve for selfish reasons.'],
-          ['3. Reconciliation', 'Love is willing to give time, effort, resources, and personal comfort for the good of others.'],
-          ['4. Restoration', 'When people fall into sin, love does not simply condemn them. It confronts wrongdoing appropriately and seeks to bring the person back through forgiveness and love.']
-        ],
-        closingTitle: 'Closing Thought:',
-        closing: 'Paul\'s ministry was not driven by personal advantage, popularity, or convenience. It was driven by the love of Christ. Because he loved the Corinthians, he comforted them, dealt honestly with them, sacrificed for their good, corrected them when necessary, and welcomed them back when they responded.',
-        discussionTitle: 'Discussion Questions',
-        questions: [
-          'How can we ensure our service in church and community is driven by love rather than duty?',
-          'Why is vulnerability and genuine care essential when helping others through spiritual struggles?'
-        ]
-      },
-
-      tagalog: {
-        image: 'tagalog.png'
-        title: 'Buod ng Aralin',
-        scripture: '“Sa bawat paraan ay dumaranas kami ng kapighatian, ngunit hindi nadudurog; nalilito, ngunit hindi nawawalan ng pag-asa; inuusig, ngunit hindi pinababayaan; ibinabagsak, ngunit hindi nalilipol; palagi naming dinadala sa aming katawan ang kamatayan ni Jesus, upang ang buhay ni Jesus ay maipakita rin sa aming mga katawan.”',
-        scriptureRef: '— 2 Corinto 4:8–10',
-        mainIdea: 'Ang tunay na ministeryong Kristiyano ay hindi tungkol sa kakayahan ng tao, pagkilala, o pansariling pakinabang. Ito ay tungkol sa pagpapahintulot kay Cristo na gumawa sa pamamagitan ng Kanyang mga lingkod upang baguhin ang mga buhay, matiis nang tapat ang pagdurusa, ipagkasundo ang mga tao sa Diyos, at akayin sila sa kabanalan at pagpapanumbalik.',
-        pointsHeading: 'Mahahalagang Punto sa Buod',
-        points: [
-          ['1. Mga Bunga ng Tunay na Ministeryo', 'Ang katibayan ng tunay na ministeryo ay hindi ang mga kwalipikasyon ng ministro kundi ang mga buhay ng mga taong kanyang pinaglilingkuran na nabago. Inilarawan ni Pablo ang mga taga-Corinto bilang kanyang “liham ni Cristo.” Ang kanilang nabagong buhay ay nagpatunay na tunay ang kanyang ministeryo. Hindi niya iniugnay ang pagbabagong ito sa kanyang talino o sariling kakayahan, kundi sa gawa ng Diyos sa pamamagitan ng Espiritu.', 'Pangunahing Aral: Ang matagumpay na ministeryo ay hindi unang sinusukat sa dami ng mga nakakakilala sa ministro, kundi sa kung gaano kalinaw na nahuhubog si Cristo sa mga tao.', 'Kapag nakatagpo ng mga tao ang aking ministeryo, mas nakikita ba nila ako o mas nakikita nila si Cristo?'],
-          ['2. Pagdurusa at Kaluwalhatian', 'Ang tunay na ministeryo ay hindi nag-aalis ng pagdurusa. Sa halip, ipinapakita nito ang kapangyarihan ng Diyos sa gitna ng kahinaan ng tao. Inilarawan ni Pablo ang kanyang sarili bilang marupok na “sisidlang putik.” Nakaranas siya ng kapighatian, kalituhan, pag-uusig, at pagbagsak, ngunit hindi siya tuluyang natalo. Ang kanyang pagdurusa ay naging pagkakataon upang maipakita sa pamamagitan niya ang “buhay ni Jesus.” Nagtiis si Pablo dahil tumingin siya lampas sa kasalukuyang kalagayan, patungo sa pagkabuhay na mag-uli at sa walang hanggang kaluwalhatiang naghihintay sa mga mananampalataya.', 'Pangunahing Aral: Ang kahinaan ay hindi dahilan para hindi tayo maglingkod. Ang kahinaang isinusuko sa Diyos ay maaaring maging daan upang maipakita ang Kanyang kapangyarihan.', 'Mananatili ba akong tapat kapag ang ministeryo ay naging masakit, mahirap, at hindi napapansin?'],
-          ['3. Ministeryong Pinakikilos ng Pag-ibig ni Cristo', 'Ang tunay na ministeryo ay nakasentro kay Cristo, hindi sa sarili. Alam ni Pablo na siya ay mananagot kay Cristo, at ang kanyang ministeryo ay pinakikilos ng paggalang at pag-ibig kay Cristo. Tumanggi siyang gawing sentro ang kanyang sarili. Ang kanyang pokus ay ang krus at ang ebanghelyo. Ipinagkasundo tayo ni Cristo sa Diyos at ipinagkatiwala sa atin ang ministeryo ng pakikipagkasundo. Kaya ang mga mananampalataya ay nagiging “mga kinatawan ni Cristo.”', 'Pangunahing Aral: Hindi tayo tinawag upang magtayo ng sarili nating kaharian. Tinawag tayo upang kumatawan sa Hari.', 'Naglilingkod ba ako kay Cristo o palihim kong ginagamit ang ministeryo upang itayo ang sarili kong pangalan?'],
-          ['4. Puso ni Pablo sa Pag-ibig at Pagpapanumbalik', 'Marahil ito ang pinakamahalagang punto dahil ipinapakita nito na ang pag-ibig Kristiyano ay hindi binabalewala ang kasalanan, ngunit hindi rin nito iniiwan ang nagkasala. Sumulat si Pablo ng napakatapang na liham sa mga taga-Corinto dahil kailangang harapin ang malulubhang problema. Nasaktan sila sa kanyang pagsaway, ngunit hindi niya layuning wasakin o hiyain sila. Nais niyang tumugon sila nang tama at mapanumbalik. Nang ibalita ni Tito kay Pablo na positibong tumugon ang mga taga-Corinto, labis na natuwa si Pablo. Tinatalakay din ng aralin ang disiplina sa iglesya. Ipinapaliwanag nito na ang layunin ng disiplina ay pagpapanumbalik. Kapag ang isang tao ay nagkasala at tumugon nang tama, hindi dapat patuloy na ituring ng iglesya na siya ay tuluyang tinanggihan. Kaya sinabi ni Pablo sa mga taga-Corinto na patawarin at muling ipakita ang kanilang pag-ibig sa taong iyon.', 'Punto ng Pagtuturo: Ang layunin ng pagsaway ay hindi kahihiyan. Ito ay paggaling, pagsisisi, pagpapanumbalik, at espirituwal na paglago.', 'Kapag sinasaway ko ang isang tao, sinusubukan ko bang patunayan na tama ako o sinusubukan kong tulungan siyang maipanumbalik?']
-        ],
-        synthesisTitle: '🔑 Pagsasama-sama ng Apat na Punto',
-        synthesisSubtext: 'Ang apat na puntong ito ay bumubuo ng isang kumpletong larawan ng tunay na ministeryong Kristiyano:',
-        synthesis: [
-          ['1. Pagbabago', 'Kapag may nagdurusa, hindi natin sila iniiwan. Ibinabahagi natin ang kaaliwang ibinigay sa atin ng Diyos.'],
-          ['2. Katapatan sa pagdurusa', 'Kapag tayo ay naglilingkod, dapat maging tunay ang ating mga motibo. Hindi natin dapat manipulahin ang mga tao o maglingkod para sa pansariling dahilan.'],
-          ['3. Pakikipagkasundo', 'Ang pag-ibig ay handang magbigay ng panahon, pagsisikap, mga kagamitan, at sariling kaginhawaan para sa ikabubuti ng iba.'],
-          ['4. Pagpapanumbalik', 'Kapag ang mga tao ay nahulog sa kasalanan, hindi lamang sila hinahatulan ng pag-ibig. Hinaharap nito nang wasto ang maling ginawa at hinahangad na maibalik ang tao sa pamamagitan ng pagpapatawad at pag-ibig.']
-        ],
-        closingTitle: 'Pangwakas na Kaisipan:',
-        closing: 'Ang ministeryo ni Pablo ay hindi pinakilos ng pansariling pakinabang, kasikatan, o kaginhawaan. Ito ay pinakilos ng pag-ibig ni Cristo. Dahil mahal niya ang mga taga-Corinto, inaliw niya sila, naging tapat sa pakikitungo sa kanila, nagsakripisyo para sa kanilang ikabubuti, sumaway kung kinakailangan, at tinanggap silang muli nang tumugon sila nang tama.',
-        discussionTitle: 'Mga Tanong sa Talakayan',
-        questions: [
-          'Paano natin masisiguro na ang ating paglilingkod sa iglesya at komunidad ay pinakikilos ng pag-ibig sa halip na tungkulin lamang?',
-          'Bakit mahalaga ang pagiging bukas at tunay na malasakit kapag tinutulungan ang iba sa kanilang mga espirituwal na pakikibaka?'
-        ]
-      },
-
-      cebuano: {
-        image: 'cebuano.png'
-        title: 'Katingbanan sa Leksyon',
-        scripture: '“Sa tanang paagi gisakit kami, apan wala mapugos; nalibog, apan wala kawad-i sa paglaom; gilutos, apan wala pasagdi; gipukan, apan wala malaglag; kanunay namong gidala diha sa among lawas ang kamatayon ni Jesus, aron ang kinabuhi ni Jesus maipakita usab diha sa among mga lawas.”',
-        scriptureRef: '— 2 Corinto 4:8–10',
-        mainIdea: 'Ang tinuod nga Kristohanong ministeryo dili mahitungod sa abilidad sa tawo, pag-ila, o personal nga kaayohan. Mahitungod kini sa pagtugot kang Cristo nga molihok pinaagi sa Iyang mga alagad aron mausab ang mga kinabuhi, matinud-anong makaantos sa kalisdanan, mapasig-uli ang mga tawo ngadto sa Diyos, ug madala sila ngadto sa pagkabalaan ug pagpahiuli.',
-        pointsHeading: 'Pangunang mga Punto sa Katingbanan',
-        points: [
-          ['1. Mga Bunga sa Tinuod nga Ministeryo', 'Ang ebidensya sa tinuod nga ministeryo dili ang mga kredensyal sa ministro kondili ang nabag-o nga mga kinabuhi sa mga tawo nga iyang gialagaran. Gihulagway ni Pablo ang mga taga-Corinto isip iyang “sulat ni Cristo.” Ang ilang nabag-o nga kinabuhi nagpamatuod nga tinuod ang iyang ministeryo. Wala niya ipahinungod kini nga kausaban sa iyang kaalam o kaugalingong abilidad, kondili sa buhat sa Diyos pinaagi sa Espiritu.', 'Pangunang Leksyon: Ang malampusong ministeryo dili una masukod sa kadaghan sa nakaila sa ministro, kondili sa kaklaro nga si Cristo naporma diha sa mga tawo.', 'Kung makasinati ang mga tawo sa akong ministeryo, mas makita ba nila ako o mas makita nila si Cristo?'],
-          ['2. Pag-antos ug Himaya', 'Ang tinuod nga ministeryo dili makawagtang sa pag-antos. Gipakita niini ang gahum sa Diyos taliwala sa kahuyang sa tawo. Gihulagway ni Pablo ang iyang kaugalingon isip huyang nga “sudlanan nga yutang kulonon.” Nakaagi siya og kasakit, kalibog, paglutos, ug pagkapukan, apan wala siya sa katapusan mapildi. Ang iyang pag-antos nahimong kahimtang diin ang “kinabuhi ni Jesus” mapakita pinaagi kaniya. Nagpadayon si Pablo tungod kay mitan-aw siya lapas sa kasamtangang kahimtang ngadto sa pagkabanhaw ug sa walay kataposang himaya nga naghulat sa mga magtutuo.', 'Pangunang Leksyon: Ang kahuyang dili makapugong kanato sa pagministeryo. Ang kahuyang nga gitugyan sa Diyos mahimong mahimong dapit diin mapadayag ang Iyang gahum.', 'Mahimo ba akong magpabiling matinud-anon kung ang ministeryo mahimong sakit, lisod, ug dili makita sa uban?'],
-          ['3. Ministeryong Gidasig sa Gugma ni Cristo', 'Ang tinuod nga ministeryo nakasentro kang Cristo, dili sa kaugalingon. Nasayod si Pablo nga manubag siya kang Cristo, ug ang iyang ministeryo gidasig sa pagtahod ug gugma kang Cristo. Wala niya tugoti nga siya mismo mahimong sentro sa iyang ministeryo. Ang iyang pokus mao ang krus ug ang ebanghelyo. Gipahiuli kita ni Cristo ngadto sa Diyos ug gitugyan kanato ang ministeryo sa pakig-uli. Busa ang mga magtutuo mahimong “mga embahador alang kang Cristo.”', 'Pangunang Leksyon: Wala kita gitawag sa pagtukod sa atong kaugalingong gingharian. Gitawag kita sa pagrepresentar sa Hari.', 'Nagaalagad ba ako kang Cristo o hinay-hinay kong gigamit ang ministeryo aron tukoron ang akong kaugalingong ngalan?'],
-          ['4. Kasingkasing ni Pablo sa Gugma ug Pagpahiuli', 'Tingali kini ang labing importante nga punto tungod kay gipakita niini nga ang Kristohanong gugma dili magpakabuta sa sala, apan dili usab mobiya sa nakasala. Misulat si Pablo og lig-on kaayong sulat ngadto sa mga taga-Corinto tungod kay adunay seryosong mga problema nga kinahanglan atubangon. Nasakitan sila sa iyang pagtul-id, apan dili niya tuyo nga gub-on o pakaulawan sila. Gusto niya nga motubag sila sa husto ug mahibalik. Sa dihang gidala ni Tito kang Pablo ang balita nga positibo ang tubag sa mga taga-Corinto, nalipay pag-ayo si Pablo. Gihisgutan usab sa leksyon ang disiplina sa iglesia. Gipatin-aw niini nga ang disiplina kinahanglan adunay pagpahiuli isip tumong. Kung ang usa ka tawo nakasala ug mitubag sa husto, dili angay nga padayon siyang trataron sa iglesia nga daw permanente siyang gisalikway. Busa gisugo ni Pablo ang mga taga-Corinto nga pasayloon ug ipakita pag-usab ang ilang gugma ngadto sa maong tawo.', 'Punto sa Pagtudlo: Ang tumong sa pagtul-id dili pagpakaulaw. Kini mao ang pagkaayo, paghinulsol, pagpahiuli, ug espirituwal nga pagkahamtong.', 'Kung motul-id ko sa usa ka tawo, naningkamot ba ako nga pamatud-an nga ako ang husto o naningkamot ba ako nga matabangan siyang mahibalik?']
-        ],
-        synthesisTitle: '🔑 Paghiusa sa Upat ka Punto',
-        synthesisSubtext: 'Kining upat ka punto naghatag og usa ka kompleto nga hulagway sa tinuod nga Kristohanong ministeryo:',
-        synthesis: [
-          ['1. Pagbag-o', 'Kung adunay nag-antos, dili nato sila pasagdan. Atong ipaambit ang kahupayan nga gihatag sa Diyos kanato.'],
-          ['2. Pagkamatinud-anon taliwala sa pag-antos', 'Kung kita nag-alagad, kinahanglan tinuod ang atong mga motibo. Dili nato angay manipulahon ang mga tawo o mag-alagad tungod sa kaugalingong interes.'],
-          ['3. Pakig-uli', 'Ang gugma andam mohatag og panahon, paningkamot, mga kapanguhaan, ug kaugalingong kahupayan alang sa kaayohan sa uban.'],
-          ['4. Pagpahiuli', 'Kung ang mga tawo mahulog sa sala, ang gugma dili lamang maghukom kanila. Atubangon niini sa husto ang sayop ug tinguhaon nga mabalik ang tawo pinaagi sa kapasayloan ug gugma.']
-        ],
-        closingTitle: 'Panghimakas nga Hunahuna:',
-        closing: 'Ang ministeryo ni Pablo wala gidasig sa personal nga kaayohan, kasikat, o kasayon. Gidasig kini sa gugma ni Cristo. Tungod kay gihigugma niya ang mga taga-Corinto, iyang gihupay sila, nakigsulti kanila nga matinud-anon, nagsakripisyo alang sa ilang kaayohan, nagtul-id kanila kung gikinahanglan, ug midawat pag-usab kanila sa dihang mitubag sila sa husto.',
-        discussionTitle: 'Mga Pangutana sa Panaghisgot',
-        questions: [
-          'Unsaon nato pagsiguro nga ang atong pag-alagad sa iglesia ug komunidad gidasig sa gugma imbes nga tungod lamang sa katungdanan?',
-          'Nganong importante ang pagkamatinud-anon ug tinuod nga pag-atiman sa pagtabang sa uban sa ilang espirituwal nga mga pakigbisog?'
-        ]
-      },
-
-      ilocano: {
-        image: 'ilocano.png'
-        title: 'Pakabuklan ti Leksion',
-        scripture: '“Maparparigat kami iti amin a wagas, ngem saan a napukaw; mariribukan, ngem saan a maiturong iti pannakawalangnamnama; maidadanes, ngem saan a mapanawan; matumba, ngem saan a madadael; kankanayon nga aw-awiten iti bagi mi ti ipapatay ni Jesus, tapno ti biag ni Jesus ket maiparangarang met kadagiti bagbagimi.”',
-        scriptureRef: '— 2 Corinto 4:8–10',
-        mainIdea: 'Ti napudno a ministerio Kristiano ket saan a maipapan iti abilidad ti tao, pannakaammo wenno pannakaidayaw, wenno bukod a gunggona. Maipapan daytoy iti panangipalubos ken Cristo a mangaramid babaen kadagiti adipenna tapno mabaliwan dagiti biag, mapagtalinaed ti kinamatalek iti panagrigat, maisubli dagiti tattao iti Dios, ken maiturongda iti kinapudno, kinasanto, ken pannakaisubli.',
-        pointsHeading: 'Dagiti Kangrunaan a Puntos iti Pakabuklan',
-        points: [
-          ['1. Dagiti Bunga ti Napudno a Ministerio', 'Ti pammaneknek ti napudno a ministerio ket saan a dagiti kredensial ti ministro no di ket dagiti nabaliwan a biag dagiti tattao a pagserbian. Iladawan ni Pablo dagiti taga-Corinto kas “surat ni Cristo.” Ti nabaliwan a biagda ket nangipakita a napudno ti ministeriona. Saan na nga impakitang gapu iti siribna wenno bukodna nga abilidad daytoy a pannakabalbaliw, no di ket gapu iti aramid ti Dios babaen iti Espiritu.', 'Kangrunaan a Leksyon: Ti naballigi a ministerio ket saan nga umuna a maukat iti bilang dagiti makaammo iti ministro, no di ket iti nalawag a pannakabukel ni Cristo kadagiti tattao.', 'No sumango dagiti tattao iti ministeriok, makita da kadi a dakdakkel nga makita da ni Cristo ngem siak?'],
-          ['2. Panagrigat ken Dayag', 'Ti napudno a ministerio ket saan a mangikkat iti panagrigat. Ipakitana ti pannakabalin ti Dios iti tengnga ti kinakapuy ti tao. Iladawan ni Pablo ti bagina a kas marupok a “banga a pitak.” Nakaawat iti pannakarigat, pannakariribok, pannakaidadanes, ken pannakatumba, ngem saan a naan-anay a naparmek. Ti panagrigatna ket nagbalin a lugar a pakaiparangarangan ti “biag ni Jesus” babaen kenkuana. Nagibtor ni Pablo gapu ta tumaliaw ti panagkitana iti agdama a kasasaad, iti panagungar ken iti agnanayon a dayag a sagsagrapen dagiti mamati.', 'Kangrunaan a Leksyon: Ti kinakapuy ket saan a mangdiskwalipika kadatayo iti ministerio. Ti kinakapuy a naisuko iti Dios ket mabalin a pagbalinan ti pannakaiparangarang ti pannakabalinna.', 'Mabalin kadi a mapagtalinaedko ti kinamatalek no ti ministerio ket agbalin a narigat, masakit, ken saan a makita?'],
-          ['3. Ministerio a Napakilos iti Ayat ni Cristo', 'Ti napudno a ministerio ket nakasentro ken Cristo, saan a iti bukod a bagi. Ammona ni Pablo a manungpalen isuna ken Cristo, ken ti ministeriona ket napakilos babaen iti panagraem ken ayatna ken Cristo. Saan na nga impasentro ti bagina iti ministerio. Ti pokusna ket ti krus ken ti evangelio. Pinagkappia ni Cristo dagiti tattao ken Dios ket intalekna kadatayo ti ministerio ti pannakikappia. Isu a dagiti mamati ket agbalinda a “mga embahador ni Cristo.”', 'Kangrunaan a Leksyon: Saan a naayaban tayo a mangbangon iti bukod tayo a pagarian. Naayaban tayo a mangirepresentar iti Ari.', 'Agserbiak kadi ken Cristo wenno siu-ulo nga us-usarek ti ministerio tapno bangunek ti bukodko a nagan?'],
-          ['4. Puso ni Pablo iti Ayat ken Pannakaisubli', 'Daytoy nalabit ti kapapatgan a punto gapu ta ipakitana a ti ayat Kristiano ket saan a palalabsenna ti basol, ngem saan met a baybay-an ti nagbasol. Nagsurat ni Pablo iti napigsa a surat kadagiti taga-Corinto gapu kadagiti napateg a parikut a masapul a sangsangpetan. Nasaktan ida iti pannangtubngarna, ngem saan a panggepna a dadaelen wenno pabainenda ida. Kayatna a sumungbatda iti umiso ken maisublida. Idi impakaammo ni Tito ken Pablo a nasayaat ti sungbat dagiti taga-Corinto, napno iti ragsak ni Pablo. Tinalakay met ti leksion ti disiplina iti iglesia. Ipakitana a ti disiplina ket masapul nga addaan iti pannakaisubli kas panggep. No nakabasol ti maysa a tao ken umiso ti sungbatna, saan a masapul a tuloy-tuloy nga ituring ti iglesia a kasla permanente a maikkat. Isu a kinuna ni Pablo kadagiti taga-Corinto nga pakawanenda ken ipakitada manen ti ayatda iti dayta a tao.', 'Punto ti Panangisuro: Ti panggep ti pannangtubngar ket saan a pannakapabain. Daytoy ket pannakaagas, panagbabawi, pannakaisubli, ken pannakadur-as iti espiritu.', 'No tubngarek ti maysa a tao, padasak kadi a paneknekan nga siak ti umiso wenno padasak a tulongan isuna a maisubli?']
-        ],
-        synthesisTitle: '🔑 Pagtitipon ti Uppat a Puntos',
-        synthesisSubtext: 'Dagitoy uppat a punto ket mangbukel iti kompleto a ladawan ti napudno a ministerio Kristiano:',
-        synthesis: [
-          ['1. Pannakabalbaliw', 'No adda agsagsagaba, saan tayo ida a baybay-an. Ibingay tayo ti liwliwa a inted ti Dios kadatayo.'],
-          ['2. Kinamatalek iti panagrigat', 'No agserbi tayo, masapul a napudno dagiti motibo tayo. Saan tayo a mangmanipula kadagiti tattao wenno agserbi gapu iti bukod a pagimbagan.'],
-          ['3. Pannakikappia', 'Ti ayat ket nakasagana a mangted iti tiempo, panagpursigi, recursos, ken bukod a kenyamanan para iti pagimbagan dagiti dadduma.'],
-          ['4. Pannakaisubli', 'No matnag dagiti tattao iti basol, ti ayat ket saan laeng a mangukom kadakuada. Sangsangpetanna iti umiso ti biddut ken sapulenna a maisubli ti tao babaen iti pammakawan ken ayat.']
-        ],
-        closingTitle: 'Pangserraan a Panunot:',
-        closing: 'Ti ministerio ni Pablo ket saan a napakilos babaen iti bukod a pagimbagan, kasikatan, wenno kinatalged. Napakilos daytoy babaen iti ayat ni Cristo. Gapu ta inayatna dagiti taga-Corinto, linawlawagna ida, nakisao iti kinapudno kadakuada, nagsakripisio para iti pagimbaganda, tinubngarna ida no kasapulan, ken inawatna ida manen idi simmungbatda iti umiso.',
-        discussionTitle: 'Dagiti Saludsod iti Panagtutungtungan',
-        questions: [
-          'Kasano a masigurado tayo a ti panagserbi tayo iti iglesia ken komunidad ket mapakilos babaen iti ayat imbes a babaen laeng iti pagrebbengan?',
-          'Apay a napateg ti kinapudno ken pudno a panangaywan no tumulong tayo kadagiti dadduma iti espirituwal a panagbinnusoranda?'
-        ]
-      }
-    };
-
-    const translationButtons = document.querySelectorAll('.translation-btn');
-    const translationPanel = document.getElementById('lesson-content');
-    const translationViewport = document.getElementById('translation-viewport');
-    let activeLanguageIndex = 0;
-    const languageOrder = ['english', 'tagalog', 'cebuano', 'ilocano'];
-
-    function renderLesson(language, direction = 0, animate = true) {
-      const data = lessonTranslations[language];
-      const html = `
-        <div class="card lesson-media translation-media">
-          <a href="${data.image}" target="_blank" class="lesson-img-link">
-  <img src="${data.image}" alt="${language} lesson visual" class="lesson-img">
-</a>
-          <div class="media-actions">
-            <a href="${data.image}" download class="btn-primary">
-  📥 Download Lesson Visual
-</a>
-          </div>
-        </div>
-
-        <h2>${data.title}</h2>
-        <blockquote class="quote-block">
-          “${data.scripture.replace(/^“|”$/g, '')}”
-          <cite>${data.scriptureRef}</cite>
-        </blockquote>
-
-        <h3>Main Idea:</h3>
-        <p>${data.mainIdea}</p>
-
-        <h3>${data.pointsHeading}</h3>
-        <ul class="lesson-points">
-          ${data.points.map(point => `
-            <li>
-              <strong>${point[0]}</strong>
-              <p>${point[1]}</p>
-              <div class="takeaway-box">
-                <p class="teaching-note"><em>${point[2]}</em></p>
-                <strong>Question:</strong> <em>${point[3]}</em>
-              </div>
-            </li>
-          `).join('')}
-        </ul>
-
-        <div class="synthesis-section">
-          <h2>${data.synthesisTitle}</h2>
-          <p class="subtext">${data.synthesisSubtext}</p>
-          <div class="flow-container">
-            ${data.synthesis.map((item, index) => `
-              <div class="flow-step"><strong>${item[0]}</strong> ${item[1]}</div>
-              ${index < data.synthesis.length - 1 ? '<div class="flow-arrow">↓</div>' : ''}
-            `).join('')}
-          </div>
-        </div>
-
-        <div class="floating-box">
-          <h3>${data.closingTitle}</h3>
-          <p>${data.closing}</p>
-        </div>
-
-        <h3>${data.discussionTitle}</h3>
-        <div class="discussion-list">
-          ${data.questions.map(question => `<p class="teaching-note"><em>${question}</em></p>`).join('')}
-        </div>
-      `;
-
-      translationPanel.classList.remove('is-sliding');
-      translationPanel.style.transition = 'none';
-      translationPanel.style.transform = `translateX(${direction > 0 ? '100%' : direction < 0 ? '-100%' : '0'})`;
-      translationPanel.innerHTML = html;
-
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          if (animate && direction !== 0) {
-            translationPanel.classList.add('is-sliding');
-            translationPanel.style.transition = '';
-            translationPanel.style.transform = 'translateX(0)';
-          } else {
-            translationPanel.style.transition = '';
-            translationPanel.style.transform = 'translateX(0)';
-          }
-        });
-      });
-    }
-
-    function setActiveLanguage(language, animate = true) {
-      const newIndex = languageOrder.indexOf(language);
-      if (newIndex < 0 || newIndex === activeLanguageIndex) return;
-
-      const direction = newIndex > activeLanguageIndex ? -1 : 1;
-      activeLanguageIndex = newIndex;
-
-      translationButtons.forEach(button => {
-        const isActive = button.dataset.language === language;
-        button.classList.toggle('active', isActive);
-        if (isActive) button.setAttribute('aria-current', 'true');
-        else button.removeAttribute('aria-current');
-      });
-
-      renderLesson(language, direction, animate);
-      document.querySelector(`[data-language="${language}"]`)?.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
-    }
-
-    translationButtons.forEach(button => {
-      button.addEventListener('click', () => setActiveLanguage(button.dataset.language));
-    });
-
-    // Finger swipe on the lesson content. Swipe left moves to the next language.
-    // Swipe right moves to the previous language.
-    let touchStartX = null;
-    let touchStartY = null;
-
-    translationViewport.addEventListener('touchstart', event => {
-      if (!event.touches.length) return;
-      touchStartX = event.touches[0].clientX;
-      touchStartY = event.touches[0].clientY;
-    }, { passive: true });
-
-    translationViewport.addEventListener('touchend', event => {
-      if (touchStartX === null || !event.changedTouches.length) return;
-      const touch = event.changedTouches[0];
-      const dx = touch.clientX - touchStartX;
-      const dy = touch.clientY - touchStartY;
-      touchStartX = null;
-      touchStartY = null;
-
-      if (Math.abs(dx) < 55 || Math.abs(dx) < Math.abs(dy) * 1.2) return;
-
-      if (dx < 0 && activeLanguageIndex < languageOrder.length - 1) {
-        setActiveLanguage(languageOrder[activeLanguageIndex + 1]);
-      } else if (dx > 0 && activeLanguageIndex > 0) {
-        setActiveLanguage(languageOrder[activeLanguageIndex - 1]);
-      }
-    }, { passive: true });
-
-    renderLesson('english', 0, false);
-  </script>
 
   <script type="module" src="../script.js"></script>
 </body>
