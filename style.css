@@ -238,7 +238,50 @@ body {
   background: rgba(255, 255, 255, 0.2);
   border-color: #FFFFFF;
 }
+<!-- ========================================== -->
+<!-- 🟢 START: ADD THIS TO YOUR <head> OR CSS   -->
+<!-- ========================================== -->
 
+  .language-selector {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    margin: 20px 0;
+    flex-wrap: wrap;
+  }
+  .lang-btn {
+    border: 2px solid #5a2d82; 
+    background: transparent;
+    color: #5a2d82;
+    padding: 8px 16px;
+    cursor: pointer;
+    border-radius: 6px;
+    font-weight: 600;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    transition: all 0.3s ease;
+  }
+  .lang-btn.active, .lang-btn:hover {
+    background: #5a2d82;
+    color: #ffffff;
+  }
+  .slider-viewport {
+    width: 100%;
+    overflow: hidden; 
+  }
+  .slider-track {
+    display: flex;
+    width: 500%; /* 100% per slide * 5 languages */
+    transition: transform 0.5s ease-in-out; 
+  }
+  .slide {
+    width: 20%; /* 100% divided by 5 slides */
+    box-sizing: border-box;
+    padding: 0 10px; /* Optional spacing between slides */
+  }
+
+/*<!-- ========================================== -->
+<!-- 🔴 END: CSS ADDITION                       -->
+<!-- ========================================== -->
 /* ----------------------------------------------------
    Floating Pop-Up Lesson Cards (Sabbath School)
 ---------------------------------------------------- */
