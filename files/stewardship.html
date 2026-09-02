@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stewardship and Mission - DayBreak</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+  <!-- Fixed Navigation Bar -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="logo">
+        <span class="logo-icon">🌅</span> DayBreak
+      </a>
+      <div class="nav-actions">
+        <a href="../index.html" class="btn-secondary btn-sm">← Back to Lessons</a>
+        <button class="btn-login">Login</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="content-container lesson-container">
+
+    <!-- Lesson Header -->
+    <header class="card lesson-header-card">
+      <span class="badge">Lesson 11</span>
+      <h1 class="lesson-main-title">Stewardship and Mission</h1>
+      <p class="scripture-ref"><strong>Key Scripture:</strong> 2 Corinthians 8:9</p>
+
+      <blockquote class="scripture-quote">
+        "For you know the grace of our Lord Jesus Christ, that though He was rich, yet for your sakes He became poor, that you through His poverty might become rich."
+        <cite>— 2 Corinthians 8:9 (NKJV)</cite>
+      </blockquote>
+    </header>
+
+    <!-- Lesson Visual / Download -->
+    <section class="card lesson-media">
+      <a href="stewardship.png" target="_blank" class="lesson-img-link">
+        <img src="stewardship.png" alt="Stewardship and Mission" class="lesson-img">
+      </a>
+      <div class="media-actions">
+        <a href="stewardship.png" download class="btn-primary">
+          📥 Download Lesson Visual
+        </a>
+      </div>
+    </section>
+
+    <!-- Lesson Content -->
+    <article class="card lesson-body" id="lesson-content">
+      <h2>Lesson Summary</h2>
+
+      <div class="main-idea-box">
+        <h3>Main Idea:</h3>
+        <p>Stewardship and mission are inseparable. God gives so that we may give, reflecting Christ's self-giving love and advancing His mission in the world.</p>
+      </div>
+
+      <h3>Key Themes for the Week</h3>
+      <ul class="lesson-points">
+        <li>
+          <strong>1. The Example of Jesus</strong>
+          <p>Though He was rich, Jesus became poor for us. He gave up heaven, lived humbly, and died on the cross. His purpose was that we might become rich in salvation.</p>
+          <p class="teaching-note"><em>Teaching point: Christ's generosity toward us is the pattern for our generosity toward others. 📖 2 Corinthians 8:9</em></p>
+        </li>
+
+        <li>
+          <strong>2. Motivation: Giving From the Heart</strong>
+          <p>Paul teaches that we should give willingly, not out of compulsion. God loves a cheerful and generous giver, and He supplies all we need and multiplies our giving for His glory.</p>
+          <p class="teaching-note"><em>Teaching point: "Each one must give as he has decided in his heart, not reluctantly or under compulsion, for God loves a cheerful giver." 📖 2 Corinthians 9:7</em></p>
+        </li>
+
+        <li>
+          <strong>3. Stewardship for the Saints and the Mission</strong>
+          <p>Our gifts meet needs and strengthen the church. Giving supports the spread of the gospel — we are co-workers with God in His mission.</p>
+          <p class="teaching-note"><em>Teaching point: "That they may glorify God for your obedience to the gospel of Christ and for the generosity of your sharing with them and with all." 📖 2 Corinthians 9:13</em></p>
+        </li>
+
+        <li>
+          <strong>4. Abundant Grace, Abundant Thanksgiving</strong>
+          <p>God gives abundantly so we can give abundantly. Our giving results in thanksgiving to God, and all glory belongs to Him who provides.</p>
+          <p class="teaching-note"><em>Teaching point: "Thanks be to God for His indescribable gift!" 📖 2 Corinthians 9:15</em></p>
+        </li>
+      </ul>
+
+      <div class="synthesis-section">
+        <h2>🔑 Key Spiritual Principle</h2>
+        <p>We are stewards of God's grace and resources, called to give generously so others may know Christ.</p>
+      </div>
+
+      <div class="floating-box">
+        <h3>Closing Thought</h3>
+        <p><i>God gave everything for us; we give back with grateful hearts to bless others and advance His mission. Empowered by Christ's grace, we manage His gifts faithfully and share them generously to reach the world with His love and truth.</i></p>
+        <p class="closing-highlight">Give with Joy. Serve with Love. Share for His Glory.</p>
+      </div>
+
+      <div style="margin-top: 25px; text-align: left;">
+        <button id="copy-btn" class="btn-primary" onclick="window.copyLessonText()">📋 Copy Text</button>
+      </div>
+    </article>
+
+    <!-- Interactive Community Section (Reactions & Comments) -->
+    <section class="card interactive-section">
+
+      <!-- Reactions -->
+      <div class="reactions-container">
+        <h3>Reactions</h3>
+        <div class="reaction-buttons">
+          <button class="btn-reaction" data-type="amen">
+            <span class="reaction-icon">🙏</span>
+            <span class="reaction-label">Amen</span>
+            <span class="reaction-count" id="count-amen">0</span>
+          </button>
+
+          <button class="btn-reaction" data-type="heart">
+            <span class="reaction-icon">❤️</span>
+            <span class="reaction-label">Love</span>
+            <span class="reaction-count" id="count-heart">0</span>
+          </button>
+
+          <button class="btn-reaction" data-type="insight">
+            <span class="reaction-icon">💡</span>
+            <span class="reaction-label">Insightful</span>
+            <span class="reaction-count" id="count-insight">0</span>
+          </button>
+        </div>
+      </div>
+
+      <hr class="section-divider">
+
+      <!-- Real-time Comments -->
+      <div class="comments-container">
+        <h3>Community Discussion</h3>
+
+        <!-- Post Comment Form -->
+        <form id="comment-form" class="comment-form">
+          <div class="input-wrapper">
+            <textarea id="comment-input" rows="3" placeholder="Share your thoughts or questions about this lesson..." required></textarea>
+          </div>
+          <div class="form-action">
+            <button type="submit" class="btn-primary">Post Comment</button>
+          </div>
+        </form>
+
+        <!-- Dynamic Comment Stream -->
+        <div id="comments-list" class="comments-list">
+          <p class="loading-text">Loading discussion...</p>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Daybreak Lessons. All rights reserved.</p>
+  </footer>
+
+  <!-- Login Modal Overlay -->
+  <div id="login-modal" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close" id="close-login">&times;</button>
+
+      <h2 id="modal-title">Welcome Back</h2>
+      <p class="subtitle" id="modal-subtitle">Sign in to react and join the discussion.</p>
+
+      <div class="social-login-group">
+        <button class="btn-social btn-google" id="google-login">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3h3.88c2.27-2.09 3.665-5.17 3.665-9.12z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.26v3.09C3.25 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.62H1.26C.46 8.22 0 10.06 0 12s.46 3.78 1.26 5.38l4.02-3.09z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.7 1.26 6.62l4.02 3.09c.95-2.85 3.6-4.96 6.72-4.96z"/></svg>
+          Continue with Google
+        </button>
+
+        <button class="btn-social btn-facebook" id="facebook-login">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#ffffff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Continue with Facebook
+        </button>
+      </div>
+
+      <div class="divider">
+        <span>or use email</span>
+      </div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required placeholder="••••••••">
+        </div>
+        <button type="submit" id="form-submit-btn" class="btn-primary btn-full">Sign In</button>
+      </form>
+
+      <div class="auth-toggle">
+        <span id="toggle-text">Don't have an account?</span>
+        <button id="toggle-auth-btn" class="btn-link">Create one</button>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="../script.js"></script>
+</body>
+</html>
