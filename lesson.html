@@ -53,89 +53,31 @@
 
     <div class="slider-viewport">
       <div class="slider-track" id="sliderTrack">
-       <script type="module">
-  import { lessonsData } from './lessons-data.js';
+        <!-- Dynamic language slides (English, Tagalog, Cebuano, Ilocano, Waray) will be generated here -->
+      </div>
+    </div>
 
-  const urlParams = new URLSearchParams(window.location.search);
-  const lessonId = urlParams.get('id') || 'authentic-ministry'; 
-  const lesson = lessonsData[lessonId];
-
-  if (lesson) {
-    // Populate header details
-    document.getElementById('page-title').innerText = `${lesson.title} - DayBreak`;
-    document.getElementById('lesson-badge').innerText = lesson.badge;
-    document.getElementById('lesson-title').innerText = lesson.title;
-    document.getElementById('scripture-ref').innerText = lesson.scriptureRef;
-    document.getElementById('scripture-quote').innerText = `"${lesson.scriptureQuote}"`;
-    document.getElementById('scripture-cite').innerText = lesson.scriptureCite;
-
-    const languages = ['en', 'tl', 'ceb', 'ilo', 'war'];
-    const sliderTrack = document.getElementById('sliderTrack');
-
-    // Build all 5 language slides dynamically
-    sliderTrack.innerHTML = languages.map(lang => {
-      const content = lesson[lang];
-      
-      if (!content) {
-        return `<div class="slide"><article class="card lesson-body"><p>Translation coming soon...</p></article></div>`;
-      }
-
-      return `
-        <div class="slide">
-          <section class="card lesson-media">
-            <a href="${content.imageSrc}" target="_blank" class="lesson-img-link">
-              <img src="${content.imageSrc}" alt="Lesson Visual" class="lesson-img">
-            </a>
-            <div class="media-actions">
-              <a href="${content.imageSrc}" download class="btn-primary">📥 Download Lesson Visual</a>
-            </div>
-          </section>
-
-          <article class="card lesson-body">
-            <h2>Lesson Summary</h2>
-            <h3>Main Idea:</h3>
-            <p>${content.mainIdea}</p>
-
-            <h3>Key Points in Summary</h3>
-            <ul class="lesson-points">
-              ${content.points.map(p => `
-                <li>
-                  <strong>${p.title}</strong>
-                  <p>${p.description}</p>
-                  <div class="takeaway-box">
-                    <p class="teaching-note"><em>${p.takeaway}</em></p>
-                    <strong>Question: </strong> <em>${p.question}</em>
-                  </div>
-                </li>
-              `).join('')}
-            </ul>
-
-            <div class="synthesis-section">
-              <h2>🔑 Put the Four Points Together</h2>
-              <div class="flow-container">
-                ${content.points.map((p, i) => `
-                  <div class="flow-step"><strong>${p.flowLabel}</strong> ${p.flowText}</div>
-                  ${i < content.points.length - 1 ? '<div class="flow-arrow">↓</div>' : ''}
-                `).join('')}
-              </div>
-            </div>
-
-            <div class="floating-box">
-              <h3>Closing Thought</h3>
-              <p><i>${content.closingThought}</i></p>
-            </div>
-
-            <h3>Discussion Questions</h3>
-            <ol class="discussion-list">
-              ${content.questions.map(q => `<li><p class="teaching-note"><em>${q}</em></p></li>`).join('')}
-            </ol>
-          </article>
+    <!-- Reactions & Comments -->
+    <section class="card interactive-section">
+      <div class="reactions-container">
+        <h3>Reactions</h3>
+        <div class="reaction-buttons">
+          <button class="btn-reaction" data-type="amen"><span class="reaction-icon">🙏</span> <span class="reaction-label">Amen</span> <span class="reaction-count" id="count-amen">0</span></button>
+          <button class="btn-reaction" data-type="heart"><span class="reaction-icon">❤️</span> <span class="reaction-label">Love</span> <span class="reaction-count" id="count-heart">0</span></button>
+          <button class="btn-reaction" data-type="insight"><span class="reaction-icon">💡</span> <span class="reaction-label">Insightful</span> <span class="reaction-count" id="count-insight">0</span></button>
         </div>
-      `;
-    }).join('');
-  }
-</script>  </div>
-        </div>
+      </div>
+      <hr class="section-divider">
+      <div class="comments-container">
+        <h3>Community Discussion</h3>
+        <form id="comment-form" class="comment-form">
+          <div class="input-wrapper">
+            <textarea id="comment-input" rows="3" placeholder="Share your thoughts..." required></textarea>
+          </div>
+          <div class="form-action"><button type="submit" class="btn-primary">Post Comment</button></div>
+        </form>
+        <div id="comments-list" class="comments-list"><p class="loading-text">Loading discussion...</p></div>
+      </div>
     </section>
 
   </main>
@@ -145,59 +87,84 @@
   <script type="module">
     import { lessonsData } from './lessons-data.js';
 
-    // Get lesson ID from URL parameter e.g., lesson.html?id=authentic-ministry
+    // Fetch the lesson ID from the browser URL (e.g., lesson.html?id=authentic-ministry)
     const urlParams = new URLSearchParams(window.location.search);
     const lessonId = urlParams.get('id') || 'authentic-ministry'; 
-    const data = lessonsData[lessonId];
+    const lesson = lessonsData[lessonId];
 
-    if (data) {
-      document.getElementById('page-title').innerText = `${data.title} - DayBreak`;
-      document.getElementById('lesson-badge').innerText = data.badge;
-      document.getElementById('lesson-title').innerText = data.title;
-      document.getElementById('scripture-ref').innerText = data.scriptureRef;
-      document.getElementById('scripture-quote').innerText = `"${data.scriptureQuote}"`;
-      document.getElementById('scripture-cite').innerText = data.scriptureCite;
-      
-      document.getElementById('img-link').href = data.imageSrc;
-      document.getElementById('lesson-img').src = data.imageSrc;
-      document.getElementById('download-link').href = data.imageSrc;
-      
-      document.getElementById('main-idea').innerText = data.mainIdea;
-      document.getElementById('closing-thought').innerText = data.closingThought;
+    if (lesson) {
+      // 1. Populate top header section
+      document.getElementById('page-title').innerText = `${lesson.title} - DayBreak`;
+      document.getElementById('lesson-badge').innerText = lesson.badge;
+      document.getElementById('lesson-title').innerText = lesson.title;
+      document.getElementById('scripture-ref').innerText = lesson.scriptureRef;
+      document.getElementById('scripture-quote').innerText = `"${lesson.scriptureQuote}"`;
+      document.getElementById('scripture-cite').innerText = lesson.scriptureCite;
 
-      // Render 4 Points
-      const pointsList = document.getElementById('points-list');
-      const flowContainer = document.getElementById('flow-container');
-      
-      pointsList.innerHTML = '';
-      flowContainer.innerHTML = '';
+      const languages = ['en', 'tl', 'ceb', 'ilo', 'war'];
+      const sliderTrack = document.getElementById('sliderTrack');
 
-      data.points.forEach((point, idx) => {
-        // Build 4 detailed points list
-        pointsList.innerHTML += `
-          <li>
-            <strong>${point.title}</strong>
-            <p>${point.description}</p>
-            <div class="takeaway-box">
-              <p class="teaching-note"><em>${point.takeaway}</em></p>
-              <strong>Question: </strong> <em>${point.question}</em>
-            </div>
-          </li>
+      // 2. Build all 5 language slides dynamically
+      sliderTrack.innerHTML = languages.map(lang => {
+        const content = lesson[lang];
+        
+        if (!content) {
+          return `<div class="slide"><article class="card lesson-body"><p style="padding: 20px; text-align: center;">Translation coming soon...</p></article></div>`;
+        }
+
+        return `
+          <div class="slide">
+            <section class="card lesson-media">
+              <a href="${content.imageSrc}" target="_blank" class="lesson-img-link">
+                <img src="${content.imageSrc}" alt="Lesson Visual" class="lesson-img">
+              </a>
+              <div class="media-actions">
+                <a href="${content.imageSrc}" download class="btn-primary">📥 Download Lesson Visual</a>
+              </div>
+            </section>
+
+            <article class="card lesson-body">
+              <h2>Lesson Summary</h2>
+              <h3>Main Idea:</h3>
+              <p>${content.mainIdea}</p>
+
+              <h3>Key Points in Summary</h3>
+              <ul class="lesson-points">
+                ${content.points.map(p => `
+                  <li>
+                    <strong>${p.title}</strong>
+                    <p>${p.description}</p>
+                    <div class="takeaway-box">
+                      <p class="teaching-note"><em>${p.takeaway}</em></p>
+                      <strong>Question: </strong> <em>${p.question}</em>
+                    </div>
+                  </li>
+                `).join('')}
+              </ul>
+
+              <div class="synthesis-section">
+                <h2>🔑 Put the Four Points Together</h2>
+                <div class="flow-container">
+                  ${content.points.map((p, i) => `
+                    <div class="flow-step"><strong>${p.flowLabel}</strong> ${p.flowText}</div>
+                    ${i < content.points.length - 1 ? '<div class="flow-arrow">↓</div>' : ''}
+                  `).join('')}
+                </div>
+              </div>
+
+              <div class="floating-box">
+                <h3>Closing Thought</h3>
+                <p><i>${content.closingThought}</i></p>
+              </div>
+
+              <h3>Discussion Questions</h3>
+              <ol class="discussion-list">
+                ${content.questions.map(q => `<li><p class="teaching-note"><em>${q}</em></p></li>`).join('')}
+              </ol>
+            </article>
+          </div>
         `;
-
-        // Build 4 Synthesis Flow Steps
-        flowContainer.innerHTML += `
-          <div class="flow-step"><strong>${point.flowLabel}</strong> ${point.flowText}</div>
-          ${idx < data.points.length - 1 ? '<div class="flow-arrow">↓</div>' : ''}
-        `;
-      });
-
-      // Render Discussion Questions
-      const questionsList = document.getElementById('questions-list');
-      questionsList.innerHTML = '';
-      data.questions.forEach(q => {
-        questionsList.innerHTML += `<li><p class="teaching-note"><em>${q}</em></p></li>`;
-      });
+      }).join('');
     }
   </script>
 
