@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Lesson Creator - DayBreak Admin</title>
+  <link rel="stylesheet" href="../style.css">
+  <style>
+    .admin-container { max-width: 800px; margin: 40px auto; padding: 20px; }
+    .form-group { margin-bottom: 15px; }
+    .form-group label { display: block; font-weight: bold; margin-bottom: 5px; }
+    .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
+    .point-box { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ddd; }
+  </style>
+</head>
+<body>
+  <div class="admin-container card">
+    <h2>➕ Add New Lesson</h2>
+    <form id="lesson-form">
+      <div class="form-group">
+        <label>Lesson ID (e.g., lesson-11):</label>
+        <input type="text" id="lessonId" required>
+      </div>
+      <div class="form-group">
+        <label>Lesson Badge (e.g., Lesson 11):</label>
+        <input type="text" id="badge" required>
+      </div>
+      <div class="form-group">
+        <label>Title:</label>
+        <input type="text" id="title" required>
+      </div>
+      <div class="form-group">
+        <label>Key Scripture Reference:</label>
+        <input type="text" id="scriptureRef" required>
+      </div>
+      <div class="form-group">
+        <label>Scripture Quote Text:</label>
+        <textarea id="scriptureQuote" rows="2" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Scripture Citation (e.g., — 2 Corinthians 4:8–10 (ESV)):</label>
+        <input type="text" id="scriptureCite" required>
+      </div>
+      <div class="form-group">
+        <label>Image Filename/URL:</label>
+        <input type="text" id="imageSrc" placeholder="e.g., lesson11.png" required>
+      </div>
+      <div class="form-group">
+        <label>Main Idea Summary:</label>
+        <textarea id="mainIdea" rows="3" required></textarea>
+      </div>
+
+      <hr>
+      <h3>4 Key Points</h3>
+      
+      <!-- Loop 1 through 4 for Key Points -->
+      <div id="points-container"></div>
+
+      <hr>
+      <div class="form-group">
+        <label>Closing Thought:</label>
+        <textarea id="closingThought" rows="2" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Discussion Question 1:</label>
+        <input type="text" id="q1" required>
+      </div>
+      <div class="form-group">
+        <label>Discussion Question 2:</label>
+        <input type="text" id="q2" required>
+      </div>
+
+      <button type="submit" class="btn-primary" style="width: 100%;">Generate Lesson JSON Data</button>
+    </form>
+    
+    <div style="margin-top: 20px;">
+      <label><strong>Output JSON (Copy & paste into lessons-data.js):</strong></label>
+      <textarea id="json-output" rows="10" readonly style="width:100%; font-family: monospace;"></textarea>
+    </div>
+  </div>
+
+  <script>
+    // Dynamically build input forms for the 4 Points
+    const container = document.getElementById('points-container');
+    for (let i = 1; i <= 4; i++) {
+      container.innerHTML += `
+        <div class="point-box">
+          <h4>Point ${i}</h4>
+          <div class="form-group"><label>Title:</label><input type="text" id="p${i}_title" required></div>
+          <div class="form-group"><label>Description:</label><textarea id="p${i}_desc" rows="3" required></textarea></div>
+          <div class="form-group"><label>Takeaway / Note:</label><input type="text" id="p${i}_takeaway" required></div>
+          <div class="form-group"><label>Question:</label><input type="text" id="p${i}_question" required></div>
+          <div class="form-group"><label>Flow Label (e.g., ${i}. Transformation):</label><input type="text" id="p${i}_flowLabel" required></div>
+          <div class="form-group"><label>Flow Summary Text:</label><input type="text" id="p${i}_flowText" required></div>
+        </div>
+      `;
+    }
+
+    document.getElementById('lesson-form').addEventListener('submit', function(e) {
+      e.preventDefault();
+      
+      const lessonId = document.getElementById('lessonId').value;
+      
+      const newLesson = {
+        badge: document.getElementById('badge').value,
+        title: document.getElementById('title').value,
+        scriptureRef: document.getElementById('scriptureRef').value,
+        scriptureQuote: document.getElementById('scriptureQuote').value,
+        scriptureCite: document.getElementById('scriptureCite').value,
+        imageSrc: document.getElementById('imageSrc').value,
+        mainIdea: document.getElementById('mainIdea').value,
+        points: [],
+        closingThought: document.getElementById('closingThought').value,
+        questions: [
+          document.getElementById('q1').value,
+          document.getElementById('q2').value
+        ]
+      };
+
+      for (let i = 1; i <= 4; i++) {
+        newLesson.points.push({
+          title: document.getElementById(`p${i}_title`).value,
+          description: document.getElementById(`p${i}_desc`).value,
+          takeaway: document.getElementById(`p${i}_takeaway`).value,
+          question: document.getElementById(`p${i}_question`).value,
+          flowLabel: document.getElementById(`p${i}_flowLabel`).value,
+          flowText: document.getElementById(`p${i}_flowText`).value
+        });
+      }
+
+      const formattedOutput = `"${lessonId}": ` + JSON.stringify(newLesson, null, 2) + ",";
+      document.getElementById('json-output').value = formattedOutput;
+    });
+  </script>
+</body>
+</html>
