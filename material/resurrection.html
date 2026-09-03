@@ -8,7 +8,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
-   <style>
+  
+  <!-- Slider & Button CSS -->
+  <style>
     .language-selector {
       display: flex;
       gap: 10px;
@@ -63,7 +65,7 @@
   </header>
 
   <main class="content-container lesson-container">
-    
+
     <!-- Lesson Header -->
     <header class="card lesson-header-card">
       <span class="badge">Lesson 8</span>
@@ -76,7 +78,7 @@
       </blockquote>
     </header>
 
-   <!-- Language Selector Buttons -->
+    <!-- Language Selector Buttons -->
     <div class="language-selector">
       <button class="lang-btn active" onclick="switchLanguage(0, this)">English</button>
       <button class="lang-btn" onclick="switchLanguage(1, this)">Tagalog</button>
@@ -89,18 +91,23 @@
     <div class="slider-viewport">
       <div class="slider-track" id="sliderTrack">
         
-        <!-- Slide 1: English -->
+        <!-- SLIDE 1: ENGLISH -->
         <div class="slide">
+          
+          <!-- Lesson Visual / Download -->
           <section class="card lesson-media">
             <a href="resurrection.png" target="_blank" class="lesson-img-link">
               <img src="resurrection.png" alt="The Power of Christ's Resurrection" class="lesson-img">
             </a>
             <div class="media-actions">
-              <a href="resurrection.png" download class="btn-primary">📥 Download Lesson Visual</a>
+              <a href="resurrection.png" download class="btn-primary">
+                📥 Download Lesson Visual
+              </a>
             </div>
           </section>
 
-          <article class="card lesson-body">
+          <!-- Lesson Content -->
+          <article class="card lesson-body" id="ministry-content">
             <h2>Lesson Summary</h2>
             
             <div class="main-idea-box">
@@ -147,7 +154,7 @@
                 <div class="flow-step"><strong>4. THE HOPE:</strong> Because Christ lives, we will live with Him.</div>
               </div>
             </div>
-             
+
             <div class="floating-box">
               <h3>Closing Thought</h3>
               <p><i>“The resurrection is not simply something we believe happened in the past. It changes our present and guarantees our future. Because Christ died, we have forgiveness. Because Christ rose, we have victory. Because Christ lives, we have hope. And because He is the firstfruits, we can look forward to the day when we too will be raised.”</i></p>
@@ -155,18 +162,19 @@
             </div>
           </article>
         </div>
-  <!-- SLIDE 2: TAGALOG -->
+
+        <!-- SLIDE 2: TAGALOG -->
         <div class="slide">
           <section class="card lesson-media">
             <a href="resurrection-tagalog.png" target="_blank" class="lesson-img-link">
-              <img src="resurrection-tagalog.png" alt="Tagalog Lesson" class="lesson-img">
+              <img src="resurrection-tagalog.png" alt="Ang Kapangyarihan ng Muling Pagkabuhay ni Cristo" class="lesson-img">
             </a>
           </section>
           <article class="card lesson-body">
             <h2>Buod ng Aralin</h2>
             <div class="main-idea-box">
               <h3>Pangunahing Kaisipan:</h3>
-              <p>"Ang tunay na ministeryong Kristiyano ay hindi tungkol sa kakayahan ng tao..."</p>
+              <p>"Ang muling pagkabuhay ni Cristo ang pundasyon ng ebanghelyo..."</p>
             </div>
           </article>
         </div>
@@ -196,6 +204,9 @@
         </div>
 
       </div>
+    </div>
+    <!-- END SLIDER VIEWPORT -->
+
     <!-- Interactive Community Section (Reactions & Comments) -->
     <section class="card interactive-section">
       <div class="reactions-container">
@@ -206,13 +217,11 @@
             <span class="reaction-label">Amen</span>
             <span class="reaction-count" id="count-amen">0</span>
           </button>
-
           <button class="btn-reaction" data-type="heart">
             <span class="reaction-icon">❤️</span>
             <span class="reaction-label">Love</span>
             <span class="reaction-count" id="count-heart">0</span>
           </button>
-
           <button class="btn-reaction" data-type="insight">
             <span class="reaction-icon">💡</span>
             <span class="reaction-label">Insightful</span>
@@ -233,7 +242,6 @@
             <button type="submit" class="btn-primary">Post Comment</button>
           </div>
         </form>
-
         <div id="comments-list" class="comments-list">
           <p class="loading-text">Loading discussion...</p>
         </div>
@@ -288,19 +296,23 @@
     </div>
   </div>
 
-  <!-- Switcher Script Placement -->
+  <!-- Javascript for the Slide functionality -->
   <script>
     function switchLanguage(index, btnElement) {
-      const slider = document.getElementById('languageSlider');
-      slider.style.transform = `translateX(-${index * 100}%)`;
+      // 1. Move the slider track horizontally
+      const track = document.getElementById('sliderTrack');
+      track.style.transform = `translateX(-${index * 20}%)`;
 
+      // 2. Update the violet button active states
       const buttons = document.querySelectorAll('.lang-btn');
       buttons.forEach(btn => btn.classList.remove('active'));
-
-      btnElement.classList.add('active');
+      if (btnElement) {
+        btnElement.classList.add('active');
+      }
     }
   </script>
 
+  <!-- Your Main JS File -->
   <script type="module" src="../script.js"></script>
 </body>
 </html>
