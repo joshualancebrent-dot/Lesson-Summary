@@ -3,11 +3,51 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dealing With False Teacher - DayBreak</title>
+  <title>Dealing With False Teachers - DayBreak</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
+  
+  <!-- Slider & Button CSS -->
+  <style>
+    .language-selector {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .lang-btn {
+      border: 2px solid #5a2d82; 
+      background: transparent;
+      color: #5a2d82;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 6px;
+      font-weight: 600;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: all 0.3s ease;
+    }
+    .lang-btn.active, .lang-btn:hover {
+      background: #5a2d82;
+      color: #ffffff;
+    }
+    .slider-viewport {
+      width: 100%;
+      overflow: hidden; 
+    }
+    .slider-track {
+      display: flex;
+      width: 500%; /* 100% per slide * 5 languages */
+      transition: transform 0.5s ease-in-out; 
+    }
+    .slide {
+      width: 20%; /* 100% divided by 5 slides */
+      box-sizing: border-box;
+      padding: 0 10px; 
+    }
+  </style>
 </head>
 <body>
 
@@ -25,132 +65,175 @@
   </header>
 
   <main class="content-container lesson-container">
-    
+
     <!-- Lesson Header -->
     <header class="card lesson-header-card">
-      <span class="badge">Lesson 8</span>
-      <h1 class="lesson-main-title">The Power of Christ's Resurrection</h1>
-      <p class="scripture-ref"><strong>Key Scripture:</strong> 1 Corinthians 15:14-17</p>
+      <span class="badge">Lesson 9</span>
+      <h1 class="lesson-main-title">Dealing With False Teachers</h1>
+      <p class="scripture-ref"><strong>Key Scripture:</strong> 2 Corinthians 2:4, NIV</p>
 
       <blockquote class="scripture-quote">
-        "And if Christ has not been raised, our preaching is useless and so is your faith."
-        <cite>— 1 Corinthians 15:14 (NIV)</cite>
+        "For I wrote you out of great distress and anguish of heart and with many tears, not to grieve you but to let you know the depth of my love for you."
+        <cite>— 2 Corinthians 2:4 (NIV)</cite>
       </blockquote>
-    </header>der>
+    </header>
 
-  <main class="content-container lesson-container">
-    
-    <!-- Lesson Header -->
-    <div class="lesson-header">
-      <span class="badge">Lesson 9</span>
-      <h1>Love-driven Ministry</h1>
-      <p class="scripture-ref"><strong>Key Scripture:</strong> 2 Corinthians 2:4</p>
+    <!-- Language Selector Buttons -->
+    <div class="language-selector">
+      <button class="lang-btn active" onclick="switchLanguage(0, this)">English</button>
+      <button class="lang-btn" onclick="switchLanguage(1, this)">Tagalog</button>
+      <button class="lang-btn" onclick="switchLanguage(2, this)">Cebuano</button>
+      <button class="lang-btn" onclick="switchLanguage(3, this)">Ilocano</button>
+      <button class="lang-btn" onclick="switchLanguage(4, this)">Waray</button>
     </div>
 
-    <blockquote class="scripture-quote">
-      "For I wrote you out of great distress and anguish of heart and with many tears, not to grieve you but to let you know the depth of my love for you."
-      <cite>— 2 Corinthians 2:4 (NIV)</cite>
-    </blockquote>
-
-    <!-- Lesson Visual / Download -->
-    <div class="card lesson-media">
-      <a href="false-teaching.png" target="_blank" class="lesson-img-link">
-        <img src="false-teaching.png" alt="Dealing with False Teacher" class="lesson-img">
-      </a>
-      <div class="media-actions">
-        <a href="false-teaching.png" download class="btn-primary">
-          📥 Download Lesson Visual
-        </a>
-      </div>
-    </div>
-
-    <!-- Lesson Body -->
-    <article class="card lesson-body">
-      <h2>Lesson Summary</h2>
-      <h3>Main Idea:</h3>
-      <p>
-        Paul’s ministry to the Corinthians was driven by Christ’s love. This love was shown through comforting people in suffering, serving with sincerity and integrity, sacrificing for others, and restoring those who had fallen.
-      </p>
-
-      <h3>Key Themes for the Week</h3>
-      <ul class="lesson-points">
-        <li>
-          <strong>1. Thanksgiving for God’s Comfort</strong> The first point teaches that God comforts us in our suffering so that we can also comfort other people who are suffering.
-          Paul begins by calling God the “Father of mercies and God of all comfort.” Paul himself experienced tremendous hardship, but instead of allowing his suffering to separate him from God, he received comfort from Him. Because Paul had personally experienced God’s comfort, he was able to understand and encourage the Corinthians when they were going through difficulties.
-          This means that Christian comfort is not something we receive merely for ourselves. God can use our painful experiences to make us more capable of helping others. The suffering does not automatically become good, but God can use it to teach us dependence on Him and to make us spiritually mature.
-          Paul also recognized that God had delivered him in the past. That past deliverance gave him confidence that he could continue trusting God in the future.
-          
-          <div class="takeaway-box">
-            <strong>Key Takeaway:</strong> God comforts us in our difficulties, and the comfort we receive becomes something we can pass on to others.
-          </div>
-        </li>
-
-        <li>
-          <strong>2. Simplicity and Sincerity in Ministry</strong> The second point is about being genuine and honest when serving God and dealing with people.
-          Some people in Corinth had questioned Paul’s character. They thought his changing plans showed that he was unreliable or that he did not really care about them. Paul therefore explained that his ministry was characterized by “simplicity and sincerity.” These words refer to purity of motives, integrity, and honest intentions.
-          Paul was not trying to manipulate the Corinthians or use clever words to gain their approval. His ministry came from pure motives before God.
-          This is important because ministry is not simply about saying the right things. A person can appear religious outwardly while having selfish motives inwardly. Paul wanted his words, intentions, and actions to be consistent.
-          Even his changing of plans should not automatically be interpreted as dishonesty. His decision not to immediately return to Corinth was actually motivated by concern for them. After a painful visit, Paul believed another immediate visit could cause even more pain, so he chose to write to them instead.
-          
-          <div class="takeaway-box">
-            <strong>In simple terms:</strong> Love-driven ministry does not manipulate people. It serves with honest motives, clear intentions, and integrity.
-          </div>
-        </li>
-
-        <li>
-          <strong>3. Self-Sacrificing Generosity</strong> The third point concerns giving for the benefit of others rather than for personal gain.
-          The image summarizes this as Paul not seeking their money but their blessing. This connects with the lesson's broader picture of Paul's ministry: his concern was not self-interest but the spiritual welfare of the Corinthians.
-          Paul's ministry involved sacrifice. He endured suffering, hardship, anxiety, and inconvenience because he cared deeply about the churches. The PDF emphasizes that Paul carried a “deep concern” for the churches even while experiencing tremendous personal difficulties.
-          This helps us understand generosity more broadly. Generosity is not limited to giving money. We can give our time, energy, attention, encouragement, resources, and even our comfort for the sake of helping someone else.
-          The lesson's discussion of Paul's ministry also contrasts a faithful servant with someone who treats ministry as a means of personal advantage. Paul says that the faithful servant speaks the Word of God sincerely and out of love for Christ rather than for selfish purposes.
-          
-          <div class="takeaway-box">
-            <strong>In simple terms:</strong> Love asks, “How can I bless others?” rather than, “What can I get from serving them?”
-          </div>
-        </li>
-
-        <li>
-          <strong>4. Restoration Out of Love</strong> The fourth point is perhaps the most important because it shows that Christian love does not ignore sin, but it also does not abandon the sinner.
-          Paul had written a very strong letter to the Corinthians because serious problems needed to be addressed. His correction caused them pain, but his purpose was not to destroy or shame them. He wanted them to respond properly and be restored. When Titus later brought Paul the news that the Corinthians had responded positively, Paul was greatly encouraged.
-          The lesson then discusses church discipline. It explains that discipline should have restoration as its goal. When someone has sinned and has responded appropriately, the church should not continue treating that person as though he or she is permanently rejected.
-          Paul therefore tells the Corinthians to forgive and reaffirm their love for the person. 
-          
-          <div class="takeaway-box">
-            <strong>Key Takeaways:</strong>
-            <ul>
-              <li>Love does not ignore wrongdoing.</li>
-              <li>Correction may sometimes be necessary.</li>
-              <li>Correction should not be motivated by hatred or revenge.</li>
-              <li>When repentance occurs, forgiveness and restoration should follow.</li>
-              <li>The ultimate goal is to help the person return to spiritual health and fellowship.</li>
-            </ul>
-          </div>
-        </li>
-      </ul>
-
-      <div class="summary-section">
-        <h3>Putting the Four Points Together</h3>
-        <p class="subtext">Four different expressions of Christlike ministry:</p>
+    <!-- Slider Viewport for Languages -->
+    <div class="slider-viewport">
+      <div class="slider-track" id="sliderTrack">
         
-        <p><strong>1. Comfort →</strong> When people suffer, we don't leave them alone. We share the comfort God has given us.</p>
-        <p><strong>2. Integrity →</strong> When we serve, our motives must be genuine. We should not manipulate people or serve for selfish reasons.</p>
-        <p><strong>3. Sacrifice →</strong> Love is willing to give time, effort, resources, and personal comfort for the good of others.</p>
-        <p><strong>4. Restoration →</strong> When people fall into sin, love does not simply condemn them. It confronts wrongdoing appropriately and seeks to bring the person back through forgiveness and love.</p>
+        <!-- SLIDE 1: ENGLISH -->
+        <div class="slide">
+          
+          <!-- Lesson Visual / Download -->
+          <section class="card lesson-media">
+            <a href="false-teaching.png" target="_blank" class="lesson-img-link">
+              <img src="false-teaching.png" alt="Dealing with False Teachers" class="lesson-img">
+            </a>
+            <div class="media-actions">
+              <a href="false-teaching.png" download class="btn-primary">
+                📥 Download Lesson Visual
+              </a>
+            </div>
+          </section>
+
+          <!-- Lesson Content -->
+          <article class="card lesson-body" id="ministry-content">
+            <h2>Lesson Summary</h2>
+            
+            <div class="main-idea-box">
+              <h3>Main Idea:</h3>
+              <p>Paul’s ministry to the Corinthians was driven by Christ’s love. This love was shown through comforting people in suffering, serving with sincerity and integrity, sacrificing for others, and restoring those who had fallen.</p>
+            </div>
+
+            <h3>Key Themes for the Week</h3>
+            <ul class="lesson-points">
+              <li>
+                <strong>1. Thanksgiving for God’s Comfort</strong>
+                <p>The first point teaches that God comforts us in our suffering so that we can also comfort other people who are suffering. Paul begins by calling God the “Father of mercies and God of all comfort.” Paul himself experienced tremendous hardship, but instead of allowing his suffering to separate him from God, he received comfort from Him. Because Paul had personally experienced God’s comfort, he was able to understand and encourage the Corinthians when they were going through difficulties.</p>
+                <p>This means that Christian comfort is not something we receive merely for ourselves. God can use our painful experiences to make us more capable of helping others. The suffering does not automatically become good, but God can use it to teach us dependence on Him and to make us spiritually mature. Paul also recognized that God had delivered him in the past. That past deliverance gave him confidence that he could continue trusting God in the future.</p>
+                <div class="takeaway-box">
+                  <p class="teaching-note"><em>Key Takeaway: God comforts us in our difficulties, and the comfort we receive becomes something we can pass on to others.</em></p>
+                </div>
+              </li>
+
+              <li>
+                <strong>2. Simplicity and Sincerity in Ministry</strong>
+                <p>The second point is about being genuine and honest when serving God and dealing with people. Some people in Corinth had questioned Paul’s character. They thought his changing plans showed that he was unreliable or that he did not really care about them. Paul therefore explained that his ministry was characterized by “simplicity and sincerity.” These words refer to purity of motives, integrity, and honest intentions.</p>
+                <p>Paul was not trying to manipulate the Corinthians or use clever words to gain their approval. His ministry came from pure motives before God. This is important because ministry is not simply about saying the right things. A person can appear religious outwardly while having selfish motives inwardly. Paul wanted his words, intentions, and actions to be consistent. Even his changing of plans should not automatically be interpreted as dishonesty. His decision not to immediately return to Corinth was actually motivated by concern for them. After a painful visit, Paul believed another immediate visit could cause even more pain, so he chose to write to them instead.</p>
+                <div class="takeaway-box">
+                  <p class="teaching-note"><em>In simple terms: Love-driven ministry does not manipulate people. It serves with honest motives, clear intentions, and integrity.</em></p>
+                </div>
+              </li>
+
+              <li>
+                <strong>3. Self-Sacrificing Generosity</strong>
+                <p>The third point concerns giving for the benefit of others rather than for personal gain. The image summarizes this as Paul not seeking their money but their blessing. This connects with the lesson's broader picture of Paul's ministry: his concern was not self-interest but the spiritual welfare of the Corinthians.</p>
+                <p>Paul's ministry involved sacrifice. He endured suffering, hardship, anxiety, and inconvenience because he cared deeply about the churches. He carried a “deep concern” for the churches even while experiencing tremendous personal difficulties. This helps us understand generosity more broadly. Generosity is not limited to giving money. We can give our time, energy, attention, encouragement, resources, and even our comfort for the sake of helping someone else. The lesson's discussion of Paul's ministry also contrasts a faithful servant with someone who treats ministry as a means of personal advantage. Paul says that the faithful servant speaks the Word of God sincerely and out of love for Christ rather than for selfish purposes.</p>
+                <div class="takeaway-box">
+                  <p class="teaching-note"><em>In simple terms: Love asks, “How can I bless others?” rather than, “What can I get from serving them?”</em></p>
+                </div>
+              </li>
+
+              <li>
+                <strong>4. Restoration Out of Love</strong>
+                <p>The fourth point is perhaps the most important because it shows that Christian love does not ignore sin, but it also does not abandon the sinner. Paul had written a very strong letter to the Corinthians because serious problems needed to be addressed. His correction caused them pain, but his purpose was not to destroy or shame them. He wanted them to respond properly and be restored. When Titus later brought Paul the news that the Corinthians had responded positively, Paul was greatly encouraged.</p>
+                <p>The lesson then discusses church discipline. It explains that discipline should have restoration as its goal. When someone has sinned and has responded appropriately, the church should not continue treating that person as though he or she is permanently rejected. Paul therefore tells the Corinthians to forgive and reaffirm their love for the person.</p>
+                <div class="takeaway-box">
+                  <p class="teaching-note"><em>Key Takeaways:</em></p>
+                  <ul>
+                    <li>Love does not ignore wrongdoing.</li>
+                    <li>Correction may sometimes be necessary.</li>
+                    <li>Correction should not be motivated by hatred or revenge.</li>
+                    <li>When repentance occurs, forgiveness and restoration should follow.</li>
+                    <li>The ultimate goal is to help the person return to spiritual health and fellowship.</li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+
+            <div class="synthesis-section">
+              <h2>🔑 Put the Four Points Together</h2>
+              <p class="subtext">Four different expressions of Christlike ministry:</p>
+              <div class="flow-container">
+                <div class="flow-step"><strong>1. Comfort:</strong> When people suffer, we don't leave them alone. We share the comfort God has given us.</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step"><strong>2. Integrity:</strong> When we serve, our motives must be genuine. We should not manipulate people or serve for selfish reasons.</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step"><strong>3. Sacrifice:</strong> Love is willing to give time, effort, resources, and personal comfort for the good of others.</div>
+                <div class="flow-arrow">↓</div>
+                <div class="flow-step"><strong>4. Restoration:</strong> When people fall into sin, love does not simply condemn them. It confronts wrongdoing appropriately and seeks to bring the person back through forgiveness and love.</div>
+              </div>
+            </div>
+
+            <div class="floating-box">
+              <h3>Closing Thought</h3>
+              <p><i>Paul's ministry was not driven by personal advantage, popularity, or convenience. It was driven by the love of Christ. Because he loved the Corinthians, he comforted them, dealt honestly with them, sacrificed for their good, corrected them when necessary, and welcomed them back when they responded.</i></p>
+            </div>
+
+            <h3>Discussion Questions</h3>
+            <ol class="discussion-list">
+              <li><p class="teaching-note"><em>How can we ensure our service in church and community is driven by love rather than duty?</em></p></li>
+              <li><p class="teaching-note"><em>Why is vulnerability and genuine care essential when helping others through spiritual struggles?</em></p></li>
+            </ol>
+          </article>
+        </div>
+
+        <!-- SLIDE 2: TAGALOG -->
+        <div class="slide">
+          <section class="card lesson-media">
+            <a href="false-teaching-tagalog.png" target="_blank" class="lesson-img-link">
+              <img src="false-teaching-tagalog.png" alt="Tagalog Lesson" class="lesson-img">
+            </a>
+          </section>
+          <article class="card lesson-body">
+            <h2>Buod ng Aralin</h2>
+            <div class="main-idea-box">
+              <h3>Pangunahing Kaisipan:</h3>
+              <p>"Ang ministeryo ni Pablo sa mga taga-Corinto ay ginabayan ng pag-ibig ni Cristo..."</p>
+            </div>
+          </article>
+        </div>
+
+        <!-- SLIDE 3: CEBUANO -->
+        <div class="slide">
+          <article class="card lesson-body">
+            <h2>Gipfukos nga Leksiyon</h2>
+            <p>Cebuano content goes here...</p>
+          </article>
+        </div>
+
+        <!-- SLIDE 4: ILOCANO -->
+        <div class="slide">
+          <article class="card lesson-body">
+            <h2>Agalipstok nga Leksiyon</h2>
+            <p>Ilocano content goes here...</p>
+          </article>
+        </div>
+
+        <!-- SLIDE 5: WARAY -->
+        <div class="slide">
+          <article class="card lesson-body">
+            <h2>Buod han Leksiyon</h2>
+            <p>Waray content goes here...</p>
+          </article>
+        </div>
+
       </div>
+    </div>
+    <!-- END SLIDER VIEWPORT -->
 
-      <div class="floating-box">
-        <h3>Closing Thought:</h3>
-        <p>Paul's ministry was not driven by personal advantage, popularity, or convenience. It was driven by the love of Christ. Because he loved the Corinthians, he comforted them, dealt honestly with them, sacrificed for their good, corrected them when necessary, and welcomed them back when they responded.</p>
-      </div>
-
-      <h3>Discussion Questions</h3>
-      <ol class="discussion-list">
-        <li>How can we ensure our service in church and community is driven by love rather than duty?</li>
-        <li>Why is vulnerability and genuine care essential when helping others through spiritual struggles?</li>
-      </ol>
-    </article>
-
-   <!-- Reactions -->
+    <!-- Interactive Community Section (Reactions & Comments) -->
+    <section class="card interactive-section">
       <div class="reactions-container">
         <h3>Reactions</h3>
         <div class="reaction-buttons">
@@ -159,13 +242,11 @@
             <span class="reaction-label">Amen</span>
             <span class="reaction-count" id="count-amen">0</span>
           </button>
-
           <button class="btn-reaction" data-type="heart">
             <span class="reaction-icon">❤️</span>
             <span class="reaction-label">Love</span>
             <span class="reaction-count" id="count-heart">0</span>
           </button>
-
           <button class="btn-reaction" data-type="insight">
             <span class="reaction-icon">💡</span>
             <span class="reaction-label">Insightful</span>
@@ -176,11 +257,8 @@
 
       <hr class="section-divider">
 
-      <!-- Real-time Comments -->
       <div class="comments-container">
         <h3>Community Discussion</h3>
-        
-        <!-- Post Comment Form -->
         <form id="comment-form" class="comment-form">
           <div class="input-wrapper">
             <textarea id="comment-input" rows="3" placeholder="Share your thoughts or questions about this lesson..." required></textarea>
@@ -189,13 +267,10 @@
             <button type="submit" class="btn-primary">Post Comment</button>
           </div>
         </form>
-
-        <!-- Dynamic Comment Stream -->
         <div id="comments-list" class="comments-list">
           <p class="loading-text">Loading discussion...</p>
         </div>
       </div>
-
     </section>
 
   </main>
@@ -208,7 +283,6 @@
   <div id="login-modal" class="modal-overlay">
     <div class="modal-card">
       <button class="modal-close" id="close-login">&times;</button>
-      
       <h2 id="modal-title">Welcome Back</h2>
       <p class="subtitle" id="modal-subtitle">Sign in to react and join the discussion.</p>
       
@@ -247,6 +321,23 @@
     </div>
   </div>
 
+  <!-- Javascript for the Slide functionality -->
+  <script>
+    function switchLanguage(index, btnElement) {
+      // 1. Move the slider track horizontally
+      const track = document.getElementById('sliderTrack');
+      track.style.transform = `translateX(-${index * 20}%)`;
+
+      // 2. Update the violet button active states
+      const buttons = document.querySelectorAll('.lang-btn');
+      buttons.forEach(btn => btn.classList.remove('active'));
+      if (btnElement) {
+        btnElement.classList.add('active');
+      }
+    }
+  </script>
+
+  <!-- Your Main JS File -->
   <script type="module" src="../script.js"></script>
 </body>
 </html>
