@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">DayBreak Lesson</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  
+  <style>
+    .language-selector { display: flex; gap: 10px; justify-content: center; margin: 20px 0; flex-wrap: wrap; }
+    .lang-btn { border: 2px solid #5a2d82; background: transparent; color: #5a2d82; padding: 8px 16px; cursor: pointer; border-radius: 6px; font-weight: 600; font-family: 'Plus Jakarta Sans', sans-serif; transition: all 0.3s ease; }
+    .lang-btn.active, .lang-btn:hover { background: #5a2d82; color: #ffffff; }
+    .slider-viewport { width: 100%; overflow: hidden; }
+    .slider-track { display: flex; width: 500%; transition: transform 0.5s ease-in-out; }
+    .slide { width: 20%; box-sizing: border-box; padding: 0 10px; }
+  </style>
+</head>
+<body>
+
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="../index.html" class="logo"><span class="logo-icon">🌅</span> DayBreak</a>
+      <div class="nav-actions">
+        <a href="../index.html" class="btn-secondary btn-sm">← Back to Lessons</a>
+        <button class="btn-login">Login</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="content-container lesson-container">
+
+    <header class="card lesson-header-card">
+      <span class="badge" id="lesson-badge"></span>
+      <h1 class="lesson-main-title" id="lesson-title"></h1>
+      <p class="scripture-ref"><strong>Key Scripture:</strong> <span id="scripture-ref"></span></p>
+
+      <blockquote class="scripture-quote">
+        <span id="scripture-quote"></span>
+        <cite id="scripture-cite"></cite>
+      </blockquote>
+    </header>
+
+    <div class="language-selector">
+      <button class="lang-btn active" onclick="switchLanguage(0, this)">English</button>
+      <button class="lang-btn" onclick="switchLanguage(1, this)">Tagalog</button>
+      <button class="lang-btn" onclick="switchLanguage(2, this)">Cebuano</button>
+      <button class="lang-btn" onclick="switchLanguage(3, this)">Ilocano</button>
+      <button class="lang-btn" onclick="switchLanguage(4, this)">Waray</button>
+    </div>
+
+    <div class="slider-viewport">
+      <div class="slider-track" id="sliderTrack">
+        
+        <!-- ENGLISH SLIDE -->
+        <div class="slide">
+          <section class="card lesson-media">
+            <a id="img-link" href="" target="_blank" class="lesson-img-link">
+              <img id="lesson-img" src="" alt="Lesson Visual" class="lesson-img">
+            </a>
+            <div class="media-actions">
+              <a id="download-link" href="" download class="btn-primary">📥 Download Lesson Visual</a>
+            </div>
+          </section>
+
+          <article class="card lesson-body">
+            <h2>Lesson Summary</h2>
+            
+            <h3>Main Idea:</h3>
+            <p id="main-idea"></p>
+
+            <h3>Key Points in Summary</h3>
+            <ul class="lesson-points" id="points-list"></ul>
+
+            <div class="synthesis-section">
+              <h2>🔑 Put the Four Points Together</h2>
+              <p class="subtext">These four points form one complete picture:</p>
+              <div class="flow-container" id="flow-container"></div>
+            </div>
+
+            <div class="floating-box">
+              <h3>Closing Thought</h3>
+              <p><i id="closing-thought"></i></p>
+            </div>
+
+            <h3>Discussion Questions</h3>
+            <ol class="discussion-list" id="questions-list"></ol>
+          </article>
+        </div>
+
+        <!-- OTHER LANGUAGE SLIDES (Tagalog, Cebuano, etc.) -->
+        <div class="slide"><article class="card lesson-body"><h2>Buod ng Aralin</h2><p>Tagalog translation content...</p></article></div>
+        <div class="slide"><article class="card lesson-body"><h2>Gipfukos nga Leksiyon</h2><p>Cebuano translation content...</p></article></div>
+        <div class="slide"><article class="card lesson-body"><h2>Agalipstok nga Leksiyon</h2><p>Ilocano translation content...</p></article></div>
+        <div class="slide"><article class="card lesson-body"><h2>Buod han Leksiyon</h2><p>Waray translation content...</p></article></div>
+
+      </div>
+    </div>
+
+    <!-- Reactions & Comments (Static Functionality Preserved) -->
+    <section class="card interactive-section">
+      <div class="reactions-container">
+        <h3>Reactions</h3>
+        <div class="reaction-buttons">
+          <button class="btn-reaction" data-type="amen"><span class="reaction-icon">🙏</span> <span class="reaction-label">Amen</span> <span class="reaction-count" id="count-amen">0</span></button>
+          <button class="btn-reaction" data-type="heart"><span class="reaction-icon">❤️</span> <span class="reaction-label">Love</span> <span class="reaction-count" id="count-heart">0</span></button>
+          <button class="btn-reaction" data-type="insight"><span class="reaction-icon">💡</span> <span class="reaction-label">Insightful</span> <span class="reaction-count" id="count-insight">0</span></button>
+        </div>
+      </div>
+      <hr class="section-divider">
+      <div class="comments-container">
+        <h3>Community Discussion</h3>
+        <form id="comment-form" class="comment-form">
+          <div class="input-wrapper">
+            <textarea id="comment-input" rows="3" placeholder="Share your thoughts..." required></textarea>
+          </div>
+          <div class="form-action"><button type="submit" class="btn-primary">Post Comment</button></div>
+        </form>
+        <div id="comments-list" class="comments-list"><p class="loading-text">Loading discussion...</p></div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer><p>&copy; 2026 Daybreak Lessons. All rights reserved.</p></footer>
+
+  <script type="module">
+    import { lessonsData } from './lessons-data.js';
+
+    // Get lesson ID from URL parameter e.g., lesson.html?id=authentic-ministry
+    const urlParams = new URLSearchParams(window.location.search);
+    const lessonId = urlParams.get('id') || 'authentic-ministry'; 
+    const data = lessonsData[lessonId];
+
+    if (data) {
+      document.getElementById('page-title').innerText = `${data.title} - DayBreak`;
+      document.getElementById('lesson-badge').innerText = data.badge;
+      document.getElementById('lesson-title').innerText = data.title;
+      document.getElementById('scripture-ref').innerText = data.scriptureRef;
+      document.getElementById('scripture-quote').innerText = `"${data.scriptureQuote}"`;
+      document.getElementById('scripture-cite').innerText = data.scriptureCite;
+      
+      document.getElementById('img-link').href = data.imageSrc;
+      document.getElementById('lesson-img').src = data.imageSrc;
+      document.getElementById('download-link').href = data.imageSrc;
+      
+      document.getElementById('main-idea').innerText = data.mainIdea;
+      document.getElementById('closing-thought').innerText = data.closingThought;
+
+      // Render 4 Points
+      const pointsList = document.getElementById('points-list');
+      const flowContainer = document.getElementById('flow-container');
+      
+      pointsList.innerHTML = '';
+      flowContainer.innerHTML = '';
+
+      data.points.forEach((point, idx) => {
+        // Build 4 detailed points list
+        pointsList.innerHTML += `
+          <li>
+            <strong>${point.title}</strong>
+            <p>${point.description}</p>
+            <div class="takeaway-box">
+              <p class="teaching-note"><em>${point.takeaway}</em></p>
+              <strong>Question: </strong> <em>${point.question}</em>
+            </div>
+          </li>
+        `;
+
+        // Build 4 Synthesis Flow Steps
+        flowContainer.innerHTML += `
+          <div class="flow-step"><strong>${point.flowLabel}</strong> ${point.flowText}</div>
+          ${idx < data.points.length - 1 ? '<div class="flow-arrow">↓</div>' : ''}
+        `;
+      });
+
+      // Render Discussion Questions
+      const questionsList = document.getElementById('questions-list');
+      questionsList.innerHTML = '';
+      data.questions.forEach(q => {
+        questionsList.innerHTML += `<li><p class="teaching-note"><em>${q}</em></p></li>`;
+      });
+    }
+  </script>
+
+  <script>
+    function switchLanguage(index, btnElement) {
+      document.getElementById('sliderTrack').style.transform = `translateX(-${index * 20}%)`;
+      document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+      if (btnElement) btnElement.classList.add('active');
+    }
+  </script>
+  <script type="module" src="../script.js"></script>
+</body>
+</html>
