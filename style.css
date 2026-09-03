@@ -9,689 +9,11 @@
   --text-muted: #64748B;
   --border-color: #E2E8F0;
   --radius-lg: 16px;
-  --radius-md: 12px;
-  --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
-  --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
-  --shadow-lg: 0 20px 30px -10px rgba(15, 23, 42, 0.15);
-  --shadow-float: 0 16px 32px -8px rgba(37, 99, 235, 0.22);
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-body {
-  background-color: var(--bg-main);
-  color: var(--text-main);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  line-height: 1.6;
-  overflow-x: hidden;
-}
-
-/* ----------------------------------------------------
-   Fixed Navigation Bar (Static position, active hovers)
----------------------------------------------------- */
-.navbar {
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(12px);
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  justify-content: center;
-}
-
-.nav-container {
-  width: 100%;
-  max-width: 1100px;
-  padding: 0.85rem 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #FFFFFF;
-  text-decoration: none;
-}
-
-.nav-links {
-  display: flex;
-  gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 0.3rem;
-  border-radius: 30px;
-}
-
-.nav-tab {
-  background: transparent;
-  border: none;
-  color: #94A3B8;
-  padding: 0.5rem 1.25rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.nav-tab:hover {
-  color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.nav-tab.active {
-  color: #FFFFFF;
-  background: var(--accent);
-}
-
-.btn-login {
-  background: var(--accent);
-  color: #FFFFFF;
-  border: none;
-  padding: 0.55rem 1.35rem;
-  border-radius: 20px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.btn-login:hover {
-  background: #1D4ED8;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-}
-
-/* ----------------------------------------------------
-   Centered Content Area & Panoramic Animations
----------------------------------------------------- */
-.content-container {
-  max-width: 900px;
-  width: 100%;
-  margin: 110px auto 40px auto;
-  padding: 0 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  flex: 1;
-}
-
-.tab-panel {
-  display: none;
-  width: 100%;
-}
-
-/* Panoramic Entrance Animation */
-.tab-panel.active {
-  display: block;
-  animation: panoramicIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes panoramicIn {
-  0% {
-    opacity: 0;
-    transform: scaleX(1.12) scaleY(0.92) translateY(15px);
-    filter: blur(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: scaleX(1) scaleY(1) translateY(0);
-    filter: blur(0);
-  }
-}
-
-/* Hero Section */
-.hero-section, .hero-card {
-  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-  color: #FFFFFF;
-  padding: 3.5rem 2.5rem;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-.hero-section h1, .hero-card h1 {
-  font-size: 2.25rem;
-  font-weight: 800;
-  line-height: 1.2;
-  margin-bottom: 0.75rem;
-  color: #FFFFFF;
-}
-
-.hero-section p, .hero-card p {
-  color: #94A3B8;
-  font-size: 1.1rem;
-  max-width: 600px;
-  margin-bottom: 2rem;
-}
-
-.hero-buttons {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.subtitle {
-  color: var(--text-muted);
-  margin-bottom: 1.5rem;
-}
-
-/* Card Components */
-.card {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 2rem;
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 1.5rem;
-  width: 100%;
-  text-align: center;
-}
-
-.btn-primary {
-  background: var(--accent);
-  color: #FFFFFF;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-primary:hover {
-  background: #1D4ED8;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-}
-
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: #FFFFFF;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: #FFFFFF;
-}
-/*<!-- ========================================== -->
-<!-- 🟢 START: ADD THIS TO YOUR <head> OR CSS   -->
-<!-- ========================================== -->*/
-
-  .language-selector {
-    display: flex;
-    gap: 10px;
-    justify-content: left;
-    margin: 20px 0;
-    flex-wrap: wrap;
-  }
-  .lang-btn {
-    border: 2px solid #5a2d82; 
-    background: transparent;
-    color: #5a2d82;
-    padding: 8px 16px;
-    cursor: pointer;
-    border-radius: 6px;
-    font-weight: 600;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-    transition: all 0.3s ease;
-  }
-  .lang-btn.active, .lang-btn:hover {
-    background: #5a2d82;
-    color: #ffffff;
-  }
-  .slider-viewport {
-    width: 100%;
-    overflow: hidden; 
-  }
-  .slider-track {
-    display: flex;
-    width: 500%; /* 100% per slide * 5 languages */
-    transition: transform 0.5s ease-in-out; 
-  }
-  .slide {
-    width: 20%; /* 100% divided by 5 slides */
-    box-sizing: border-box;
-    padding: 0 10px; /* Optional spacing between slides */
-  }
-
-/*<!-- ========================================== -->
-<!-- 🔴 END: CSS ADDITION                       -->
-<!-- ========================================== -->*/
-/* ----------------------------------------------------
-   Floating Pop-Up Lesson Cards (Sabbath School)
----------------------------------------------------- */
-.sabbath-school-list {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.lesson-card-item {
-  width: 100%;
-}
-
-/* Base floating box styling */
-.lesson-card-link {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.25rem 1.5rem;
-  background: #FFFFFF;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  text-decoration: none;
-  color: var(--text-main);
-  box-shadow: var(--shadow-sm);
-  position: relative;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.3s ease,
-              background-color 0.3s ease;
-}
-
-/* Pop-Up floating effect when cursor passes over */
-.lesson-card-link:hover {
-  transform: translateY(-6px) scale(1.015);
-  box-shadow: var(--shadow-float);
-  border-color: var(--accent);
-  background-color: var(--accent-light);
-  z-index: 10;
-}
-
-.lesson-card-title {
-  font-weight: 700;
-  font-size: 1rem;
-  color: var(--text-main);
-  transition: color 0.2s ease;
-}
-
-.lesson-card-link:hover .lesson-card-title {
-  color: var(--accent);
-}
-
-.lesson-card-ref {
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-footer {
-  width: 100%;
-  background: var(--primary);
-  color: #94A3B8;
-  text-align: center;
-  padding: 2rem;
-  font-size: 0.9rem;
-  margin-top: auto;
-}
-```It looks like the changes haven't been applied to the live site yet. Please make sure you've saved the updated files and pushed your changes to your GitHub repository. Sometimes, it takes a minute for GitHub Pages to reflect the updates.I see the files in your repository were updated recently. Sometimes it just takes a little time for GitHub Pages to process the changes, so you might want to try refreshing your live site again.Yes, I can see —Yes, I can see your screen showing the Sabbath School Lessons. What specific modifications would you like to make to this section?I can help you —To create that popup effect for the lesson titles, we can add a scale and a stronger shadow effect to the hover state of the lesson links. I'll provide you with the updated CSS rules to make those boxes pop when the cursor passes over them.Here is the updated **`style.css`**.
-
-This version includes:
-* **Floating "Pop-Up" Box Effect:** When hovering over any lesson item in the list, the card smoothly lifts up (`translateY(-6px)`), scales slightly (`scale(1.02)`), changes color, and casts an elevated floating shadow.
-* **Centered Content:** Centered main layout and hero section.
-* **Panoramic Animation:** Smooth panoramic entrance (`@keyframes panoramicIn`) when switching tabs.
-* **Fixed Navigation:** Fixed header that doesn't jump or move, with smooth button hover states.
-
----
-
-### Updated `style.css`
-
-```css
-:root {
-  --primary: #0F172A;
-  --primary-hover: #1E293B;
-  --accent: #2563EB;
-  --accent-light: #EFF6FF;
-  --bg-main: #F8FAFC;
-  --card-bg: #FFFFFF;
-  --text-main: #0F172A;
-  --text-muted: #64748B;
-  --border-color: #E2E8F0;
-  --radius-lg: 16px;
-  --radius-md: 12px;
-  --shadow-sm: 0 2px 4px rgba(0,0,0,0.04);
-  --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
-  --shadow-lg: 0 20px 30px -10px rgba(15, 23, 42, 0.15);
-  --shadow-float: 0 16px 32px -8px rgba(37, 99, 235, 0.22);
-}
-
-* {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
-}
-
-body {
-  background-color: var(--bg-main);
-  color: var(--text-main);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  line-height: 1.6;
-  overflow-x: hidden;
-}
-
-/* ----------------------------------------------------
-   Fixed Navigation Bar (Static position, active hovers)
----------------------------------------------------- */
-.navbar {
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(12px);
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  z-index: 1000;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  justify-content: center;
-}
-
-.nav-container {
-  width: 100%;
-  max-width: 1100px;
-  padding: 0.85rem 1.5rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.logo {
-  font-size: 1.25rem;
-  font-weight: 800;
-  color: #FFFFFF;
-  text-decoration: none;
-}
-
-.nav-links {
-  display: flex;
-  gap: 0.5rem;
-  background: rgba(255, 255, 255, 0.08);
-  padding: 0.3rem;
-  border-radius: 30px;
-}
-
-.nav-tab {
-  background: transparent;
-  border: none;
-  color: #94A3B8;
-  padding: 0.5rem 1.25rem;
-  font-size: 0.9rem;
-  font-weight: 600;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.nav-tab:hover {
-  color: #FFFFFF;
-  background: rgba(255, 255, 255, 0.15);
-}
-
-.nav-tab.active {
-  color: #FFFFFF;
-  background: var(--accent);
-}
-
-.btn-login {
-  background: var(--accent);
-  color: #FFFFFF;
-  border: none;
-  padding: 0.55rem 1.35rem;
-  border-radius: 20px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.25s ease;
-}
-
-.btn-login:hover {
-  background: #1D4ED8;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-}
-
-/* ----------------------------------------------------
-   Centered Content Area & Panoramic Animations
----------------------------------------------------- */
-.content-container {
-  max-width: 900px;
-  width: 100%;
-  margin: 110px auto 40px auto;
-  padding: 0 1.5rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  flex: 1;
-}
-
-.tab-panel {
-  display: none;
-  width: 100%;
-}
-
-/* Panoramic Entrance Animation */
-.tab-panel.active {
-  display: block;
-  animation: panoramicIn 0.65s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-}
-
-@keyframes panoramicIn {
-  0% {
-    opacity: 0;
-    transform: scaleX(1.12) scaleY(0.92) translateY(15px);
-    filter: blur(10px);
-  }
-  100% {
-    opacity: 1;
-    transform: scaleX(1) scaleY(1) translateY(0);
-    filter: blur(0);
-  }
-}
-
-/* Hero Section */
-.hero-section, .hero-card {
-  background: linear-gradient(135deg, #0F172A 0%, #1E293B 100%);
-  color: #FFFFFF;
-  padding: 3.5rem 2.5rem;
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 2rem;
-}
-
-.hero-section h1, .hero-card h1 {
-  font-size: 2.25rem;
-  font-weight: 800;
-  line-height: 1.2;
-  margin-bottom: 0.75rem;
-  color: #FFFFFF;
-}
-
-.hero-section p, .hero-card p {
-  color: #94A3B8;
-  font-size: 1.1rem;
-  max-width: 600px;
-  margin-bottom: 2rem;
-}
-
-.hero-buttons {
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-}
-
-.subtitle {
-  color: var(--text-muted);
-  margin-bottom: 1.5rem;
-}
-
-/* Card Components */
-.card {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-lg);
-  padding: 2rem;
-  box-shadow: var(--shadow-sm);
-  margin-bottom: 1.5rem;
-  width: 100%;
-  text-align: center;
-}
-
-.btn-primary {
-  background: var(--accent);
-  color: #FFFFFF;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-primary:hover {
-  background: #1D4ED8;
-  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-}
-
-.btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  color: #FFFFFF;
-  border: 1px solid rgba(255, 255, 255, 0.25);
-  padding: 0.75rem 1.5rem;
-  border-radius: var(--radius-md);
-  font-weight: 600;
-  text-decoration: none;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.2);
-  border-color: #FFFFFF;
-}
-
-/* ----------------------------------------------------
-   Floating Pop-Up Lesson Cards (Sabbath School)
----------------------------------------------------- */
-.sabbath-school-list {
-  list-style: none;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.lesson-card-item {
-  width: 100%;
-}
-
-/* Base floating box styling */
-.lesson-card-link {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.25rem 1.5rem;
-  background: #FFFFFF;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-md);
-  text-decoration: none;
-  color: var(--text-main);
-  box-shadow: var(--shadow-sm);
-  position: relative;
-  transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              box-shadow 0.3s cubic-bezier(0.16, 1, 0.3, 1),
-              border-color 0.3s ease,
-              background-color 0.3s ease;
-}
-
-/* Pop-Up floating effect when cursor passes over */
-.lesson-card-link:hover {
-  transform: translateY(-6px) scale(1.015);
-  box-shadow: var(--shadow-float);
-  border-color: var(--accent);
-  background-color: var(--accent-light);
-  z-index: 10;
-}
-
-.lesson-card-title {
-  font-weight: 700;
-  font-size: 1rem;
-  color: var(--text-main);
-  transition: color 0.2s ease;
-}
-
-.lesson-card-link:hover .lesson-card-title {
-  color: var(--accent);
-}
-
-.lesson-card-ref {
-  color: var(--text-muted);
-  font-size: 0.85rem;
-  font-weight: 600;
-}
-
-footer {
-  width: 100%;
-  background: var(--primary);
-  color: #94A3B8;
-  text-align: center;
-  padding: 2rem;
-  font-size: 0.9rem;
-  margin-top: auto;
-}
-```You'll see the "History" button right above the code window, right next to the "Blame" button on the right side.My apologies, the "History" button is located in the top right corner of the file view area, just above the right side of the code header.You've got the "History" button right there. To move forward, just click on the commit you want to revert to, and you'll find the revert option on that page.On this commit page, you'll need to tap the three dots icon in the upper right corner of the file view, and you should see an option to revert or view the file's history from there.If you're having trouble finding the revert button here, an easy alternative is to just edit the file directly and paste back the original code you had before these changes.I've retrieved the original CSS code for you to replace the current file with.Here is the complete original **`style.css`** code to restore your layout:
-
-```css
-:root {
-  --primary: #0F172A;
-  --primary-hover: #1E293B;
-  --accent: #2563EB;
-  --accent-light: #EFF6FF;
-  --bg-main: #F8FAFC;
-  --card-bg: #FFFFFF;
-  --text-main: #0F172A;
-  --text-muted: #64748B;
-  --border-color: #E2E8F0;
-  --radius-lg: 16px;
   --radius-md: 10px;
   --shadow-sm: 0 1px 3px rgba(0,0,0,0.05);
   --shadow-md: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
   --shadow-lg: 0 20px 30px -10px rgba(15, 23, 42, 0.15);
+  --shadow-float: 0 16px 32px -8px rgba(37, 99, 235, 0.22);
 }
 
 * {
@@ -710,7 +32,9 @@ body {
   line-height: 1.6;
 }
 
-/* Modern Header / Navbar */
+/* ----------------------------------------------------
+   Modern Header / Navbar
+---------------------------------------------------- */
 .navbar {
   background: rgba(15, 23, 42, 0.95);
   backdrop-filter: blur(12px);
@@ -782,7 +106,9 @@ body {
   transform: translateY(-1px);
 }
 
-/* Content Container & Tabs */
+/* ----------------------------------------------------
+   Content Container & Layout
+---------------------------------------------------- */
 .content-container {
   max-width: 1100px;
   margin: 100px auto 40px auto;
@@ -834,7 +160,7 @@ body {
   gap: 1rem;
 }
 
-/* Reusable UI Components */
+/* Reusable Cards & Buttons */
 .card {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
@@ -865,6 +191,8 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: all 0.2s;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .btn-primary:hover {
@@ -883,45 +211,61 @@ body {
   cursor: pointer;
 }
 
-/* Grid Layout for Sabbath School */
+/* ----------------------------------------------------
+   Language Selector & Slider Functionality
+---------------------------------------------------- */
+.language-selector {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+.lang-btn {
+  border: 2px solid var(--accent);
+  background: transparent;
+  color: var(--accent);
+  padding: 8px 16px;
+  cursor: pointer;
+  border-radius: 20px;
+  font-weight: 600;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.lang-btn.active, 
+.lang-btn:hover {
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.slider-viewport {
+  width: 100%;
+  overflow: hidden;
+}
+
+.slider-track {
+  display: flex;
+  width: 500%; /* 100% per slide * 5 languages */
+  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.slide {
+  width: 20%; /* 100% divided by 5 slides */
+  box-sizing: border-box;
+}
+
+/* ----------------------------------------------------
+   Sabbath School Grid & Pop-Up Links
+---------------------------------------------------- */
 .sabbath-school-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.25rem;
   margin-top: 1.5rem;
 }
-/* ----------------------------------------------------
-   Lesson Points (Left-Aligned List)
----------------------------------------------------- */
-.lesson-points {
-  text-align: left; /* Forces the text to the left */
-  list-style: none; /* Removes standard bullet points since you are using emojis */
-  padding: 0;
-  margin: 1.5rem 0;
-}
-.text-highlight {
-  color: var(--accent); /* This automatically uses the exact blue from your website's theme */
-  font-weight: bold; /* Optional: makes it bold so it stands out even more */
-}
-.lesson-points li {
-  margin-bottom: 2rem; /* Adds breathing room between each point */
-}
 
-.lesson-points strong {
-  font-size: 1.1rem;
-  color: var(--text-main);
-  display: block; /* Puts the paragraph on a new line below the title */
-  margin-bottom: 0.5rem;
-}
-
-/* Styles the Teaching Note like a blockquote */
-.lesson-points .teaching-note {
-  background-color: var(--bg-main); 
-  border-left: 4px solid var(--accent); /* Uses your blue accent color */
-  padding: 10px 15px;
-  margin-top: 10px;
-  color: var(--text-muted);
-}
 .lesson-card {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
@@ -977,7 +321,43 @@ body {
   color: var(--accent);
 }
 
-/* Modern Reactions Bar */
+/* ----------------------------------------------------
+   Lesson Points Structure
+---------------------------------------------------- */
+.lesson-points {
+  text-align: left;
+  list-style: none;
+  padding: 0;
+  margin: 1.5rem 0;
+}
+
+.text-highlight {
+  color: var(--accent);
+  font-weight: bold;
+}
+
+.lesson-points li {
+  margin-bottom: 2rem;
+}
+
+.lesson-points strong {
+  font-size: 1.1rem;
+  color: var(--text-main);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.lesson-points .teaching-note {
+  background-color: var(--bg-main); 
+  border-left: 4px solid var(--accent);
+  padding: 10px 15px;
+  margin-top: 10px;
+  color: var(--text-muted);
+}
+
+/* ----------------------------------------------------
+   Reactions & Comments
+---------------------------------------------------- */
 .reactions-group {
   display: flex;
   gap: 0.75rem;
@@ -1012,7 +392,6 @@ body {
   font-size: 0.8rem;
 }
 
-/* Modern Community Discussion UI */
 .comment-form {
   margin-top: 1.25rem;
 }
@@ -1088,7 +467,9 @@ body {
   color: var(--text-main);
 }
 
-/* Modal Overlay */
+/* ----------------------------------------------------
+   Modal Overlay
+---------------------------------------------------- */
 .modal-overlay {
   position: fixed;
   top: 0;
