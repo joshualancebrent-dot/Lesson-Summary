@@ -8,6 +8,44 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
+   <style>
+    .language-selector {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin: 20px 0;
+      flex-wrap: wrap;
+    }
+    .lang-btn {
+      border: 2px solid #5a2d82; 
+      background: transparent;
+      color: #5a2d82;
+      padding: 8px 16px;
+      cursor: pointer;
+      border-radius: 6px;
+      font-weight: 600;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      transition: all 0.3s ease;
+    }
+    .lang-btn.active, .lang-btn:hover {
+      background: #5a2d82;
+      color: #ffffff;
+    }
+    .slider-viewport {
+      width: 100%;
+      overflow: hidden; 
+    }
+    .slider-track {
+      display: flex;
+      width: 500%; /* 100% per slide * 5 languages */
+      transition: transform 0.5s ease-in-out; 
+    }
+    .slide {
+      width: 20%; /* 100% divided by 5 slides */
+      box-sizing: border-box;
+      padding: 0 10px; 
+    }
+  </style>
 </head>
 <body>
 
@@ -38,7 +76,7 @@
       </blockquote>
     </header>
 
-    <!-- Language Selector -->
+   <!-- Language Selector Buttons -->
     <div class="language-selector">
       <button class="lang-btn active" onclick="switchLanguage(0, this)">English</button>
       <button class="lang-btn" onclick="switchLanguage(1, this)">Tagalog</button>
@@ -49,7 +87,7 @@
 
     <!-- Slider Viewport for Languages -->
     <div class="slider-viewport">
-      <div class="slider-track" id="languageSlider">
+      <div class="slider-track" id="sliderTrack">
         
         <!-- Slide 1: English -->
         <div class="slide">
