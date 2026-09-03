@@ -347,15 +347,3 @@ function switchLanguage(index, btnElement) {
         btnElement.classList.add('active');
       }
     }
-  function switchLanguage(index, btnElement) {
-    // Slide the track horizontally based on index (0 = 0%, 1 = -100%, 2 = -200%, etc.)
-    const slider = document.getElementById('languageSlider');
-    slider.style.transform = `translateX(-${index * 100}%)`;
-
-    // Remove 'active' class from all language buttons
-    const buttons = document.querySelectorAll('.lang-btn');
-    buttons.forEach(btn => btn.classList.remove('active'));
-
-    // Highlight the clicked button
-    btnElement.classList.add('active');
-  }
