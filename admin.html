@@ -15,20 +15,23 @@
     .tab-btn.active { background: #5a2d82; color: white; }
     .lang-section { display: none; }
     .lang-section.active { display: block; }
+    .status-msg { margin-top: 15px; padding: 10px; border-radius: 6px; display: none; font-weight: bold; }
+    .status-success { background: #d4edda; color: #155724; }
+    .status-error { background: #f8d7da; color: #721c24; }
   </style>
 </head>
 <body>
   <div class="admin-container card">
-    <h2>➕ Multi-Language Lesson Creator</h2>
+    <h2>➕ Multi-Language Lesson Creator (Firebase)</h2>
     <form id="lesson-form">
       
-      <!-- Top Shared Details -->
+      <!-- Shared Details -->
       <div class="form-group">
-        <label>Lesson ID (e.g., lesson-11 or authentic-ministry):</label>
+        <label>Lesson ID (e.g., Lesson 13 or authentic-ministry):</label>
         <input type="text" id="lessonId" required>
       </div>
       <div class="form-group">
-        <label>Lesson Badge (e.g., Lesson 10):</label>
+        <label>Lesson Badge (e.g., Lesson 13):</label>
         <input type="text" id="badge" required>
       </div>
       <div class="form-group">
@@ -56,12 +59,12 @@
         <button type="button" class="tab-btn" onclick="showLang('tl', this)">🇵🇭 Tagalog</button>
       </div>
 
-      <!-- English Form Section -->
+      <!-- English Section -->
       <div id="lang-en" class="lang-section active">
         <h3>English Content</h3>
         <div class="form-group">
           <label>Image Path/Filename:</label>
-          <input type="text" id="en_imageSrc" placeholder="authentic.png" required>
+          <input type="text" id="en_imageSrc" placeholder="grace.png" required>
         </div>
         <div class="form-group">
           <label>Main Idea Summary:</label>
@@ -85,12 +88,12 @@
         </div>
       </div>
 
-      <!-- Tagalog Form Section -->
+      <!-- Tagalog Section -->
       <div id="lang-tl" class="lang-section">
         <h3>Tagalog Translation</h3>
         <div class="form-group">
           <label>Tagalog Image Path/Filename:</label>
-          <input type="text" id="tl_imageSrc" placeholder="resurrection-tagalog.png">
+          <input type="text" id="tl_imageSrc" placeholder="grace-tagalog.png">
         </div>
         <div class="form-group">
           <label>Main Idea Summary (Buod):</label>
@@ -114,17 +117,16 @@
         </div>
       </div>
 
-      <button type="submit" class="btn-primary" style="width: 100%; margin-top: 20px;">Generate Lesson Data JSON</button>
+      <button type="submit" id="submit-btn" class="btn-primary" style="width: 100%; margin-top: 20px;">
+        🚀 Save Lesson Directly to Database
+      </button>
+      
+      <div id="status-msg" class="status-msg"></div>
     </form>
-    
-    <div style="margin-top: 25px;">
-      <label><strong>Output JSON (Copy & paste into lessons-data.js):</strong></label>
-      <textarea id="json-output" rows="12" readonly style="width:100%; font-family: monospace;"></textarea>
-    </div>
   </div>
 
   <script>
-    // Build 4 Points for both languages dynamically
+    // Dynamically build 4 Key Points input blocks
     ['en', 'tl'].forEach(lang => {
       const container = document.getElementById(`${lang}-points-container`);
       for (let i = 1; i <= 4; i++) {
@@ -135,7 +137,7 @@
             <div class="form-group"><label>Description:</label><textarea id="${lang}_p${i}_desc" rows="2"></textarea></div>
             <div class="form-group"><label>Takeaway Note:</label><input type="text" id="${lang}_p${i}_takeaway"></div>
             <div class="form-group"><label>Question:</label><input type="text" id="${lang}_p${i}_question"></div>
-            <div class="form-group"><label>Flow Label (e.g. ${i}. Transformation):</label><input type="text" id="${lang}_p${i}_flowLabel"></div>
+            <div class="form-group"><label>Flow Label (e.g., ${i}. Transformation):</label><input type="text" id="${lang}_p${i}_flowLabel"></div>
             <div class="form-group"><label>Flow Summary Text:</label><input type="text" id="${lang}_p${i}_flowText"></div>
           </div>
         `;
@@ -148,15 +150,24 @@
       document.getElementById(`lang-${lang}`).classList.add('active');
       btn.classList.add('active');
     }
+  </script>
 
-    document.getElementById('lesson-form').addEventListener('submit', function(e) {
+  <script type="module">
+    import { saveLesson } from './lessons-data.js';
+
+    document.getElementById('lesson-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       
-      const lessonId = document.getElementById('lessonId').value;
-      
+      const submitBtn = document.getElementById('submit-btn');
+      const statusMsg = document.getElementById('status-msg');
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Saving to Database...";
+
+      const lessonId = document.getElementById('lessonId').value.trim();
+
       const buildLangData = (lang) => {
-        const imageSrc = document.getElementById(`${lang}_imageSrc`).value;
-        if (!imageSrc) return null; // Skip language if empty
+        const imageSrc = document.getElementById(`${lang}_imageSrc`).value.trim();
+        if (!imageSrc) return null;
 
         const langData = {
           imageSrc: imageSrc,
@@ -188,12 +199,26 @@
         scriptureRef: document.getElementById('scriptureRef').value,
         scriptureQuote: document.getElementById('scriptureQuote').value,
         scriptureCite: document.getElementById('scriptureCite').value,
-        en: buildLangData('en'),
-        tl: buildLangData('tl')
+        en: buildLangData('en')
       };
 
-      const formattedOutput = `"${lessonId}": ` + JSON.stringify(newLesson, null, 2) + ",";
-      document.getElementById('json-output').value = formattedOutput;
+      const tlData = buildLangData('tl');
+      if (tlData) newLesson.tl = tlData;
+
+      try {
+        await saveLesson(lessonId, newLesson);
+        statusMsg.className = "status-msg status-success";
+        statusMsg.style.display = "block";
+        statusMsg.innerText = `✅ Success! Lesson "${lessonId}" has been saved directly to Firebase.`;
+      } catch (error) {
+        console.error(error);
+        statusMsg.className = "status-msg status-error";
+        statusMsg.style.display = "block";
+        statusMsg.innerText = `❌ Error saving lesson: ${error.message}`;
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.innerText = "🚀 Save Lesson Directly to Database";
+      }
     });
   </script>
 </body>
