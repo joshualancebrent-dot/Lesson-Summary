@@ -50,7 +50,5 @@ export const lessonsData = {
         "If “God is love,” how should God’s love influence the way Christians deal with conflict and pursue unity in the church?"
       ]
     }
-
-    // You can safely add 'tl', 'ceb', 'ilo', 'war' objects right beneath 'en'!
   }
 };
