@@ -126,7 +126,7 @@
   </div>
 
   <script>
-    // Dynamically build 4 Key Points input blocks
+    // Build 4 Key Points input blocks dynamically
     ['en', 'tl'].forEach(lang => {
       const container = document.getElementById(`${lang}-points-container`);
       for (let i = 1; i <= 4; i++) {
@@ -153,15 +153,32 @@
   </script>
 
   <script type="module">
-    import { saveLesson } from './lessons-data.js';
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    // Firebase Config matching your active project
+    const firebaseConfig = {
+      apiKey: "AIzaSyAKsH40B0E-ytvtDBp5q0cCnAcrkfsDkxg",
+      authDomain: "day-break-7a1d2.firebaseapp.com",
+      projectId: "day-break-7a1d2",
+      storageBucket: "day-break-7a1d2.firebasestorage.app",
+      messagingSenderId: "374552344821",
+      appId: "1:374552344821:web:eb18d503f6eca8d7722dbc",
+      measurementId: "G-8YES7NF8D"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
     document.getElementById('lesson-form').addEventListener('submit', async function(e) {
       e.preventDefault();
       
       const submitBtn = document.getElementById('submit-btn');
       const statusMsg = document.getElementById('status-msg');
+      
       submitBtn.disabled = true;
       submitBtn.innerText = "Saving to Database...";
+      statusMsg.style.display = "none";
 
       const lessonId = document.getElementById('lessonId').value.trim();
 
@@ -199,19 +216,20 @@
         scriptureRef: document.getElementById('scriptureRef').value,
         scriptureQuote: document.getElementById('scriptureQuote').value,
         scriptureCite: document.getElementById('scriptureCite').value,
-        en: buildLangData('en')
+        en: buildLangData('en'),
+        createdAt: serverTimestamp()
       };
 
       const tlData = buildLangData('tl');
       if (tlData) newLesson.tl = tlData;
 
       try {
-        await saveLesson(lessonId, newLesson);
+        await setDoc(doc(db, "lessons", lessonId), newLesson);
         statusMsg.className = "status-msg status-success";
         statusMsg.style.display = "block";
-        statusMsg.innerText = `✅ Success! Lesson "${lessonId}" has been saved directly to Firebase.`;
+        statusMsg.innerText = `✅ Success! Lesson "${lessonId}" saved directly to Firebase.`;
       } catch (error) {
-        console.error(error);
+        console.error("Firestore Save Error:", error);
         statusMsg.className = "status-msg status-error";
         statusMsg.style.display = "block";
         statusMsg.innerText = `❌ Error saving lesson: ${error.message}`;
