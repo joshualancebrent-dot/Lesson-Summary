@@ -210,15 +210,18 @@
         return langData;
       };
 
-      const newLesson = {
-        badge: document.getElementById('badge').value,
-        title: document.getElementById('title').value,
-        scriptureRef: document.getElementById('scriptureRef').value,
-        scriptureQuote: document.getElementById('scriptureQuote').value,
-        scriptureCite: document.getElementById('scriptureCite').value,
-        en: buildLangData('en'),
-        createdAt: serverTimestamp()
-      };
+     const newLesson = {
+  badge: document.getElementById('badge').value,
+  title: document.getElementById('title').value,
+  scriptureRef: document.getElementById('scriptureRef').value,
+  scriptureQuote: document.getElementById('scriptureQuote').value,
+  scriptureCite: document.getElementById('scriptureCite').value,
+  en: buildLangData('en'), // Places mainIdea, points, closingThought inside 'en'
+  createdAt: serverTimestamp()
+};
+
+const tlData = buildLangData('tl');
+if (tlData) newLesson.tl = tlData;
 
       const tlData = buildLangData('tl');
       if (tlData) newLesson.tl = tlData;
