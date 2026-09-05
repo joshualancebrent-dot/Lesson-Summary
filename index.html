@@ -53,8 +53,37 @@
       <p class="subtitle">Structured Bible studies and discussion materials for this quarter.</p>
       
       <div class="card">
-        <ul class="sabbath-school-list" id="sabbath-school-list">
-          <p class="loading-text" style="padding: 10px; text-align: center;">Loading lessons from database...</p>
+        <ul class="sabbath-school-list">
+          <li class="lesson-card-item">
+            <a href="material/resurrection.html" class="lesson-card-link">
+              <span class="lesson-card-title">The Power of Christ's Resurrection</span>
+              <span class="lesson-card-ref">1 Corinthians 15:14-17</span>
+            </a>
+          </li>
+          <li class="lesson-card-item">
+            <a href="material/love-driven-ministry.html" class="lesson-card-link">
+              <span class="lesson-card-title">Love-driven Ministry</span>
+              <span class="lesson-card-ref">2 Corinthians 2:4</span>
+            </a>
+          </li>
+          <li class="lesson-card-item">
+            <a href="material/authentic-ministry.html" class="lesson-card-link">
+              <span class="lesson-card-title">Authentic Christian Ministry</span>
+              <span class="lesson-card-ref">2 Corinthians 4:8-10</span>
+            </a>
+          </li>
+          <li class="lesson-card-item">
+            <a href="material/stewardship.html" class="lesson-card-link">
+              <span class="lesson-card-title">Stewardship and Mission</span>
+              <span class="lesson-card-ref">2 Corinthians 8:9</span>
+            </a>
+          </li>
+          <li class="lesson-card-item">
+            <a href="material/false-teachers.html" class="lesson-card-link">
+              <span class="lesson-card-title">Dealing With False Teachers</span>
+              <span class="lesson-card-ref">2 Corinthians 10:4</span>
+            </a>
+          </li>
         </ul>
       </div>
     </section>
@@ -119,26 +148,8 @@
   </div>
 
   <script type="module" src="script.js"></script>
-
-  <!-- Dynamic Firebase Lesson Loader -->
-  <script type="module">
-    import { db } from './material/lessons-data.js';
-    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    async function loadDynamicLessons() {
-      const listContainer = document.getElementById('sabbath-school-list');
-
-      try {
-        const querySnapshot = await getDocs(collection(db, "lessons"));
-
-        if (querySnapshot.empty) {
-          listContainer.innerHTML = `
-            <li class="lesson-card-item">
-              <a href="material/lesson.html?id=Lesson%2013" class="lesson-card-link">
-                <span class="lesson-card-title">Grace, Love, and Fellowship</span>
-                <span class="lesson-card-ref">2 Cor. 13:14</span>
-              </a>
-            </li>`;
+</body>
+</html>            </li>`;
           return;
         }
 
