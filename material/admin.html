@@ -223,8 +223,7 @@
 const tlData = buildLangData('tl');
 if (tlData) newLesson.tl = tlData;
 
-      const tlData = buildLangData('tl');
-      if (tlData) newLesson.tl = tlData;
+  
 
       try {
         await setDoc(doc(db, "lessons", lessonId), newLesson);
