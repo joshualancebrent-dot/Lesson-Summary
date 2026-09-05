@@ -1,14 +1,15 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
 import { getFirestore, doc, getDoc, setDoc } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-// Firebase Configuration (Replace with your actual keys from Firebase Console)
+// Replaced placeholders with your actual Firebase Configuration
 const firebaseConfig = {
-  apiKey: "YOUR_FIREBASE_API_KEY",
-  authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-  storageBucket: "YOUR_PROJECT_ID.appspot.com",
-  messagingSenderId: "YOUR_SENDER_ID",
-  appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyAKsH40B0E-ytvtDBp5q0cCnAcrkfsDkxg",
+  authDomain: "day-break-7a1d2.firebaseapp.com",
+  projectId: "day-break-7a1d2",
+  storageBucket: "day-break-7a1d2.firebasestorage.app",
+  messagingSenderId: "374552344821",
+  appId: "1:374552344821:web:eb18d503f6eca8d7722dbc",
+  measurementId: "G-8YES7NF8D"
 };
 
 const app = initializeApp(firebaseConfig);
