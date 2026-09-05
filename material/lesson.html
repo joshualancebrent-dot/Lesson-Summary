@@ -108,10 +108,10 @@
           const content = lesson[lang];
           
           if (!content) {
-            return <div class="slide"><article class="card lesson-body"><p style="padding: 20px; text-align: center;">Translation coming soon...</p></article></div>`;
+            return `<div class="slide"><article class="card lesson-body"><p style="padding: 20px; text-align: center;">Translation coming soon...</p></article></div>`;
           }
 
-          return 
+          return `
             <div class="slide">
               <section class="card lesson-media">
                 <a href="${content.imageSrc}" target="_blank" class="lesson-img-link">
@@ -129,7 +129,7 @@
 
                 <h3>Key Points in Summary</h3>
                 <ul class="lesson-points">
-                  ${content.points.map(p => 
+                  ${content.points.map(p => `
                     <li>
                       <strong>${p.title}</strong>
                       <p>${p.description}</p>
@@ -138,16 +138,16 @@
                         <strong>Question: </strong> <em>${p.question}</em>
                       </div>
                     </li>
-                  ).join('')}
+                  `).join('')}
                 </ul>
 
                 <div class="synthesis-section">
                   <h2>🔑 Put the Four Points Together</h2>
                   <div class="flow-container">
-                    ${content.points.map((p, i) => 
+                    ${content.points.map((p, i) => `
                       <div class="flow-step"><strong>${p.flowLabel}</strong> ${p.flowText}</div>
                       ${i < content.points.length - 1 ? '<div class="flow-arrow">↓</div>' : ''}
-                    ).join('')}
+                    `).join('')}
                   </div>
                 </div>
 
@@ -162,7 +162,7 @@
                 </ol>
               </article>
             </div>
-          ;
+          `;
         }).join('');
       } else {
         document.getElementById('lesson-title').innerText = "Lesson Not Found";
