@@ -166,6 +166,43 @@
     }
 
     loadDynamicLessons();
+    import { getFirestore, collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+async function loadLessons() {
+  const querySnapshot = await getDocs(collection(db, "lessons"));
+  let lessons = [];
+
+  querySnapshot.forEach((doc) => {
+    lessons.push({ id: doc.id, ...doc.data() });
+  });
+
+  // Sort lessons numerically by lesson number
+  lessons.sort((a, b) => {
+    const numA = parseInt((a.badge || a.id || '').replace(/\D/g, ''), 10) || 0;
+    const numB = parseInt((b.badge || b.id || '').replace(/\D/g, ''), 10) || 0;
+    return numA - numB;
+  });
+
+  // Render sorted lessons to container
+  const container = document.getElementById('lessons-container'); // Update ID if different
+  container.innerHTML = '';
+
+  lessons.forEach((lesson) => {
+    container.innerHTML += `
+      <div class="lesson-card">
+        <div class="lesson-title">
+          <strong>${lesson.badge ? lesson.badge + ': ' : ''}${lesson.title}</strong>
+        </div>
+        <div class="lesson-scripture">
+          ${lesson.scriptureRef || ''}
+        </div>
+      </div>
+    `;
+  });
+}
+
+loadLessons();
   </script>
+  
 </body>
 </html>
