@@ -1228,3 +1228,108 @@ footer {
     margin: auto;
   }
 }
+/* Mobile Responsiveness for Phones (768px and smaller) */
+@media screen and (max-width: 768px) {
+
+  /* Prevent page overflow */
+  body {
+    overflow-x: hidden;
+  }
+
+  /* Compact Navbar for mobile */
+  .nav-container {
+    padding: 10px 15px;
+    gap: 10px;
+  }
+
+  .nav-actions {
+    display: flex;
+    gap: 8px;
+  }
+
+  .nav-actions .btn-secondary,
+  .nav-actions .btn-login {
+    padding: 6px 10px;
+    font-size: 0.85rem;
+    min-height: 40px;
+  }
+
+  /* Content Padding & Typography */
+  .content-container.lesson-container {
+    padding: 10px;
+  }
+
+  .card {
+    padding: 16px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .lesson-main-title {
+    font-size: 1.5rem !important;
+    line-height: 1.3;
+  }
+
+  .scripture-quote {
+    padding: 12px;
+    font-size: 0.95rem;
+  }
+
+  /* Swipeable Horizontal Language Selector */
+  .language-selector {
+    flex-wrap: nowrap !important;
+    overflow-x: auto;
+    justify-content: flex-start !important;
+    padding: 5px 0 10px 0;
+    margin: 10px 0;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .language-selector::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for clean visual look */
+  }
+
+  .lang-btn {
+    flex: 0 0 auto;
+    padding: 8px 14px;
+    font-size: 0.85rem;
+    min-height: 44px; /* Touch target standard */
+  }
+
+  /* Slider Slides & Images */
+  .slide {
+    padding: 0 2px !important;
+  }
+
+  .lesson-img {
+    width: 100% !important;
+    height: auto !important;
+    display: block;
+    margin: 0 auto;
+  }
+
+  .media-actions .btn-primary {
+    width: 100%;
+    min-height: 44px;
+    text-align: center;
+    box-sizing: border-box;
+  }
+
+  /* Interactive Reactions & Discussion */
+  .reaction-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .btn-reaction {
+    width: 100%;
+    min-height: 44px;
+    justify-content: space-between;
+    padding: 10px 14px;
+  }
+
+  .comment-form .form-action button {
+    width: 100%;
+    min-height: 44px;
+  }
+}
