@@ -347,3 +347,9 @@ function switchLanguage(index, btnElement) {
         btnElement.classList.add('active');
       }
     }
+// Clean double quotes if already present in database
+const cleanQuote = lesson.scriptureQuote.replace(/^"|"$/g, '');
+document.getElementById('scripture-quote').innerText = `"${cleanQuote}"`;
+
+// Ensure spaces between concatenated words in title
+document.getElementById('lesson-title').innerText = lesson.title.replace(/([a-z])([A-Z])/g, '$1 $2');
