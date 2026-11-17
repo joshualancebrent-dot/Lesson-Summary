@@ -458,3 +458,54 @@ subTabs.forEach(tab => {
     document.querySelectorAll('.drawer-category').forEach(cat => cat.classList.remove('open'));
   });
 });
+const hamburgerBtn = document.getElementById('hamburger-btn');
+const hamburgerDrawer = document.getElementById('hamburger-drawer');
+const categoryButtons = document.querySelectorAll('.drawer-category-btn');
+const subTabs = document.querySelectorAll('.drawer-sub-tab');
+const sectionLabel = document.getElementById('mobile-section-label');
+const loginModal = document.getElementById('login-modal');
+
+// Toggle drawer
+hamburgerBtn.addEventListener('click', () => {
+  const isOpen = hamburgerDrawer.classList.toggle('open');
+  hamburgerBtn.classList.toggle('open', isOpen);
+  hamburgerBtn.setAttribute('aria-expanded', isOpen);
+});
+
+// Accordion toggle for Learn, Connect, Go
+categoryButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const parentCategory = btn.parentElement;
+    
+    // Close other categories
+    document.querySelectorAll('.drawer-category').forEach(cat => {
+      if (cat !== parentCategory) {
+        cat.classList.remove('open');
+      }
+    });
+
+    parentCategory.classList.toggle('open');
+  });
+});
+
+// Handle sub-tab clicks
+subTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const targetId = tab.getAttribute('data-target');
+
+    if (targetId) {
+      sectionLabel.textContent = tab.textContent;
+      if (typeof switchTab === 'function') {
+        switchTab(targetId);
+      }
+    } else if (tab.id === 'drawer-login-trigger' && loginModal) {
+      loginModal.classList.add('active');
+    }
+
+    // Close drawer on selection
+    hamburgerDrawer.classList.remove('open');
+    hamburgerBtn.classList.remove('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    document.querySelectorAll('.drawer-category').forEach(cat => cat.classList.remove('open'));
+  });
+});
