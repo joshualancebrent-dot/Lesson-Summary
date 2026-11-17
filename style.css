@@ -111,7 +111,158 @@ body {
   background: #1D4ED8;
   box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
 }
+/* ----------------------------------------------------
+   Hamburger Bar (Positioned outside & below the fixed header)
+---------------------------------------------------- */
+.hamburger-bar {
+  position: fixed;
+  top: 65px; /* Matches your fixed navbar height */
+  left: 0;
+  width: 100%;
+  height: 48px;
+  background-color: #0F172A;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 0 24px;
+  z-index: 950;
+}
 
+.hamburger-btn {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+.hamburger-btn span {
+  display: block;
+  width: 100%;
+  height: 2.5px;
+  background-color: #ffffff;
+  border-radius: 2px;
+  transition: transform 0.25s ease, opacity 0.25s ease;
+}
+
+/* Animate the three lines into an "X" when open */
+.hamburger-btn.open span:nth-child(1) {
+  transform: translateY(7.75px) rotate(45deg);
+}
+.hamburger-btn.open span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger-btn.open span:nth-child(3) {
+  transform: translateY(-7.75px) rotate(-45deg);
+}
+
+.current-section-label {
+  color: #94A3B8;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+/* ----------------------------------------------------
+   Collapsible Drawer Container & Accordion
+---------------------------------------------------- */
+.hamburger-drawer {
+  display: none;
+  position: fixed;
+  top: 113px; /* Navbar (65px) + Hamburger Bar (48px) */
+  left: 0;
+  width: 300px;
+  max-width: 90vw;
+  background-color: #0F172A;
+  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+  padding: 16px;
+  z-index: 940;
+  border-bottom-right-radius: var(--radius-md);
+}
+
+.hamburger-drawer.open {
+  display: block;
+}
+
+.drawer-menu {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.drawer-category-btn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(255, 255, 255, 0.04);
+  border: none;
+  color: #ffffff;
+  padding: 12px 14px;
+  font-size: 1rem;
+  font-weight: 700;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.drawer-category-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.drawer-category-btn .chevron {
+  transition: transform 0.25s ease;
+}
+
+.drawer-category.open .drawer-category-btn .chevron {
+  transform: rotate(180deg);
+}
+
+/* Accordion Sub-links Panel */
+.drawer-sublinks {
+  max-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding-left: 12px;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.drawer-category.open .drawer-sublinks {
+  max-height: 200px;
+  padding-top: 6px;
+  padding-bottom: 8px;
+}
+
+.drawer-sub-tab {
+  background: transparent;
+  border: none;
+  color: #94A3B8;
+  text-align: left;
+  padding: 9px 12px;
+  font-size: 0.9rem;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.drawer-sub-tab:hover {
+  color: #ffffff;
+  background: rgba(37, 99, 235, 0.2);
+}
+
+/* ----------------------------------------------------
+   Main Content Offset
+---------------------------------------------------- */
+.content-container {
+  margin-top: 140px !important; /* Clears both the fixed header and the hamburger bar */
+}
 /* ----------------------------------------------------
    Centered Content Area & Panoramic Animations
 ---------------------------------------------------- */
