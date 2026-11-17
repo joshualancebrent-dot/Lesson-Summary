@@ -180,4 +180,233 @@ document.addEventListener('DOMContentLoaded', () => {
       }
 
       snapshot.forEach((docSnap) => {
-        const data = doc
+        const data = docSnap.data();
+        const dateStr = data.createdAt ? new Date(data.createdAt.toDate()).toLocaleDateString(undefined, {
+          month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
+        }) : "Just now";
+
+        const card = document.createElement('div');
+        card.className = 'comment-card';
+        card.innerHTML = `
+          <div class="comment-avatar">${(data.userName || 'U')[0].toUpperCase()}</div>
+          <div class="comment-content">
+            <div class="comment-header">
+              <span class="comment-author">${data.userName || 'Anonymous User'}</span>
+              <span class="comment-date">${dateStr}</span>
+            </div>
+            <p class="comment-text">${data.text}</p>
+          </div>
+        `;
+        commentsList.appendChild(card);
+      });
+    });
+
+    if (commentForm) {
+      commentForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const user = auth ? auth.currentUser : null;
+
+        if (!user) {
+          alert("Please log in to share your thoughts.");
+          if (modal) modal.classList.add('active');
+          return;
+        }
+
+        const input = document.getElementById('comment-input');
+        const text = input.value.trim();
+        if (!text) return;
+
+        try {
+          await addDoc(commentsRef, {
+            userId: user.uid,
+            userName: user.displayName || user.email.split('@')[0],
+            text: text,
+            createdAt: serverTimestamp()
+          });
+          input.value = "";
+        } catch (err) {
+          alert("Could not post comment: " + err.message);
+        }
+      });
+    }
+
+    const reactionsRef = collection(db, "lessons", currentLessonId, "reactions");
+    onSnapshot(reactionsRef, (snapshot) => {
+      let counts = { amen: 0, heart: 0, insight: 0 };
+      snapshot.forEach(docSnap => {
+        const type = docSnap.data().type;
+        if (counts[type] !== undefined) counts[type]++;
+      });
+
+      const amenEl = document.getElementById('count-amen');
+      const heartEl = document.getElementById('count-heart');
+      const insightEl = document.getElementById('count-insight');
+
+      if (amenEl) amenEl.textContent = counts.amen;
+      if (heartEl) heartEl.textContent = counts.heart;
+      if (insightEl) insightEl.textContent = counts.insight;
+    });
+
+    document.querySelectorAll('.btn-reaction').forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const user = auth ? auth.currentUser : null;
+        if (!user) {
+          alert("Please log in to react.");
+          if (modal) modal.classList.add('active');
+          return;
+        }
+
+        const type = btn.getAttribute('data-type');
+        const userReactionDoc = doc(db, "lessons", currentLessonId, "reactions", user.uid);
+
+        try {
+          await setDoc(userReactionDoc, {
+            type: type,
+            userId: user.uid,
+            updatedAt: serverTimestamp()
+          });
+        } catch (err) {
+          alert("Reaction error: " + err.message);
+        }
+      });
+    });
+  }
+
+  // -------------------------------------------------------------
+  // HAMBURGER MENU & DRAWER LOGIC (Safely inside DOMContentLoaded)
+  // -------------------------------------------------------------
+  const hamburgerBtn = document.getElementById('hamburger-btn');
+  const hamburgerDrawer = document.getElementById('hamburger-drawer');
+  const categoryButtons = document.querySelectorAll('.drawer-category-btn');
+  const subTabs = document.querySelectorAll('.drawer-sub-tab');
+  const sectionLabel = document.getElementById('mobile-section-label');
+
+  if (hamburgerBtn && hamburgerDrawer) {
+    // 1. Toggle main drawer and animate icon
+    hamburgerBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const isOpen = hamburgerDrawer.classList.toggle('open');
+      hamburgerBtn.classList.toggle('open', isOpen);
+      hamburgerBtn.setAttribute('aria-expanded', isOpen);
+    });
+
+    // 2. Accordion toggle for categories
+    categoryButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const parentCategory = btn.parentElement;
+        
+        document.querySelectorAll('.drawer-category').forEach(cat => {
+          if (cat !== parentCategory) {
+            cat.classList.remove('open');
+          }
+        });
+
+        parentCategory.classList.toggle('open');
+      });
+    });
+
+    // 3. Handle sub-tab selections and login triggers
+    subTabs.forEach(tab => {
+      tab.addEventListener('click', () => {
+        const targetId = tab.getAttribute('data-target');
+
+        if (targetId) {
+          if (sectionLabel) sectionLabel.textContent = tab.textContent;
+          if (typeof switchTab === 'function') {
+            switchTab(targetId);
+          }
+        } else if (tab.id === 'drawer-login-trigger' && modal) {
+          modal.classList.add('active');
+        }
+
+        // Close drawer after selection
+        hamburgerDrawer.classList.remove('open');
+        hamburgerBtn.classList.remove('open');
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+        document.querySelectorAll('.drawer-category').forEach(cat => cat.classList.remove('open'));
+      });
+    });
+
+    // 4. Close drawer when clicking outside
+    document.addEventListener('click', (e) => {
+      if (!hamburgerDrawer.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+        hamburgerDrawer.classList.remove('open');
+        hamburgerBtn.classList.remove('open');
+        hamburgerBtn.setAttribute('aria-expanded', 'false');
+        document.querySelectorAll('.drawer-category').forEach(cat => cat.classList.remove('open'));
+      }
+    });
+  }
+});
+
+// Global Utilities (Outside DOMContentLoaded)
+window.copyLessonText = function() {
+  const content = document.getElementById("lesson-content") || document.getElementById("ministry-content");
+  
+  if (!content) {
+    console.error("Could not find the content to copy.");
+    return;
+  }
+
+  const clonedContent = content.cloneNode(true);
+  const buttonToRemove = clonedContent.querySelector('#copy-btn');
+  if (buttonToRemove) {
+    buttonToRemove.parentElement.remove();
+  }
+
+  const textToCopy = clonedContent.innerText;
+
+  if (navigator.clipboard && window.isSecureContext) {
+    navigator.clipboard.writeText(textToCopy)
+      .then(showSuccess)
+      .catch(() => fallbackCopy(textToCopy)); 
+  } else {
+    fallbackCopy(textToCopy);
+  }
+
+  function fallbackCopy(text) {
+    const textArea = document.createElement("textarea");
+    textArea.value = text;
+    textArea.style.position = "fixed";
+    textArea.style.top = "0";
+    textArea.style.left = "0";
+    textArea.style.opacity = "0"; 
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+    
+    try {
+      document.execCommand('copy');
+      showSuccess();
+    } catch (err) {
+      alert("Your browser is blocking the copy function. Please select the text manually.");
+    }
+    document.body.removeChild(textArea);
+  }
+
+  function showSuccess() {
+    const btn = document.getElementById("copy-btn");
+    if (!btn) return;
+    const originalText = "📋 Copy Text"; 
+    btn.innerHTML = "✅ Copied!";
+    btn.style.backgroundColor = "#10B981"; 
+    
+    setTimeout(() => {
+      btn.innerHTML = originalText;
+      btn.style.backgroundColor = ""; 
+    }, 2000);
+  }
+};
+
+window.switchLanguage = function(index, btnElement) {
+  const track = document.getElementById('sliderTrack');
+  if (track) {
+    track.style.transform = `translateX(-${index * 20}%)`;
+  }
+
+  const buttons = document.querySelectorAll('.lang-btn');
+  buttons.forEach(btn => btn.classList.remove('active'));
+  if (btnElement) {
+    btnElement.classList.add('active');
+  }
+};
