@@ -347,3 +347,68 @@ function switchLanguage(index, btnElement) {
         btnElement.classList.add('active');
       }
     }
+const hamburgerBtn = document.getElementById('hamburger-btn');
+const hamburgerDrawer = document.getElementById('hamburger-drawer');
+const categoryButtons = document.querySelectorAll('.drawer-category-btn');
+const subTabs = document.querySelectorAll('.drawer-sub-tab');
+const sectionLabel = document.getElementById('mobile-section-label');
+const loginModal = document.getElementById('login-modal');
+
+// 1. Toggle main drawer and animate icon
+hamburgerBtn.addEventListener('click', (e) => {
+  e.stopPropagation();
+  const isOpen = hamburgerDrawer.classList.toggle('open');
+  hamburgerBtn.classList.toggle('open', isOpen);
+  hamburgerBtn.setAttribute('aria-expanded', isOpen);
+});
+
+// 2. Accordion toggle for categories
+categoryButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    const parentCategory = btn.parentElement;
+    
+    // Close other open categories
+    document.querySelectorAll('.drawer-category').forEach(cat => {
+      if (cat !== parentCategory) {
+        cat.classList.remove('open');
+      }
+    });
+
+    parentCategory.classList.toggle('open');
+  });
+});
+
+// 3. Handle sub-tab selections and login triggers
+subTabs.forEach(tab => {
+  tab.addEventListener('click', () => {
+    const targetId = tab.getAttribute('data-target');
+
+    if (targetId) {
+      sectionLabel.textContent = tab.textContent;
+      if (typeof switchTab === 'function') {
+        switchTab(targetId);
+      }
+    } else if (tab.id === 'drawer-login-trigger' && loginModal) {
+      loginModal.classList.add('active');
+    }
+
+    // Close drawer after selection
+    hamburgerDrawer.classList.remove('open');
+    hamburgerBtn.classList.remove('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    document.querySelectorAll('.drawer-category').forEach(cat => cat.classList.remove('open'));
+  });
+});
+
+// Close drawer when clicking outside
+document.addEventListener('click', (e) => {
+  if (!hamburgerDrawer.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+    hamburgerDrawer.classList.remove('open');
+    hamburgerBtn.classList.remove('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    document.querySelectorAll('.drawer-category').forEach(cat => cat.classList.remove('open'));
+  }
+});
+```[cite: 1]
+
+Once you save this script, your hamburger menu is fully functional, complete with smooth accordion menus and automatic closing behavior when clicking outside or selecting a destination[cite: 1]. Let me know how it looks on your live page!
