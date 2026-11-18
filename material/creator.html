@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0F172A">
+  <title>DayBreak — Creator Studio</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    /* Creator-Specific Form & Preview Styles */
+    .creator-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2rem;
+      width: 100%;
+      text-align: left;
+      margin-top: 1.5rem;
+    }
+
+    @media screen and (max-width: 768px) {
+      .creator-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .creator-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 2rem;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .creator-card h3 {
+      margin-bottom: 1.25rem;
+      color: var(--primary);
+      border-bottom: 1px solid var(--border-color);
+      padding-bottom: 0.75rem;
+    }
+
+    .creator-field {
+      margin-bottom: 1.25rem;
+    }
+
+    .creator-field label {
+      display: block;
+      font-size: 0.9rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+      color: var(--text-main);
+    }
+
+    .creator-field input,
+    .creator-field textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-size: 0.95rem;
+      color: var(--text-main);
+      background: var(--bg-main);
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+    }
+
+    .creator-field input:focus,
+    .creator-field textarea:focus {
+      border-color: var(--accent);
+      background: #FFFFFF;
+      box-shadow: 0 0 0 3px var(--accent-light);
+    }
+
+    .preview-badge {
+      display: inline-block;
+      background: var(--accent-light);
+      color: var(--accent);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      margin-bottom: 0.75rem;
+      text-transform: uppercase;
+    }
+
+    .preview-scripture {
+      background: var(--bg-main);
+      border-left: 4px solid var(--accent);
+      padding: 0.85rem 1rem;
+      margin: 1rem 0;
+      font-style: italic;
+      color: var(--text-muted);
+      border-radius: 0 8px 8px 0;
+    }
+
+    .preview-body {
+      white-space: pre-wrap;
+      color: var(--text-main);
+      line-height: 1.75;
+      margin-bottom: 1.25rem;
+    }
+
+    .preview-prayer {
+      background: #F1F5F9;
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.92rem;
+      color: var(--primary);
+    }
+
+    .status-banner {
+      padding: 0.85rem 1rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 1rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .status-banner.success {
+      display: block;
+      background: #DCFCE7;
+      color: #166534;
+      border: 1px solid #86EFAC;
+    }
+
+    .status-banner.error {
+      display: block;
+      background: #FEE2E2;
+      color: #991B1B;
+      border: 1px solid #FCA5A5;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Fixed Header Navigation -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="index.html" class="logo">DayBreak</a>
+      <nav class="nav-links">
+        <a href="index.html" class="nav-tab" style="text-decoration:none;">← Back to Home</a>
+        <button class="nav-tab active">Creator Studio</button>
+      </nav>
+      <button class="btn-login" id="creator-auth-btn">Login</button>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main class="content-container" style="max-width: 1100px; margin-top: 100px;">
+    <div style="width: 100%; text-align: left;">
+      <h1>Devotional Creator Studio</h1>
+      <p class="subtitle">Write and publish daily reflections directly to the DayBreak community.</p>
+    </div>
+
+    <div id="auth-warning" class="status-banner error" style="width: 100%; text-align: left;">
+      You must be signed in to upload a devotional. Click Login in the top right corner first.
+    </div>
+
+    <div class="creator-grid">
+      <!-- Left Column: Editor Form -->
+      <div class="creator-card">
+        <h3>Compose Devotional</h3>
+        <div id="publish-status" class="status-banner"></div>
+
+        <form id="devotional-upload-form">
+          <div class="creator-field">
+            <label for="devo-date">Scheduled Date</label>
+            <input type="date" id="devo-date" required>
+          </div>
+
+          <div class="creator-field">
+            <label for="devo-title">Devotional Title</label>
+            <input type="text" id="devo-title" placeholder="e.g., Finding Stillness in the Storm" required>
+          </div>
+
+          <div class="creator-field">
+            <label for="devo-scripture">Key Scripture Reference</label>
+            <input type="text" id="devo-scripture" placeholder="e.g., Psalm 46:10" required>
+          </div>
+
+          <div class="creator-field">
+            <label for="devo-verse-text">Scripture Verse Text</label>
+            <textarea id="devo-verse-text" rows="2" placeholder="Be still, and know that I am God..." required></textarea>
+          </div>
+
+          <div class="creator-field">
+            <label for="devo-reflection">Reflection / Message</label>
+            <textarea id="devo-reflection" rows="7" placeholder="Write your main devotional message here..." required></textarea>
+          </div>
+
+          <div class="creator-field">
+            <label for="devo-prayer">Closing Prayer</label>
+            <textarea id="devo-prayer" rows="3" placeholder="Lord, help us to trust in Your timing..." required></textarea>
+          </div>
+
+          <button type="submit" id="publish-btn" class="btn-primary btn-full">Publish Devotional</button>
+        </form>
+      </div>
+
+      <!-- Right Column: Live Preview -->
+      <div class="creator-card">
+        <h3>Live Reader Preview</h3>
+        <span class="preview-badge" id="prev-date">Today's Date</span>
+        <h2 id="prev-title" style="margin-bottom: 0.5rem;">Your Devotional Title</h2>
+        <p style="font-size: 0.85rem; color: var(--text-muted);" id="prev-author">By Creator</p>
+
+        <div class="preview-scripture">
+          <strong id="prev-scripture">Scripture Reference</strong><br>
+          <span id="prev-verse">"Your scripture verse text will appear here..."</span>
+        </div>
+
+        <div class="preview-body" id="prev-reflection">Your main devotional message will appear here as you type...</div>
+
+        <div class="preview-prayer">
+          <strong>Prayer:</strong> <span id="prev-prayer">Your closing prayer will appear here...</span>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Login Modal Overlay (Reused from index.html) -->
+  <div id="login-modal" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close" id="close-login">&times;</button>
+      <h2 id="modal-title">Creator Sign In</h2>
+      <p class="subtitle">Sign in to publish devotionals.</p>
+      <button class="btn-social btn-google btn-full" id="google-login" style="margin-bottom: 1rem; padding: 0.75rem; border: 1px solid #cbd5e1; border-radius: 8px; background: #fff; cursor: pointer; font-weight: 600;">
+        Continue with Google
+      </button>
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required placeholder="••••••••">
+        </div>
+        <button type="submit" class="btn-primary btn-full">Sign In</button>
+      </form>
+    </div>
+  </div>
+
+  <footer>
+    <p>&copy; 2026 Daybreak Lessons. All rights reserved.</p>
+  </footer>
+
+  <!-- Firebase Creator Upload Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+    import { getAuth, onAuthStateChanged, signInWithEmailAndPassword, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyAKsH40B0E-ytvtDBp5q0cCnAcrkfsDkxg",
+      authDomain: "day-break-7a1d2.firebaseapp.com",
+      projectId: "day-break-7a1d2",
+      storageBucket: "day-break-7a1d2.firebasestorage.app",
+      messagingSenderId: "374552344821",
+      appId: "1:374552344821:web:eb18d503f6eca8d7722dbc",
+      measurementId: "G-8YES7NF8D"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    // Elements
+    const authBtn = document.getElementById('creator-auth-btn');
+    const authWarning = document.getElementById('auth-warning');
+    const modal = document.getElementById('login-modal');
+    const closeBtn = document.getElementById('close-login');
+    const form = document.getElementById('devotional-upload-form');
+    const statusBanner = document.getElementById('publish-status');
+    const publishBtn = document.getElementById('publish-btn');
+
+    // Set default date to today
+    const dateInput = document.getElementById('devo-date');
+    dateInput.valueAsDate = new Date();
+    document.getElementById('prev-date').textContent = dateInput.value;
+
+    // Live Preview Bindings
+    const bindPreview = (inputId, previewId, fallback) => {
+      document.getElementById(inputId).addEventListener('input', (e) => {
+        document.getElementById(previewId).textContent = e.target.value.trim() || fallback;
+      });
+    };
+
+    bindPreview('devo-date', 'prev-date', 'Scheduled Date');
+    bindPreview('devo-title', 'prev-title', 'Your Devotional Title');
+    bindPreview('devo-scripture', 'prev-scripture', 'Scripture Reference');
+    bindPreview('devo-verse-text', 'prev-verse', '"Your scripture verse text will appear here..."');
+    bindPreview('devo-reflection', 'prev-reflection', 'Your main devotional message will appear here as you type...');
+    bindPreview('devo-prayer', 'prev-prayer', 'Your closing prayer will appear here...');
+
+    // Auth State Tracking
+    onAuthStateChanged(auth, (user) => {
+      if (user) {
+        authBtn.textContent = 'Logout';
+        authWarning.style.display = 'none';
+        publishBtn.disabled = false;
+        document.getElementById('prev-author').textContent = `By ${user.displayName || user.email.split('@')[0]}`;
+        modal.classList.remove('active');
+      } else {
+        authBtn.textContent = 'Login';
+        authWarning.style.display = 'block';
+        publishBtn.disabled = true;
+        document.getElementById('prev-author').textContent = 'By Creator (Sign in required)';
+      }
+    });
+
+    authBtn.addEventListener('click', () => {
+      if (auth.currentUser) {
+        signOut(auth);
+      } else {
+        modal.classList.add('active');
+      }
+    });
+
+    closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+    document.getElementById('google-login').addEventListener('click', () => signInWithPopup(auth, new GoogleAuthProvider()));
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      try {
+        await signInWithEmailAndPassword(auth, document.getElementById('email').value, document.getElementById('password').value);
+      } catch (err) {
+        alert(err.message);
+      }
+    });
+
+    // Submit Devotional to Firestore
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const user = auth.currentUser;
+      if (!user) {
+        modal.classList.add('active');
+        return;
+      }
+
+      publishBtn.disabled = true;
+      publishBtn.textContent = 'Publishing...';
+      statusBanner.className = 'status-banner';
+
+      try {
+        await addDoc(collection(db, "devotionals"), {
+          date: document.getElementById('devo-date').value,
+          title: document.getElementById('devo-title').value.trim(),
+          scriptureRef: document.getElementById('devo-scripture').value.trim(),
+          verseText: document.getElementById('devo-verse-text').value.trim(),
+          reflection: document.getElementById('devo-reflection').value.trim(),
+          prayer: document.getElementById('devo-prayer').value.trim(),
+          authorName: user.displayName || user.email.split('@')[0],
+          authorId: user.uid,
+          createdAt: serverTimestamp()
+        });
+
+        statusBanner.textContent = 'Devotional published successfully! It is now live on the Daily Devotional tab.';
+        statusBanner.classList.add('success');
+        form.reset();
+        dateInput.valueAsDate = new Date();
+      } catch (error) {
+        console.error("Upload failed:", error);
+        statusBanner.textContent = 'Failed to publish: ' + error.message;
+        statusBanner.classList.add('error');
+      } finally {
+        publishBtn.disabled = false;
+        publishBtn.textContent = 'Publish Devotional';
+      }
+    });
+  </script>
+</body>
+</html>
