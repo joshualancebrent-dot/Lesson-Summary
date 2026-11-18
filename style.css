@@ -1498,3 +1498,22 @@ footer {
     min-height: 44px;
   }
 }
+/* Update your hover/open rules to support both hover and mobile tap */
+.hamburger-wrapper:hover .hamburger-drawer,
+.hamburger-drawer.open {
+  display: block;
+}
+
+.hamburger-wrapper:hover .hamburger-btn span:nth-child(1),
+.hamburger-drawer.open ~ .hamburger-bar .hamburger-btn span:nth-child(1), /* Optional sync */
+.hamburger-btn.open span:nth-child(1) {
+  transform: translateY(7.75px) rotate(45deg);
+}
+.hamburger-wrapper:hover .hamburger-btn span:nth-child(2),
+.hamburger-btn.open span:nth-child(2) {
+  opacity: 0;
+}
+.hamburger-wrapper:hover .hamburger-btn span:nth-child(3),
+.hamburger-btn.open span:nth-child(3) {
+  transform: translateY(-7.75px) rotate(-45deg);
+}
