@@ -33,7 +33,27 @@ body {
   line-height: 1.6;
   overflow-x: hidden;
 }
+/* Support both desktop hover AND mobile/click .open states */
+.hamburger-wrapper:hover .hamburger-drawer,
+.hamburger-drawer.open {
+  display: block;
+}
 
+/* Icon transformation for both hover and click/tap */
+.hamburger-wrapper:hover .hamburger-btn span:nth-child(1),
+.hamburger-btn.open span:nth-child(1) {
+  transform: translateY(7.75px) rotate(45deg);
+}
+
+.hamburger-wrapper:hover .hamburger-btn span:nth-child(2),
+.hamburger-btn.open span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger-wrapper:hover .hamburger-btn span:nth-child(3),
+.hamburger-btn.open span:nth-child(3) {
+  transform: translateY(-7.75px) rotate(-45deg);
+}
 /* ----------------------------------------------------
    Fixed Navigation Bar (Static position, active hovers)
 ---------------------------------------------------- */
