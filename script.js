@@ -410,3 +410,23 @@ window.switchLanguage = function(index, btnElement) {
     btnElement.classList.add('active');
   }
 };
+// Hybrid Mobile Tap & Desktop Hover Handler
+  const hamburgerWrapper = document.querySelector('.hamburger-wrapper');
+  const hamburgerBtn = document.getElementById('hamburger-btn');
+  const hamburgerDrawer = document.getElementById('hamburger-drawer');
+
+  if (hamburgerBtn && hamburgerDrawer && hamburgerWrapper) {
+    hamburgerBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      hamburgerDrawer.classList.toggle('open');
+      hamburgerBtn.classList.toggle('open');
+    });
+
+    // Close drawer when clicking anywhere outside of it on mobile
+    document.addEventListener('click', (e) => {
+      if (!hamburgerWrapper.contains(e.target)) {
+        hamburgerDrawer.classList.remove('open');
+        hamburgerBtn.classList.remove('open');
+      }
+    });
+  }
