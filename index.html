@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<meta name="theme-color" content="#1e1e2d">
-<meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1e1e2d">
+  <meta name="mobile-web-app-capable" content="yes">
 
   <title>DayBreak</title>
   <link rel="stylesheet" href="style.css">
@@ -26,18 +25,7 @@
     </div>
   </header>
 
-  
- <!-- Hamburger Sub-Bar (Placed right below the fixed navbar) -->
-   <div class="hamburger-bar">
-    <button id="hamburger-btn" class="hamburger-btn" aria-label="Toggle Menu" aria-expanded="false">
-      <span></span>
-      <span></span>
-      <span></span>
-    </button>
-    <span class="current-section-label" id="mobile-section-label">Menu</span>
-  </div>
-<!-- Collapsible Drawer (Learn, Connect, Go) -->
-<!-- Hamburger Menu Wrapper for Hover Activation -->
+  <!-- Hamburger Menu Wrapper for Hover & Click Activation -->
   <div class="hamburger-wrapper">
     <div class="hamburger-bar">
       <button id="hamburger-btn" class="hamburger-btn" aria-label="Toggle Menu" aria-expanded="false">
@@ -105,7 +93,7 @@
       </div>
     </section>
 
- <!-- Devotional Tab -->
+    <!-- Devotional Tab -->
     <section id="devotional" class="tab-panel">
       <h2>Daily Devotional</h2>
       <p class="subtitle">Scripture, reflections, and prayers for your morning quiet time.</p>
@@ -187,54 +175,8 @@
 
   <script type="module" src="script.js"></script>
 
-  <!-- Dynamic Firebase Lesson Loader -->
+  <!-- Dynamic Firebase Lesson & Devotional Loader -->
   <script type="module">
-    import { db } from './material/lessons-data.js';
-    import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
-
-    async function loadDynamicLessons() {
-      const listContainer = document.getElementById('sabbath-school-list');
-
-      try {
-        const querySnapshot = await getDocs(collection(db, "lessons"));
-
-        if (querySnapshot.empty) {
-          listContainer.innerHTML = `
-            <li class="lesson-card-item">
-              <a href="material/lesson.html?id=Lesson%2013" class="lesson-card-link">
-                <span class="lesson-card-title">Grace, Love, and Fellowship</span>
-                <span class="lesson-card-ref">2 Cor. 13:14</span>
-              </a>
-            </li>`;
-          return;
-        }
-
-        listContainer.innerHTML = '';
-
-        querySnapshot.forEach((docSnap) => {
-          const lessonId = docSnap.id;
-          const lesson = docSnap.data();
-
-          const li = document.createElement('li');
-          li.className = 'lesson-card-item';
-          li.innerHTML = `
-            <a href="material/lesson.html?id=${encodeURIComponent(lessonId)}" class="lesson-card-link">
-              <span class="lesson-card-title">${lesson.title || 'Untitled Lesson'}</span>
-              <span class="lesson-card-ref">${lesson.scriptureRef || ''}</span>
-            </a>
-          `;
-          listContainer.appendChild(li);
-        });
-
-      } catch (error) {
-        console.error("Error loading dynamic lessons:", error);
-        listContainer.innerHTML = `<p style="padding: 10px; color: red;">Failed to load dynamic lessons from database.</p>`;
-      }
-    }
-
-    loadDynamicLessons();
-
-    type="module">
     import { db } from './material/lessons-data.js';
     import { collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
