@@ -71,6 +71,7 @@
           </button>
           <div class="drawer-sublinks">
             <button class="drawer-sub-tab" data-target="resources">Resources & Downloads</button>
+            <button class="drawer-sub-tab" onclick="window.location.href='material/admin.html'">Creator Studio</button>
           </div>
         </div>
 
@@ -243,7 +244,7 @@
           card.style.textAlign = 'left';
           card.innerHTML = `
             <span class="badge">${d.date || 'Daily Reading'}</span>
-            <h3 style="margin: 0.75rem 0 0.25rem 0;">${langBlock.title || 'Untitled Devotional'}</h3>
+            <h3 style="margin: 0.75rem 0 0.25rem 0;">${langBlock.title || d.title || 'Untitled Devotional'}</h3>
             <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">By ${d.authorName || 'DayBreak Contributor'}</p>
             <blockquote style="background: var(--bg-main); border-left: 4px solid var(--accent); padding: 0.85rem 1rem; margin-bottom: 1rem; font-style: italic;">
               <strong>${d.scriptureRef || ''}</strong>${d.scriptureQuote ? ` — "${d.scriptureQuote}"` : ''}
