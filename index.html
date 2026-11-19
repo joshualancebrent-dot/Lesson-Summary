@@ -38,7 +38,7 @@
 
     <aside id="hamburger-drawer" class="hamburger-drawer">
       <nav class="drawer-menu">
-        
+
         <!-- Learn Section -->
         <div class="drawer-category">
           <button class="drawer-category-btn" data-category="learn">
@@ -78,10 +78,10 @@
       </nav>
     </aside>
   </div>
-  
+
   <!-- Centered Content Container -->
   <main class="content-container">
-    
+
     <!-- Home Tab -->
     <section id="home" class="tab-panel active">
       <div class="hero-section">
@@ -107,7 +107,7 @@
     <section id="sabbath" class="tab-panel">
       <h2>Sabbath School Lessons</h2>
       <p class="subtitle">Structured Bible studies and discussion materials for this quarter.</p>
-      
+
       <div class="card">
         <ul class="sabbath-school-list" id="sabbath-school-list">
           <p class="loading-text" style="padding: 10px; text-align: center;">Loading lessons from database...</p>
@@ -221,6 +221,34 @@
       }
     }
 
+    function createDevotionalCard(d, badgeOverride = null) {
+      const langBlock = d.en || {};
+      const card = document.createElement('div');
+      card.className = 'card';
+      card.style.textAlign = 'left';
+      card.innerHTML = `
+        <span class="badge">${badgeOverride || d.date || 'Daily Reading'}</span>
+        <h3 style="margin: 0.75rem 0 0.25rem 0;">${langBlock.title || d.title || 'Untitled Devotional'}</h3>
+        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">By ${d.authorName || 'DayBreak Contributor'}</p>
+        <blockquote style="background: var(--bg-main); border-left: 4px solid var(--accent); padding: 0.85rem 1rem; margin-bottom: 1rem; font-style: italic;">
+          <strong>${d.scriptureRef || ''}</strong>${d.scriptureQuote ? ` — "${d.scriptureQuote}"` : ''}
+        </blockquote>
+        <p style="white-space: pre-wrap; margin-bottom: 1.25rem;">${langBlock.reflection || ''}</p>
+        <div style="background: #F1F5F9; padding: 0.85rem 1rem; border-radius: 8px; font-size: 0.92rem;">
+          <strong>Prayer:</strong> ${langBlock.prayer || ''}
+        </div>
+      `;
+      return card;
+    }
+
+    function getLocalTodayString() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
     async function loadDynamicDevotionals() {
       const feedContainer = document.getElementById('devotional-feed');
       if (!feedContainer) return;
@@ -234,28 +262,61 @@
           return;
         }
 
+        const allDevotionals = snapshot.docs.map(docSnap => docSnap.data());
+        const todayStr = getLocalTodayString();
+
+        const todaysDevotionals = allDevotionals.filter(d => d.date === todayStr);
+        let featuredList = [];
+        let previousList = [];
+
+        if (todaysDevotionals.length > 0) {
+          featuredList = todaysDevotionals;
+          previousList = allDevotionals.filter(d => d.date !== todayStr);
+        } else {
+          featuredList = [allDevotionals[0]];
+          previousList = allDevotionals.slice(1);
+        }
+
         feedContainer.innerHTML = '';
 
-        snapshot.forEach((docSnap) => {
-          const d = docSnap.data();
-          const langBlock = d.en || {};
-          const card = document.createElement('div');
-          card.className = 'card';
-          card.style.textAlign = 'left';
-          card.innerHTML = `
-            <span class="badge">${d.date || 'Daily Reading'}</span>
-            <h3 style="margin: 0.75rem 0 0.25rem 0;">${langBlock.title || d.title || 'Untitled Devotional'}</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">By ${d.authorName || 'DayBreak Contributor'}</p>
-            <blockquote style="background: var(--bg-main); border-left: 4px solid var(--accent); padding: 0.85rem 1rem; margin-bottom: 1rem; font-style: italic;">
-              <strong>${d.scriptureRef || ''}</strong>${d.scriptureQuote ? ` — "${d.scriptureQuote}"` : ''}
-            </blockquote>
-            <p style="white-space: pre-wrap; margin-bottom: 1.25rem;">${langBlock.reflection || ''}</p>
-            <div style="background: #F1F5F9; padding: 0.85rem 1rem; border-radius: 8px; font-size: 0.92rem;">
-              <strong>Prayer:</strong> ${langBlock.prayer || ''}
-            </div>
-          `;
-          feedContainer.appendChild(card);
+        featuredList.forEach(d => {
+          const badgeLabel = d.date === todayStr
+            ? `Today • ${d.date}`
+            : `Latest • ${d.date || 'Daily Reading'}`;
+          feedContainer.appendChild(createDevotionalCard(d, badgeLabel));
         });
+
+        if (previousList.length > 0) {
+          const toggleWrapper = document.createElement('div');
+          toggleWrapper.style.textAlign = 'center';
+          toggleWrapper.style.margin = '1.25rem 0';
+
+          const toggleBtn = document.createElement('button');
+          toggleBtn.type = 'button';
+          toggleBtn.className = 'btn-primary';
+          toggleBtn.textContent = `View Previous Devotionals (${previousList.length})`;
+
+          const previousContainer = document.createElement('div');
+          previousContainer.id = 'previous-devotionals-list';
+          previousContainer.style.display = 'none';
+          previousContainer.style.marginTop = '1rem';
+
+          previousList.forEach(d => {
+            previousContainer.appendChild(createDevotionalCard(d));
+          });
+
+          toggleBtn.addEventListener('click', () => {
+            const isHidden = previousContainer.style.display === 'none';
+            previousContainer.style.display = isHidden ? 'block' : 'none';
+            toggleBtn.textContent = isHidden
+              ? 'Hide Previous Devotionals'
+              : `View Previous Devotionals (${previousList.length})`;
+          });
+
+          toggleWrapper.appendChild(toggleBtn);
+          feedContainer.appendChild(toggleWrapper);
+          feedContainer.appendChild(previousContainer);
+        }
       } catch (error) {
         console.error("Error loading dynamic devotionals:", error);
         feedContainer.innerHTML = `<div class="card"><p style="color: red;">Failed to load devotionals from database.</p></div>`;
