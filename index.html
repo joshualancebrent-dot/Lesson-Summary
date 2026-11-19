@@ -177,10 +177,26 @@
   <script type="module" src="script.js"></script>
 
   <!-- Dynamic Firebase Lesson & Devotional Loader -->
- <!-- Dynamic Firebase Lesson & Devotional Loader -->
   <script type="module">
     import { db } from './material/lessons-data.js';
     import { collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    const DEVO_LANG_LABELS = {
+      en: { label: 'English', prayerPrefix: 'Prayer' },
+      tl: { label: 'Tagalog', prayerPrefix: 'Panalangin' },
+      ceb: { label: 'Cebuano', prayerPrefix: 'Pag-ampo' },
+      ilo: { label: 'Ilocano', prayerPrefix: 'Kararag' },
+      war: { label: 'Waray', prayerPrefix: 'Pag-ampo' }
+    };
+
+    function getAvailableDevoLangs(d) {
+      const order = ['en', 'tl', 'ceb', 'ilo', 'war'];
+      const available = order.filter(code => {
+        const block = d[code];
+        return block && (block.title || block.reflection || block.prayer);
+      });
+      return available.length > 0 ? available : ['en'];
+    }
 
     async function loadDynamicLessons() {
       const listContainer = document.getElementById('sabbath-school-list');
@@ -223,22 +239,84 @@
     }
 
     function createDevotionalCard(d, badgeOverride = null) {
-      const langBlock = d.en || {};
+      const langs = getAvailableDevoLangs(d);
+      let activeLang = langs.includes('en') ? 'en' : langs[0];
+
       const card = document.createElement('div');
       card.className = 'card';
       card.style.textAlign = 'left';
-      card.innerHTML = `
-        <span class="badge">${badgeOverride || d.date || 'Daily Reading'}</span>
-        <h3 style="margin: 0.75rem 0 0.25rem 0;">${langBlock.title || d.title || 'Untitled Devotional'}</h3>
-        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">By ${d.authorName || 'DayBreak Contributor'}</p>
-        <blockquote style="background: var(--bg-main); border-left: 4px solid var(--accent); padding: 0.85rem 1rem; margin-bottom: 1rem; font-style: italic;">
-          <strong>${d.scriptureRef || ''}</strong>${d.scriptureQuote ? ` — "${d.scriptureQuote}"` : ''}
-        </blockquote>
-        <p style="white-space: pre-wrap; margin-bottom: 1.25rem;">${langBlock.reflection || ''}</p>
-        <div style="background: #F1F5F9; padding: 0.85rem 1rem; border-radius: 8px; font-size: 0.92rem;">
-          <strong>Prayer:</strong> ${langBlock.prayer || ''}
-        </div>
-      `;
+
+      const badge = document.createElement('span');
+      badge.className = 'badge';
+      badge.textContent = badgeOverride || d.date || 'Daily Reading';
+
+      const titleEl = document.createElement('h3');
+      titleEl.style.margin = '0.75rem 0 0.25rem 0';
+
+      const authorEl = document.createElement('p');
+      authorEl.style.fontSize = '0.85rem';
+      authorEl.style.color = 'var(--text-muted)';
+      authorEl.style.marginBottom = '0.75rem';
+      authorEl.textContent = `By ${d.authorName || 'DayBreak Contributor'}`;
+
+      const langBar = document.createElement('div');
+      langBar.className = 'language-selector';
+      langBar.style.justifyContent = 'flex-start';
+      langBar.style.margin = '0 0 1rem 0';
+
+      const quoteEl = document.createElement('blockquote');
+      quoteEl.style.background = 'var(--bg-main)';
+      quoteEl.style.borderLeft = '4px solid var(--accent)';
+      quoteEl.style.padding = '0.85rem 1rem';
+      quoteEl.style.marginBottom = '1rem';
+      quoteEl.style.fontStyle = 'italic';
+      quoteEl.innerHTML = `<strong>${d.scriptureRef || ''}</strong>${d.scriptureQuote ? ` — "${d.scriptureQuote}"` : ''}`;
+
+      const reflectionEl = document.createElement('p');
+      reflectionEl.style.whiteSpace = 'pre-wrap';
+      reflectionEl.style.marginBottom = '1.25rem';
+
+      const prayerBox = document.createElement('div');
+      prayerBox.style.background = '#F1F5F9';
+      prayerBox.style.padding = '0.85rem 1rem';
+      prayerBox.style.borderRadius = '8px';
+      prayerBox.style.fontSize = '0.92rem';
+
+      function renderLang(langCode) {
+        activeLang = langCode;
+        const block = d[langCode] || d.en || {};
+        const meta = DEVO_LANG_LABELS[langCode] || DEVO_LANG_LABELS.en;
+
+        titleEl.textContent = block.title || d.title || 'Untitled Devotional';
+        reflectionEl.textContent = block.reflection || '';
+        prayerBox.innerHTML = `<strong>${meta.prayerPrefix}:</strong> ${block.prayer || ''}`;
+
+        langBar.querySelectorAll('.lang-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.lang === langCode);
+        });
+      }
+
+      langs.forEach(code => {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'lang-btn';
+        btn.dataset.lang = code;
+        btn.textContent = DEVO_LANG_LABELS[code]?.label || code.toUpperCase();
+        btn.addEventListener('click', () => renderLang(code));
+        langBar.appendChild(btn);
+      });
+
+      card.appendChild(badge);
+      card.appendChild(titleEl);
+      card.appendChild(authorEl);
+      if (langs.length > 1) {
+        card.appendChild(langBar);
+      }
+      card.appendChild(quoteEl);
+      card.appendChild(reflectionEl);
+      card.appendChild(prayerBox);
+
+      renderLang(activeLang);
       return card;
     }
 
