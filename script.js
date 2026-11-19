@@ -166,8 +166,10 @@ document.addEventListener('DOMContentLoaded', () => {
   const commentsList = document.getElementById('comments-list');
 
   if (db && commentsList) {
+    const urlParams = new URLSearchParams(window.location.search);
+    const paramLessonId = urlParams.get('id');
     const pagePath = window.location.pathname.split("/").pop().replace(".html", "") || "resurrection";
-    const currentLessonId = pagePath.length > 0 ? pagePath : "resurrection";
+    const currentLessonId = paramLessonId || (pagePath.length > 0 ? pagePath : "resurrection");
 
     const commentsRef = collection(db, "lessons", currentLessonId, "comments");
     const q = query(commentsRef, orderBy("createdAt", "desc"));
@@ -273,39 +275,44 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // -------------------------------------------------------------
-  // HAMBURGER MENU & DRAWER LOGIC (Safely inside DOMContentLoaded)
+  // HAMBURGER MENU & DRAWER LOGIC (Hybrid Hover + Mobile Tap)
   // -------------------------------------------------------------
+  const hamburgerWrapper = document.querySelector('.hamburger-wrapper');
   const hamburgerBtn = document.getElementById('hamburger-btn');
   const hamburgerDrawer = document.getElementById('hamburger-drawer');
   const categoryButtons = document.querySelectorAll('.drawer-category-btn');
   const subTabs = document.querySelectorAll('.drawer-sub-tab');
   const sectionLabel = document.getElementById('mobile-section-label');
 
+  function closeHamburgerDrawer() {
+    if (!hamburgerDrawer || !hamburgerBtn) return;
+    hamburgerDrawer.classList.remove('open');
+    hamburgerBtn.classList.remove('open');
+    hamburgerBtn.setAttribute('aria-expanded', 'false');
+    document.querySelectorAll('.drawer-category').forEach(cat => cat.classList.remove('open'));
+  }
+
   if (hamburgerBtn && hamburgerDrawer) {
-    // 1. Toggle main drawer and animate icon
     hamburgerBtn.addEventListener('click', (e) => {
       e.stopPropagation();
       const isOpen = hamburgerDrawer.classList.toggle('open');
       hamburgerBtn.classList.toggle('open', isOpen);
-      hamburgerBtn.setAttribute('aria-expanded', isOpen);
+      hamburgerBtn.setAttribute('aria-expanded', String(isOpen));
     });
 
-    // 2. Accordion toggle for categories
     categoryButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
+      btn.addEventListener('click', (e) => {
+        e.stopPropagation();
         const parentCategory = btn.parentElement;
-        
         document.querySelectorAll('.drawer-category').forEach(cat => {
           if (cat !== parentCategory) {
             cat.classList.remove('open');
           }
         });
-
         parentCategory.classList.toggle('open');
       });
     });
 
-    // 3. Handle sub-tab selections and login triggers
     subTabs.forEach(tab => {
       tab.addEventListener('click', () => {
         const targetId = tab.getAttribute('data-target');
@@ -319,21 +326,14 @@ document.addEventListener('DOMContentLoaded', () => {
           modal.classList.add('active');
         }
 
-        // Close drawer after selection
-        hamburgerDrawer.classList.remove('open');
-        hamburgerBtn.classList.remove('open');
-        hamburgerBtn.setAttribute('aria-expanded', 'false');
-        document.querySelectorAll('.drawer-category').forEach(cat => cat.classList.remove('open'));
+        closeHamburgerDrawer();
       });
     });
 
-    // 4. Close drawer when clicking outside
     document.addEventListener('click', (e) => {
-      if (!hamburgerDrawer.contains(e.target) && !hamburgerBtn.contains(e.target)) {
-        hamburgerDrawer.classList.remove('open');
-        hamburgerBtn.classList.remove('open');
-        hamburgerBtn.setAttribute('aria-expanded', 'false');
-        document.querySelectorAll('.drawer-category').forEach(cat => cat.classList.remove('open'));
+      const container = hamburgerWrapper || hamburgerDrawer;
+      if (!container.contains(e.target) && !hamburgerBtn.contains(e.target)) {
+        closeHamburgerDrawer();
       }
     });
   }
@@ -410,23 +410,3 @@ window.switchLanguage = function(index, btnElement) {
     btnElement.classList.add('active');
   }
 };
-// Hybrid Mobile Tap & Desktop Hover Handler
-  const hamburgerWrapper = document.querySelector('.hamburger-wrapper');
-  const hamburgerBtn = document.getElementById('hamburger-btn');
-  const hamburgerDrawer = document.getElementById('hamburger-drawer');
-
-  if (hamburgerBtn && hamburgerDrawer && hamburgerWrapper) {
-    hamburgerBtn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      hamburgerDrawer.classList.toggle('open');
-      hamburgerBtn.classList.toggle('open');
-    });
-
-    // Close drawer when clicking anywhere outside of it on mobile
-    document.addEventListener('click', (e) => {
-      if (!hamburgerWrapper.contains(e.target)) {
-        hamburgerDrawer.classList.remove('open');
-        hamburgerBtn.classList.remove('open');
-      }
-    });
-  }
