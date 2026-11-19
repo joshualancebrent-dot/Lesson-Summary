@@ -181,334 +181,325 @@
     import { db } from './material/lessons-data.js';
     import { collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    const DEVO_LANG_LABELS = {
-      en: { label: 'English', prayerPrefix: 'Prayer' },
-      tl: { label: 'Tagalog', prayerPrefix: 'Panalangin' },
-      ceb: { label: 'Cebuano', prayerPrefix: 'Pag-ampo' },
-      ilo: { label: 'Ilocano', prayerPrefix: 'Kararag' },
-      war: { label: 'Waray', prayerPrefix: 'Pag-ampo' }
-    };
+   const DEVO_CACHE_KEY = 'daybreak_cached_devotionals_v1';
 
-    function getAvailableDevoLangs(d) {
-      const order = ['en', 'tl', 'ceb', 'ilo', 'war'];
-      const available = order.filter(code => {
-        const block = d[code];
-        return block && (block.title || block.reflection || block.prayer);
-      });
-      return available.length > 0 ? available : ['en'];
-    }
-
-    async function loadDynamicLessons() {
-      const listContainer = document.getElementById('sabbath-school-list');
-
-      try {
-        const querySnapshot = await getDocs(collection(db, "lessons"));
-
-        if (querySnapshot.empty) {
-          listContainer.innerHTML = `
-            <li class="lesson-card-item">
-              <a href="material/lesson.html?id=Lesson%2013" class="lesson-card-link">
-                <span class="lesson-card-title">Grace, Love, and Fellowship</span>
-                <span class="lesson-card-ref">2 Cor. 13:14</span>
-              </a>
-            </li>`;
-          return;
+    const FALLBACK_DEVOTIONALS = [
+      {
+        date: getLocalTodayString(),
+        authorName: 'DayBreak Editorial',
+        scriptureRef: 'Psalm 46:1',
+        scriptureQuote: 'God is our refuge and strength, an ever-present help in trouble.',
+        en: {
+          title: 'Anchored in Peace Today',
+          reflection: 'Even when schedules feel heavy or answers take time, steady rest begins by bringing what is in front of you to God. Take a quiet moment today to release what you cannot control and walk forward one faithful step at a time.',
+          prayer: 'Lord, steady my heart today, guard my thoughts with Your peace, and guide my steps in Your grace. Amen.'
+        },
+        ceb: {
+          title: 'Lig-on sa Kalinaw Karong Adlawa',
+          reflection: 'Bisan pa sa kabug-at sa adlaw-adlaw o sa paghulat og tubag, ang tinuod nga pahulay magsugod sa pagtugyan sa atong kaugalingon ngadto sa Dios. Paggahin og kadiyot nga kahilom karon aron itugyan ang dili nato makontrolar ug mopadayon uban ang pagtuo.',
+          prayer: 'Ginoo, lig-ona ang akong kasingkasing karong adlawa, bantayi ang akong hunahuna sa Imong kalinaw, ug giyahi ang akong mga lakang sa Imong grasya. Amen.'
         }
+      }
+    ];
 
-        listContainer.innerHTML = '';
-
-        querySnapshot.forEach((docSnap) => {
-          const lessonId = docSnap.id;
-          const lesson = docSnap.data();
-
-          const li = document.createElement('li');
-          li.className = 'lesson-card-item';
-          li.innerHTML = `
-            <a href="material/lesson.html?id=${encodeURIComponent(lessonId)}" class="lesson-card-link">
-              <span class="lesson-card-title">${lesson.title || 'Untitled Lesson'}</span>
-              <span class="lesson-card-ref">${lesson.scriptureRef || ''}</span>
-            </a>
-          `;
-          listContainer.appendChild(li);
-        });
-
-      } catch (error) {
-        console.error("Error loading dynamic lessons:", error);
-        listContainer.innerHTML = `<p style="padding: 10px; color: red;">Failed to load dynamic lessons from database.</p>`;
+    function saveDevotionalsToCache(list) {
+      try {
+        if (Array.isArray(list) && list.length > 0) {
+          localStorage.setItem(DEVO_CACHE_KEY, JSON.stringify(list));
+        }
+      } catch (e) {
+        console.warn('Unable to cache devotionals locally:', e);
       }
     }
 
-    function createDevotionalCard(d, badgeOverride = null) {
-      const langs = getAvailableDevoLangs(d);
-      let activeLang = langs.includes('en') ? 'en' : langs[0];
+    function readDevotionalsFromCache() {
+      try {
+        const raw = localStorage.getItem(DEVO_CACHE_KEY);
+        if (!raw) return null;
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) && parsed.length > 0 ? parsed : null;
+      } catch (e) {
+        console.warn('Unable to read cached devotionals:', e);
+        return null;
+      }
+    }
 
+    function renderDevotionalStatusCard(feedContainer, { title, message, isError = false, onRetry = null }) {
+      feedContainer.innerHTML = '';
       const card = document.createElement('div');
       card.className = 'card';
       card.style.textAlign = 'left';
 
-      const badge = document.createElement('span');
-      badge.className = 'badge';
-      badge.textContent = badgeOverride || d.date || 'Daily Reading';
+      const heading = document.createElement('h3');
+      heading.textContent = title;
+      heading.style.marginBottom = '0.5rem';
+      if (isError) heading.style.color = '#B91C1C';
 
-      const titleEl = document.createElement('h3');
-      titleEl.style.margin = '0.75rem 0 0.25rem 0';
+      const desc = document.createElement('p');
+      desc.textContent = message;
+      desc.style.color = 'var(--text-muted)';
+      desc.style.marginBottom = onRetry ? '1rem' : '0';
 
-      const authorEl = document.createElement('p');
-      authorEl.style.fontSize = '0.85rem';
-      authorEl.style.color = 'var(--text-muted)';
-      authorEl.style.marginBottom = '0.75rem';
-      authorEl.textContent = `By ${d.authorName || 'DayBreak Contributor'}`;
+      card.appendChild(heading);
+      card.appendChild(desc);
 
-      const langBar = document.createElement('div');
-      langBar.className = 'language-selector';
-      langBar.style.justifyContent = 'flex-start';
-      langBar.style.margin = '0 0 1rem 0';
+      if (typeof onRetry === 'function') {
+        const retryBtn = document.createElement('button');
+        retryBtn.type = 'button';
+        retryBtn.className = 'btn-primary';
+        retryBtn.textContent = 'Retry Loading Devotional';
+        retryBtn.addEventListener('click', onRetry);
+        card.appendChild(retryBtn);
+      }
 
-      const quoteEl = document.createElement('blockquote');
-      quoteEl.style.background = 'var(--bg-main)';
-      quoteEl.style.borderLeft = '4px solid var(--accent)';
-      quoteEl.style.padding = '0.85rem 1rem';
-      quoteEl.style.marginBottom = '1rem';
-      quoteEl.style.fontStyle = 'italic';
-      quoteEl.innerHTML = `<strong>${d.scriptureRef || ''}</strong>${d.scriptureQuote ? ` — "${d.scriptureQuote}"` : ''}`;
+      feedContainer.appendChild(card);
+    }
 
-      const reflectionEl = document.createElement('p');
-      reflectionEl.style.whiteSpace = 'pre-wrap';
-      reflectionEl.style.marginBottom = '1.25rem';
+    function renderDevotionalFeed(feedContainer, rawList, noticeMessage = null, onRetry = null) {
+      const allDevotionals = [...rawList].sort((a, b) => {
+        const dateA = a.date || '';
+        const dateB = b.date || '';
+        if (dateA !== dateB) return dateB.localeCompare(dateA);
+        return getCreatedAtMillis(b) - getCreatedAtMillis(a);
+      });
 
-      const prayerBox = document.createElement('div');
-      prayerBox.style.background = '#F1F5F9';
-      prayerBox.style.padding = '0.85rem 1rem';
-      prayerBox.style.borderRadius = '8px';
-      prayerBox.style.fontSize = '0.92rem';
+      const todayStr = getLocalTodayString();
+      const latestDevotional = allDevotionals[0];
+      const previousList = allDevotionals.slice(1);
 
-      function renderLang(langCode) {
-        activeLang = langCode;
-        const block = d[langCode] || d.en || {};
-        const meta = DEVO_LANG_LABELS[langCode] || DEVO_LANG_LABELS.en;
+      feedContainer.innerHTML = '';
 
-        titleEl.textContent = block.title || d.title || 'Untitled Devotional';
-        reflectionEl.textContent = block.reflection || '';
-        prayerBox.innerHTML = `<strong>${meta.prayerPrefix}:</strong> ${block.prayer || ''}`;
+      if (noticeMessage) {
+        const noticeCard = document.createElement('div');
+        noticeCard.className = 'card';
+        noticeCard.style.textAlign = 'left';
+        noticeCard.style.background = '#EFF6FF';
+        noticeCard.style.borderColor = '#BFDBFE';
+        noticeCard.style.padding = '0.9rem 1.25rem';
+        noticeCard.style.marginBottom = '1rem';
+        noticeCard.style.display = 'flex';
+        noticeCard.style.justifyContent = 'space-between';
+        noticeCard.style.alignItems = 'center';
+        noticeCard.style.flexWrap = 'wrap';
+        noticeCard.style.gap = '10px';
 
-        langBar.querySelectorAll('.lang-btn').forEach(btn => {
-          btn.classList.toggle('active', btn.dataset.lang === langCode);
+        const noticeText = document.createElement('span');
+        noticeText.textContent = noticeMessage;
+        noticeText.style.fontSize = '0.88rem';
+        noticeText.style.color = '#1E3A8A';
+        noticeText.style.fontWeight = '600';
+
+        noticeCard.appendChild(noticeText);
+
+        if (typeof onRetry === 'function') {
+          const retrySmallBtn = document.createElement('button');
+          retrySmallBtn.type = 'button';
+          retrySmallBtn.className = 'btn-primary';
+          retrySmallBtn.textContent = 'Retry Sync';
+          retrySmallBtn.style.padding = '6px 12px';
+          retrySmallBtn.style.fontSize = '0.85rem';
+          retrySmallBtn.addEventListener('click', onRetry);
+          noticeCard.appendChild(retrySmallBtn);
+        }
+
+        feedContainer.appendChild(noticeCard);
+      }
+
+      // Top Toolbar: Status on left, Jump to Date on right
+      const toolbar = document.createElement('div');
+      toolbar.style.display = 'flex';
+      toolbar.style.justifyContent = 'space-between';
+      toolbar.style.alignItems = 'center';
+      toolbar.style.flexWrap = 'wrap';
+      toolbar.style.gap = '10px';
+      toolbar.style.marginBottom = '1rem';
+
+      const viewStatus = document.createElement('span');
+      viewStatus.id = 'devo-view-status';
+      viewStatus.style.fontSize = '0.9rem';
+      viewStatus.style.fontWeight = '600';
+      viewStatus.style.color = 'var(--text-muted)';
+      viewStatus.textContent = `Showing Latest Devotional (${latestDevotional.date || 'Daily Reading'})`;
+
+      const jumpGroup = document.createElement('div');
+      jumpGroup.style.display = 'flex';
+      jumpGroup.style.alignItems = 'center';
+      jumpGroup.style.gap = '8px';
+      jumpGroup.style.marginLeft = 'auto';
+
+      const jumpLabel = document.createElement('label');
+      jumpLabel.htmlFor = 'jump-to-date-input';
+      jumpLabel.textContent = 'Jump to Date:';
+      jumpLabel.style.fontSize = '0.88rem';
+      jumpLabel.style.fontWeight = '700';
+
+      const dateInput = document.createElement('input');
+      dateInput.type = 'date';
+      dateInput.id = 'jump-to-date-input';
+      dateInput.value = latestDevotional.date || todayStr;
+      dateInput.style.padding = '6px 10px';
+      dateInput.style.border = '1px solid var(--border-color)';
+      dateInput.style.borderRadius = '8px';
+      dateInput.style.background = '#FFFFFF';
+      dateInput.style.fontSize = '0.88rem';
+
+      const resetBtn = document.createElement('button');
+      resetBtn.type = 'button';
+      resetBtn.id = 'reset-latest-devo-btn';
+      resetBtn.className = 'btn-secondary';
+      resetBtn.textContent = 'Latest';
+      resetBtn.style.display = 'none';
+      resetBtn.style.padding = '6px 12px';
+      resetBtn.style.color = 'var(--text-main)';
+      resetBtn.style.borderColor = 'var(--border-color)';
+      resetBtn.style.background = '#FFFFFF';
+
+      jumpGroup.appendChild(jumpLabel);
+      jumpGroup.appendChild(dateInput);
+      jumpGroup.appendChild(resetBtn);
+
+      toolbar.appendChild(viewStatus);
+      toolbar.appendChild(jumpGroup);
+      feedContainer.appendChild(toolbar);
+
+      const activeDevoContainer = document.createElement('div');
+      activeDevoContainer.id = 'active-devotional-container';
+      feedContainer.appendChild(activeDevoContainer);
+
+      function renderLatestView() {
+        activeDevoContainer.innerHTML = '';
+        resetBtn.style.display = 'none';
+        viewStatus.textContent = `Showing Latest Devotional (${latestDevotional.date || 'Daily Reading'})`;
+        const badgeLabel = latestDevotional.date === todayStr
+          ? `Latest Today • ${latestDevotional.date}`
+          : `Latest • ${latestDevotional.date || 'Daily Reading'}`;
+        activeDevoContainer.appendChild(createDevotionalCard(latestDevotional, badgeLabel));
+      }
+
+      function renderDateView(selectedDate) {
+        if (!selectedDate) {
+          renderLatestView();
+          return;
+        }
+        const matches = allDevotionals.filter(d => d.date === selectedDate);
+        activeDevoContainer.innerHTML = '';
+        resetBtn.style.display = 'inline-block';
+        viewStatus.textContent = `Jumped to Date: ${selectedDate}`;
+
+        if (matches.length === 0) {
+          activeDevoContainer.innerHTML = `
+            <div class="card">
+              <p>No devotional found for <strong>${selectedDate}</strong>.</p>
+            </div>`;
+          return;
+        }
+
+        matches.forEach(d => {
+          activeDevoContainer.appendChild(createDevotionalCard(d, `Date • ${d.date}`));
         });
       }
 
-      langs.forEach(code => {
-        const btn = document.createElement('button');
-        btn.type = 'button';
-        btn.className = 'lang-btn';
-        btn.dataset.lang = code;
-        btn.textContent = DEVO_LANG_LABELS[code]?.label || code.toUpperCase();
-        btn.addEventListener('click', () => renderLang(code));
-        langBar.appendChild(btn);
+      dateInput.addEventListener('change', () => {
+        renderDateView(dateInput.value);
       });
 
-      card.appendChild(badge);
-      card.appendChild(titleEl);
-      card.appendChild(authorEl);
-      if (langs.length > 1) {
-        card.appendChild(langBar);
+      resetBtn.addEventListener('click', () => {
+        dateInput.value = latestDevotional.date || todayStr;
+        renderLatestView();
+      });
+
+      renderLatestView();
+
+      if (previousList.length > 0) {
+        const toggleWrapper = document.createElement('div');
+        toggleWrapper.style.textAlign = 'center';
+        toggleWrapper.style.margin = '1.25rem 0';
+
+        const toggleBtn = document.createElement('button');
+        toggleBtn.type = 'button';
+        toggleBtn.className = 'btn-primary';
+        toggleBtn.textContent = `View Previous Devotionals (${previousList.length})`;
+
+        const previousContainer = document.createElement('div');
+        previousContainer.id = 'previous-devotionals-list';
+        previousContainer.style.display = 'none';
+        previousContainer.style.marginTop = '1rem';
+
+        previousList.forEach(d => {
+          previousContainer.appendChild(createDevotionalCard(d));
+        });
+
+        toggleBtn.addEventListener('click', () => {
+          const isHidden = previousContainer.style.display === 'none';
+          previousContainer.style.display = isHidden ? 'block' : 'none';
+          toggleBtn.textContent = isHidden
+            ? 'Hide Previous Devotionals'
+            : `View Previous Devotionals (${previousList.length})`;
+        });
+
+        toggleWrapper.appendChild(toggleBtn);
+        feedContainer.appendChild(toggleWrapper);
+        feedContainer.appendChild(previousContainer);
       }
-      card.appendChild(quoteEl);
-      card.appendChild(reflectionEl);
-      card.appendChild(prayerBox);
-
-      renderLang(activeLang);
-      return card;
-    }
-
-    function getLocalTodayString() {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
-
-    function getCreatedAtMillis(d) {
-      if (!d.createdAt) return 0;
-      if (typeof d.createdAt.toMillis === 'function') return d.createdAt.toMillis();
-      if (typeof d.createdAt.seconds === 'number') return d.createdAt.seconds * 1000;
-      return 0;
     }
 
     async function loadDynamicDevotionals() {
       const feedContainer = document.getElementById('devotional-feed');
       if (!feedContainer) return;
 
+      renderDevotionalStatusCard(feedContainer, {
+        title: 'Loading Daily Devotional',
+        message: 'Fetching the latest devotional reading...'
+      });
+
       try {
         const q = query(collection(db, "devotionals"), orderBy("date", "desc"));
         const snapshot = await getDocs(q);
 
         if (snapshot.empty) {
-          feedContainer.innerHTML = `<div class="card"><p>No devotionals published yet.</p></div>`;
+          const cached = readDevotionalsFromCache();
+          if (cached) {
+            renderDevotionalFeed(
+              feedContainer,
+              cached,
+              'Showing saved devotionals from this device.',
+              loadDynamicDevotionals
+            );
+          } else {
+            renderDevotionalFeed(
+              feedContainer,
+              FALLBACK_DEVOTIONALS,
+              'No database devotionals found yet—showing a local starter reading.',
+              loadDynamicDevotionals
+            );
+          }
           return;
         }
 
-        const allDevotionals = snapshot.docs
-          .map(docSnap => docSnap.data())
-          .sort((a, b) => {
-            const dateA = a.date || '';
-            const dateB = b.date || '';
-            if (dateA !== dateB) return dateB.localeCompare(dateA);
-            return getCreatedAtMillis(b) - getCreatedAtMillis(a);
-          });
-
-        const todayStr = getLocalTodayString();
-        const latestDevotional = allDevotionals[0];
-        const previousList = allDevotionals.slice(1);
-
-        feedContainer.innerHTML = '';
-
-        // Top Toolbar: Status on left, Jump to Date on right
-        const toolbar = document.createElement('div');
-        toolbar.style.display = 'flex';
-        toolbar.style.justifyContent = 'space-between';
-        toolbar.style.alignItems = 'center';
-        toolbar.style.flexWrap = 'wrap';
-        toolbar.style.gap = '10px';
-        toolbar.style.marginBottom = '1rem';
-
-        const viewStatus = document.createElement('span');
-        viewStatus.id = 'devo-view-status';
-        viewStatus.style.fontSize = '0.9rem';
-        viewStatus.style.fontWeight = '600';
-        viewStatus.style.color = 'var(--text-muted)';
-        viewStatus.textContent = `Showing Latest Devotional (${latestDevotional.date || 'Daily Reading'})`;
-
-        const jumpGroup = document.createElement('div');
-        jumpGroup.style.display = 'flex';
-        jumpGroup.style.alignItems = 'center';
-        jumpGroup.style.gap = '8px';
-        jumpGroup.style.marginLeft = 'auto';
-
-        const jumpLabel = document.createElement('label');
-        jumpLabel.htmlFor = 'jump-to-date-input';
-        jumpLabel.textContent = 'Jump to Date:';
-        jumpLabel.style.fontSize = '0.88rem';
-        jumpLabel.style.fontWeight = '700';
-
-        const dateInput = document.createElement('input');
-        dateInput.type = 'date';
-        dateInput.id = 'jump-to-date-input';
-        dateInput.value = latestDevotional.date || todayStr;
-        dateInput.style.padding = '6px 10px';
-        dateInput.style.border = '1px solid var(--border-color)';
-        dateInput.style.borderRadius = '8px';
-        dateInput.style.background = '#FFFFFF';
-        dateInput.style.fontSize = '0.88rem';
-
-        const resetBtn = document.createElement('button');
-        resetBtn.type = 'button';
-        resetBtn.id = 'reset-latest-devo-btn';
-        resetBtn.className = 'btn-secondary';
-        resetBtn.textContent = 'Latest';
-        resetBtn.style.display = 'none';
-        resetBtn.style.padding = '6px 12px';
-        resetBtn.style.color = 'var(--text-main)';
-        resetBtn.style.borderColor = 'var(--border-color)';
-        resetBtn.style.background = '#FFFFFF';
-
-        jumpGroup.appendChild(jumpLabel);
-        jumpGroup.appendChild(dateInput);
-        jumpGroup.appendChild(resetBtn);
-
-        toolbar.appendChild(viewStatus);
-        toolbar.appendChild(jumpGroup);
-        feedContainer.appendChild(toolbar);
-
-        // Main Display Container (single latest devotional by default)
-        const activeDevoContainer = document.createElement('div');
-        activeDevoContainer.id = 'active-devotional-container';
-        feedContainer.appendChild(activeDevoContainer);
-
-        function renderLatestView() {
-          activeDevoContainer.innerHTML = '';
-          resetBtn.style.display = 'none';
-          viewStatus.textContent = `Showing Latest Devotional (${latestDevotional.date || 'Daily Reading'})`;
-          const badgeLabel = latestDevotional.date === todayStr
-            ? `Latest Today • ${latestDevotional.date}`
-            : `Latest • ${latestDevotional.date || 'Daily Reading'}`;
-          activeDevoContainer.appendChild(createDevotionalCard(latestDevotional, badgeLabel));
-        }
-
-        function renderDateView(selectedDate) {
-          if (!selectedDate) {
-            renderLatestView();
-            return;
-          }
-          const matches = allDevotionals.filter(d => d.date === selectedDate);
-          activeDevoContainer.innerHTML = '';
-          resetBtn.style.display = 'inline-block';
-          viewStatus.textContent = `Jumped to Date: ${selectedDate}`;
-
-          if (matches.length === 0) {
-            activeDevoContainer.innerHTML = `
-              <div class="card">
-                <p>No devotional found for <strong>${selectedDate}</strong>.</p>
-              </div>`;
-            return;
-          }
-
-          matches.forEach(d => {
-            activeDevoContainer.appendChild(createDevotionalCard(d, `Date • ${d.date}`));
-          });
-        }
-
-        dateInput.addEventListener('change', () => {
-          renderDateView(dateInput.value);
-        });
-
-        resetBtn.addEventListener('click', () => {
-          dateInput.value = latestDevotional.date || todayStr;
-          renderLatestView();
-        });
-
-        renderLatestView();
-
-        // Previous Devotionals Toggle
-        if (previousList.length > 0) {
-          const toggleWrapper = document.createElement('div');
-          toggleWrapper.style.textAlign = 'center';
-          toggleWrapper.style.margin = '1.25rem 0';
-
-          const toggleBtn = document.createElement('button');
-          toggleBtn.type = 'button';
-          toggleBtn.className = 'btn-primary';
-          toggleBtn.textContent = `View Previous Devotionals (${previousList.length})`;
-
-          const previousContainer = document.createElement('div');
-          previousContainer.id = 'previous-devotionals-list';
-          previousContainer.style.display = 'none';
-          previousContainer.style.marginTop = '1rem';
-
-          previousList.forEach(d => {
-            previousContainer.appendChild(createDevotionalCard(d));
-          });
-
-          toggleBtn.addEventListener('click', () => {
-            const isHidden = previousContainer.style.display === 'none';
-            previousContainer.style.display = isHidden ? 'block' : 'none';
-            toggleBtn.textContent = isHidden
-              ? 'Hide Previous Devotionals'
-              : `View Previous Devotionals (${previousList.length})`;
-          });
-
-          toggleWrapper.appendChild(toggleBtn);
-          feedContainer.appendChild(toggleWrapper);
-          feedContainer.appendChild(previousContainer);
-        }
+        const liveDevotionals = snapshot.docs.map(docSnap => docSnap.data());
+        saveDevotionalsToCache(liveDevotionals);
+        renderDevotionalFeed(feedContainer, liveDevotionals, null, loadDynamicDevotionals);
       } catch (error) {
         console.error("Error loading dynamic devotionals:", error);
-        feedContainer.innerHTML = `<div class="card"><p style="color: red;">Failed to load devotionals from database.</p></div>`;
+        const cached = readDevotionalsFromCache();
+        if (cached) {
+          renderDevotionalFeed(
+            feedContainer,
+            cached,
+            'Could not reach the database—showing cached devotionals from this device.',
+            loadDynamicDevotionals
+          );
+          return;
+        }
+
+        renderDevotionalFeed(
+          feedContainer,
+          FALLBACK_DEVOTIONALS,
+          'Could not reach the database—showing an offline fallback devotional.',
+          loadDynamicDevotionals
+        );
       }
     }
-
-    loadDynamicLessons();
-    loadDynamicDevotionals();
   </script>
 </body>
 </html>
