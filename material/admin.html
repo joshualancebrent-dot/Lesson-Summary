@@ -8,6 +8,26 @@
   <style>
     .admin-container { max-width: 900px; margin: 40px auto; padding: 20px; }
     .top-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
+    .admin-gate-banner {
+      padding: 12px 16px;
+      border-radius: 8px;
+      margin-bottom: 18px;
+      font-size: 0.92rem;
+      font-weight: 600;
+      border: 1px solid #fecaca;
+      background: #fef2f2;
+      color: #991b1b;
+    }
+    .admin-gate-banner.authorized {
+      border-color: #bbf7d0;
+      background: #f0fdf4;
+      color: #166534;
+    }
+    .creator-locked {
+      opacity: 0.55;
+      pointer-events: none;
+      user-select: none;
+    }
     .section-selector {
       display: grid;
       grid-template-columns: 1fr 1fr;
@@ -58,313 +78,318 @@
         <button type="button" id="admin-auth-btn" class="btn-secondary" style="padding: 8px 14px;">Sign In with Google</button>
       </div>
     </div>
-    <p id="auth-status" style="margin-bottom: 16px; font-size: 0.9rem; color: #475569;">Publishing as DayBreak Contributor (or sign in to attach your profile)</p>
 
-    <!-- Section Selector: Devotional vs. Sabbath School Lesson -->
-    <div class="form-group">
-      <label>Select Where to Input Content:</label>
-      <div class="section-selector" role="group" aria-label="Content Section Selector">
-        <button type="button" id="btn-mode-devotional" class="section-choice-btn active" onclick="selectCreatorSection('devotional')">
-          Daily Devotional
-        </button>
-        <button type="button" id="btn-mode-sabbath" class="section-choice-btn" onclick="selectCreatorSection('sabbath')">
-          Sabbath School Lesson
-        </button>
+    <div id="admin-gate-banner" class="admin-gate-banner">
+      Admin sign-in required: Please sign in with an authorized admin account to publish or edit content.
+    </div>
+
+    <div id="creator-workspace" class="creator-locked" aria-disabled="true">
+      <!-- Section Selector: Devotional vs. Sabbath School Lesson -->
+      <div class="form-group">
+        <label>Select Where to Input Content:</label>
+        <div class="section-selector" role="group" aria-label="Content Section Selector">
+          <button type="button" id="btn-mode-devotional" class="section-choice-btn active" onclick="selectCreatorSection('devotional')">
+            Daily Devotional
+          </button>
+          <button type="button" id="btn-mode-sabbath" class="section-choice-btn" onclick="selectCreatorSection('sabbath')">
+            Sabbath School Lesson
+          </button>
+        </div>
       </div>
-    </div>
 
-    <!-- ========================================== -->
-    <!-- MODE 1: DAILY DEVOTIONAL FORM              -->
-    <!-- ========================================== -->
-    <div id="mode-devotional" class="creator-mode active">
-      <form id="devotional-form" novalidate>
-        <div class="form-group">
-          <label for="devoDate">Devotional Date:</label>
-          <input type="date" id="devoDate">
-        </div>
-        <div class="form-group">
-          <label for="devoId">Document ID (optional, e.g., 2026-11-19 or morning-light):</label>
-          <input type="text" id="devoId" placeholder="Leave blank to auto-generate">
-        </div>
-        <div class="form-group">
-          <label for="devoScriptureRef">Scripture Reference:</label>
-          <input type="text" id="devoScriptureRef" placeholder="e.g., Psalm 23:1">
-        </div>
-        <div class="form-group">
-          <label for="devoScriptureQuote">Scripture Verse Text:</label>
-          <textarea id="devoScriptureQuote" rows="2"></textarea>
-        </div>
+      <!-- ========================================== -->
+      <!-- MODE 1: DAILY DEVOTIONAL FORM              -->
+      <!-- ========================================== -->
+      <div id="mode-devotional" class="creator-mode active">
+        <form id="devotional-form" novalidate>
+          <div class="form-group">
+            <label for="devoDate">Devotional Date:</label>
+            <input type="date" id="devoDate">
+          </div>
+          <div class="form-group">
+            <label for="devoId">Document ID (optional, e.g., 2026-11-19 or morning-light):</label>
+            <input type="text" id="devoId" placeholder="Leave blank to auto-generate">
+          </div>
+          <div class="form-group">
+            <label for="devoScriptureRef">Scripture Reference:</label>
+            <input type="text" id="devoScriptureRef" placeholder="e.g., Psalm 23:1">
+          </div>
+          <div class="form-group">
+            <label for="devoScriptureQuote">Scripture Verse Text:</label>
+            <textarea id="devoScriptureQuote" rows="2"></textarea>
+          </div>
 
-        <hr style="margin: 25px 0;">
+          <hr style="margin: 25px 0;">
 
-        <div class="tab-buttons" id="devo-lang-tabs">
-          <button type="button" class="tab-btn active" onclick="showLang('devo', 'en', this)">English</button>
-          <button type="button" class="tab-btn" onclick="showLang('devo', 'tl', this)">Tagalog</button>
-          <button type="button" class="tab-btn" onclick="showLang('devo', 'ceb', this)">Cebuano</button>
-          <button type="button" class="tab-btn" onclick="showLang('devo', 'ilo', this)">Ilocano</button>
-          <button type="button" class="tab-btn" onclick="showLang('devo', 'war', this)">Waray</button>
-        </div>
+          <div class="tab-buttons" id="devo-lang-tabs">
+            <button type="button" class="tab-btn active" onclick="showLang('devo', 'en', this)">English</button>
+            <button type="button" class="tab-btn" onclick="showLang('devo', 'tl', this)">Tagalog</button>
+            <button type="button" class="tab-btn" onclick="showLang('devo', 'ceb', this)">Cebuano</button>
+            <button type="button" class="tab-btn" onclick="showLang('devo', 'ilo', this)">Ilocano</button>
+            <button type="button" class="tab-btn" onclick="showLang('devo', 'war', this)">Waray</button>
+          </div>
 
-        <div id="devo-lang-en" class="lang-section active">
-          <h3>English Devotional</h3>
-          <div class="form-group">
-            <label for="devo_en_title">Title:</label>
-            <input type="text" id="devo_en_title">
+          <div id="devo-lang-en" class="lang-section active">
+            <h3>English Devotional</h3>
+            <div class="form-group">
+              <label for="devo_en_title">Title:</label>
+              <input type="text" id="devo_en_title">
+            </div>
+            <div class="form-group">
+              <label for="devo_en_reflection">Reflection:</label>
+              <textarea id="devo_en_reflection" rows="6"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="devo_en_prayer">Closing Prayer:</label>
+              <textarea id="devo_en_prayer" rows="3"></textarea>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="devo_en_reflection">Reflection:</label>
-            <textarea id="devo_en_reflection" rows="6"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="devo_en_prayer">Closing Prayer:</label>
-            <textarea id="devo_en_prayer" rows="3"></textarea>
-          </div>
-        </div>
 
-        <div id="devo-lang-tl" class="lang-section">
-          <h3>Tagalog Devotional</h3>
-          <div class="form-group">
-            <label for="devo_tl_title">Pamagat:</label>
-            <input type="text" id="devo_tl_title">
+          <div id="devo-lang-tl" class="lang-section">
+            <h3>Tagalog Devotional</h3>
+            <div class="form-group">
+              <label for="devo_tl_title">Pamagat:</label>
+              <input type="text" id="devo_tl_title">
+            </div>
+            <div class="form-group">
+              <label for="devo_tl_reflection">Pagninilay:</label>
+              <textarea id="devo_tl_reflection" rows="6"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="devo_tl_prayer">Panalangin:</label>
+              <textarea id="devo_tl_prayer" rows="3"></textarea>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="devo_tl_reflection">Pagninilay:</label>
-            <textarea id="devo_tl_reflection" rows="6"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="devo_tl_prayer">Panalangin:</label>
-            <textarea id="devo_tl_prayer" rows="3"></textarea>
-          </div>
-        </div>
 
-        <div id="devo-lang-ceb" class="lang-section">
-          <h3>Cebuano Devotional</h3>
-          <div class="form-group">
-            <label for="devo_ceb_title">Ulohan:</label>
-            <input type="text" id="devo_ceb_title">
+          <div id="devo-lang-ceb" class="lang-section">
+            <h3>Cebuano Devotional</h3>
+            <div class="form-group">
+              <label for="devo_ceb_title">Ulohan:</label>
+              <input type="text" id="devo_ceb_title">
+            </div>
+            <div class="form-group">
+              <label for="devo_ceb_reflection">Pamalandong:</label>
+              <textarea id="devo_ceb_reflection" rows="6"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="devo_ceb_prayer">Pag-ampo:</label>
+              <textarea id="devo_ceb_prayer" rows="3"></textarea>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="devo_ceb_reflection">Pamalandong:</label>
-            <textarea id="devo_ceb_reflection" rows="6"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="devo_ceb_prayer">Pag-ampo:</label>
-            <textarea id="devo_ceb_prayer" rows="3"></textarea>
-          </div>
-        </div>
 
-        <div id="devo-lang-ilo" class="lang-section">
-          <h3>Ilocano Devotional</h3>
-          <div class="form-group">
-            <label for="devo_ilo_title">Paulo:</label>
-            <input type="text" id="devo_ilo_title">
+          <div id="devo-lang-ilo" class="lang-section">
+            <h3>Ilocano Devotional</h3>
+            <div class="form-group">
+              <label for="devo_ilo_title">Paulo:</label>
+              <input type="text" id="devo_ilo_title">
+            </div>
+            <div class="form-group">
+              <label for="devo_ilo_reflection">Panangmennam:</label>
+              <textarea id="devo_ilo_reflection" rows="6"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="devo_ilo_prayer">Kararag:</label>
+              <textarea id="devo_ilo_prayer" rows="3"></textarea>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="devo_ilo_reflection">Panangmennam:</label>
-            <textarea id="devo_ilo_reflection" rows="6"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="devo_ilo_prayer">Kararag:</label>
-            <textarea id="devo_ilo_prayer" rows="3"></textarea>
-          </div>
-        </div>
 
-        <div id="devo-lang-war" class="lang-section">
-          <h3>Waray Devotional</h3>
-          <div class="form-group">
-            <label for="devo_war_title">Ulohan:</label>
-            <input type="text" id="devo_war_title">
+          <div id="devo-lang-war" class="lang-section">
+            <h3>Waray Devotional</h3>
+            <div class="form-group">
+              <label for="devo_war_title">Ulohan:</label>
+              <input type="text" id="devo_war_title">
+            </div>
+            <div class="form-group">
+              <label for="devo_war_reflection">Pamalandong:</label>
+              <textarea id="devo_war_reflection" rows="6"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="devo_war_prayer">Pag-ampo:</label>
+              <textarea id="devo_war_prayer" rows="3"></textarea>
+            </div>
           </div>
-          <div class="form-group">
-            <label for="devo_war_reflection">Pamalandong:</label>
-            <textarea id="devo_war_reflection" rows="6"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="devo_war_prayer">Pag-ampo:</label>
-            <textarea id="devo_war_prayer" rows="3"></textarea>
-          </div>
-        </div>
 
-        <button type="submit" id="devo-submit-btn" class="btn-primary" style="width: 100%; margin-top: 20px;">
-          Publish Devotional to Database
-        </button>
-      </form>
-    </div>
+          <button type="submit" id="devo-submit-btn" class="btn-primary" style="width: 100%; margin-top: 20px;">
+            Publish Devotional to Database
+          </button>
+        </form>
+      </div>
 
-    <!-- ========================================== -->
-    <!-- MODE 2: SABBATH SCHOOL LESSON FORM         -->
-    <!-- ========================================== -->
-    <div id="mode-sabbath" class="creator-mode">
-      <form id="lesson-form" novalidate>
-        <div class="form-group">
-          <label for="lessonId">Lesson ID (e.g., Lesson 13 or authentic-ministry):</label>
-          <input type="text" id="lessonId">
-        </div>
-        <div class="form-group">
-          <label for="badge">Lesson Badge (e.g., Lesson 13):</label>
-          <input type="text" id="badge">
-        </div>
-        <div class="form-group">
-          <label for="title">Title:</label>
-          <input type="text" id="title">
-        </div>
-        <div class="form-group">
-          <label for="scriptureRef">Key Scripture Reference:</label>
-          <input type="text" id="scriptureRef">
-        </div>
-        <div class="form-group">
-          <label for="scriptureQuote">Scripture Quote Text:</label>
-          <textarea id="scriptureQuote" rows="2"></textarea>
-        </div>
-        <div class="form-group">
-          <label for="scriptureCite">Scripture Citation:</label>
-          <input type="text" id="scriptureCite">
-        </div>
+      <!-- ========================================== -->
+      <!-- MODE 2: SABBATH SCHOOL LESSON FORM         -->
+      <!-- ========================================== -->
+      <div id="mode-sabbath" class="creator-mode">
+        <form id="lesson-form" novalidate>
+          <div class="form-group">
+            <label for="lessonId">Lesson ID (e.g., Lesson 13 or authentic-ministry):</label>
+            <input type="text" id="lessonId">
+          </div>
+          <div class="form-group">
+            <label for="badge">Lesson Badge (e.g., Lesson 13):</label>
+            <input type="text" id="badge">
+          </div>
+          <div class="form-group">
+            <label for="title">Title:</label>
+            <input type="text" id="title">
+          </div>
+          <div class="form-group">
+            <label for="scriptureRef">Key Scripture Reference:</label>
+            <input type="text" id="scriptureRef">
+          </div>
+          <div class="form-group">
+            <label for="scriptureQuote">Scripture Quote Text:</label>
+            <textarea id="scriptureQuote" rows="2"></textarea>
+          </div>
+          <div class="form-group">
+            <label for="scriptureCite">Scripture Citation:</label>
+            <input type="text" id="scriptureCite">
+          </div>
 
-        <hr style="margin: 25px 0;">
+          <hr style="margin: 25px 0;">
 
-        <div class="tab-buttons" id="lesson-lang-tabs">
-          <button type="button" class="tab-btn active" onclick="showLang('lesson', 'en', this)">English</button>
-          <button type="button" class="tab-btn" onclick="showLang('lesson', 'tl', this)">Tagalog</button>
-          <button type="button" class="tab-btn" onclick="showLang('lesson', 'ceb', this)">Cebuano</button>
-          <button type="button" class="tab-btn" onclick="showLang('lesson', 'ilo', this)">Ilocano</button>
-          <button type="button" class="tab-btn" onclick="showLang('lesson', 'war', this)">Waray</button>
-        </div>
+          <div class="tab-buttons" id="lesson-lang-tabs">
+            <button type="button" class="tab-btn active" onclick="showLang('lesson', 'en', this)">English</button>
+            <button type="button" class="tab-btn" onclick="showLang('lesson', 'tl', this)">Tagalog</button>
+            <button type="button" class="tab-btn" onclick="showLang('lesson', 'ceb', this)">Cebuano</button>
+            <button type="button" class="tab-btn" onclick="showLang('lesson', 'ilo', this)">Ilocano</button>
+            <button type="button" class="tab-btn" onclick="showLang('lesson', 'war', this)">Waray</button>
+          </div>
 
-        <div id="lesson-lang-en" class="lang-section active">
-          <h3>English Content</h3>
-          <div class="form-group">
-            <label for="en_imageSrc">Image Path/Filename:</label>
-            <input type="text" id="en_imageSrc" placeholder="grace.png">
+          <div id="lesson-lang-en" class="lang-section active">
+            <h3>English Content</h3>
+            <div class="form-group">
+              <label for="en_imageSrc">Image Path/Filename:</label>
+              <input type="text" id="en_imageSrc" placeholder="grace.png">
+            </div>
+            <div class="form-group">
+              <label for="en_mainIdea">Main Idea Summary:</label>
+              <textarea id="en_mainIdea" rows="3"></textarea>
+            </div>
+            <h4>4 Key Points (English)</h4>
+            <div id="en-points-container"></div>
+            <div class="form-group">
+              <label for="en_closingThought">Closing Thought:</label>
+              <textarea id="en_closingThought" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="en_q1">Discussion Question 1:</label>
+              <input type="text" id="en_q1">
+            </div>
+            <div class="form-group">
+              <label for="en_q2">Discussion Question 2:</label>
+              <input type="text" id="en_q2">
+            </div>
           </div>
-          <div class="form-group">
-            <label for="en_mainIdea">Main Idea Summary:</label>
-            <textarea id="en_mainIdea" rows="3"></textarea>
-          </div>
-          <h4>4 Key Points (English)</h4>
-          <div id="en-points-container"></div>
-          <div class="form-group">
-            <label for="en_closingThought">Closing Thought:</label>
-            <textarea id="en_closingThought" rows="2"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="en_q1">Discussion Question 1:</label>
-            <input type="text" id="en_q1">
-          </div>
-          <div class="form-group">
-            <label for="en_q2">Discussion Question 2:</label>
-            <input type="text" id="en_q2">
-          </div>
-        </div>
 
-        <div id="lesson-lang-tl" class="lang-section">
-          <h3>Tagalog Translation</h3>
-          <div class="form-group">
-            <label for="tl_imageSrc">Tagalog Image Path/Filename:</label>
-            <input type="text" id="tl_imageSrc" placeholder="grace-tagalog.png">
+          <div id="lesson-lang-tl" class="lang-section">
+            <h3>Tagalog Translation</h3>
+            <div class="form-group">
+              <label for="tl_imageSrc">Tagalog Image Path/Filename:</label>
+              <input type="text" id="tl_imageSrc" placeholder="grace-tagalog.png">
+            </div>
+            <div class="form-group">
+              <label for="tl_mainIdea">Main Idea Summary (Buod):</label>
+              <textarea id="tl_mainIdea" rows="3"></textarea>
+            </div>
+            <h4>4 Key Points (Tagalog)</h4>
+            <div id="tl-points-container"></div>
+            <div class="form-group">
+              <label for="tl_closingThought">Closing Thought (Pangwakas na Kaisipan):</label>
+              <textarea id="tl_closingThought" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="tl_q1">Discussion Question 1:</label>
+              <input type="text" id="tl_q1">
+            </div>
+            <div class="form-group">
+              <label for="tl_q2">Discussion Question 2:</label>
+              <input type="text" id="tl_q2">
+            </div>
           </div>
-          <div class="form-group">
-            <label for="tl_mainIdea">Main Idea Summary (Buod):</label>
-            <textarea id="tl_mainIdea" rows="3"></textarea>
-          </div>
-          <h4>4 Key Points (Tagalog)</h4>
-          <div id="tl-points-container"></div>
-          <div class="form-group">
-            <label for="tl_closingThought">Closing Thought (Pangwakas na Kaisipan):</label>
-            <textarea id="tl_closingThought" rows="2"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="tl_q1">Discussion Question 1:</label>
-            <input type="text" id="tl_q1">
-          </div>
-          <div class="form-group">
-            <label for="tl_q2">Discussion Question 2:</label>
-            <input type="text" id="tl_q2">
-          </div>
-        </div>
 
-        <div id="lesson-lang-ceb" class="lang-section">
-          <h3>Cebuano Translation</h3>
-          <div class="form-group">
-            <label for="ceb_imageSrc">Cebuano Image Path/Filename:</label>
-            <input type="text" id="ceb_imageSrc" placeholder="cebuano.png">
+          <div id="lesson-lang-ceb" class="lang-section">
+            <h3>Cebuano Translation</h3>
+            <div class="form-group">
+              <label for="ceb_imageSrc">Cebuano Image Path/Filename:</label>
+              <input type="text" id="ceb_imageSrc" placeholder="cebuano.png">
+            </div>
+            <div class="form-group">
+              <label for="ceb_mainIdea">Main Idea Summary (Kinatibuk-an):</label>
+              <textarea id="ceb_mainIdea" rows="3"></textarea>
+            </div>
+            <h4>4 Key Points (Cebuano)</h4>
+            <div id="ceb-points-container"></div>
+            <div class="form-group">
+              <label for="ceb_closingThought">Closing Thought (Panapos nga Huna-huna):</label>
+              <textarea id="ceb_closingThought" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="ceb_q1">Discussion Question 1:</label>
+              <input type="text" id="ceb_q1">
+            </div>
+            <div class="form-group">
+              <label for="ceb_q2">Discussion Question 2:</label>
+              <input type="text" id="ceb_q2">
+            </div>
           </div>
-          <div class="form-group">
-            <label for="ceb_mainIdea">Main Idea Summary (Kinatibuk-an):</label>
-            <textarea id="ceb_mainIdea" rows="3"></textarea>
-          </div>
-          <h4>4 Key Points (Cebuano)</h4>
-          <div id="ceb-points-container"></div>
-          <div class="form-group">
-            <label for="ceb_closingThought">Closing Thought (Panapos nga Huna-huna):</label>
-            <textarea id="ceb_closingThought" rows="2"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="ceb_q1">Discussion Question 1:</label>
-            <input type="text" id="ceb_q1">
-          </div>
-          <div class="form-group">
-            <label for="ceb_q2">Discussion Question 2:</label>
-            <input type="text" id="ceb_q2">
-          </div>
-        </div>
 
-        <div id="lesson-lang-ilo" class="lang-section">
-          <h3>Ilocano Translation</h3>
-          <div class="form-group">
-            <label for="ilo_imageSrc">Ilocano Image Path/Filename:</label>
-            <input type="text" id="ilo_imageSrc" placeholder="ilocano.png">
+          <div id="lesson-lang-ilo" class="lang-section">
+            <h3>Ilocano Translation</h3>
+            <div class="form-group">
+              <label for="ilo_imageSrc">Ilocano Image Path/Filename:</label>
+              <input type="text" id="ilo_imageSrc" placeholder="ilocano.png">
+            </div>
+            <div class="form-group">
+              <label for="ilo_mainIdea">Main Idea Summary (Pagsingkir):</label>
+              <textarea id="ilo_mainIdea" rows="3"></textarea>
+            </div>
+            <h4>4 Key Points (Ilocano)</h4>
+            <div id="ilo-points-container"></div>
+            <div class="form-group">
+              <label for="ilo_closingThought">Closing Thought (Panungpalan a Panunot):</label>
+              <textarea id="ilo_closingThought" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="ilo_q1">Discussion Question 1:</label>
+              <input type="text" id="ilo_q1">
+            </div>
+            <div class="form-group">
+              <label for="ilo_q2">Discussion Question 2:</label>
+              <input type="text" id="ilo_q2">
+            </div>
           </div>
-          <div class="form-group">
-            <label for="ilo_mainIdea">Main Idea Summary (Pagsingkir):</label>
-            <textarea id="ilo_mainIdea" rows="3"></textarea>
-          </div>
-          <h4>4 Key Points (Ilocano)</h4>
-          <div id="ilo-points-container"></div>
-          <div class="form-group">
-            <label for="ilo_closingThought">Closing Thought (Panungpalan a Panunot):</label>
-            <textarea id="ilo_closingThought" rows="2"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="ilo_q1">Discussion Question 1:</label>
-            <input type="text" id="ilo_q1">
-          </div>
-          <div class="form-group">
-            <label for="ilo_q2">Discussion Question 2:</label>
-            <input type="text" id="ilo_q2">
-          </div>
-        </div>
 
-        <div id="lesson-lang-war" class="lang-section">
-          <h3>Waray Translation</h3>
-          <div class="form-group">
-            <label for="war_imageSrc">Waray Image Path/Filename:</label>
-            <input type="text" id="war_imageSrc" placeholder="waray.png">
+          <div id="lesson-lang-war" class="lang-section">
+            <h3>Waray Translation</h3>
+            <div class="form-group">
+              <label for="war_imageSrc">Waray Image Path/Filename:</label>
+              <input type="text" id="war_imageSrc" placeholder="waray.png">
+            </div>
+            <div class="form-group">
+              <label for="war_mainIdea">Main Idea Summary (Kagsumada):</label>
+              <textarea id="war_mainIdea" rows="3"></textarea>
+            </div>
+            <h4>4 Key Points (Waray)</h4>
+            <div id="war-points-container"></div>
+            <div class="form-group">
+              <label for="war_closingThought">Closing Thought (Panapos nga Hunahuna):</label>
+              <textarea id="war_closingThought" rows="2"></textarea>
+            </div>
+            <div class="form-group">
+              <label for="war_q1">Discussion Question 1:</label>
+              <input type="text" id="war_q1">
+            </div>
+            <div class="form-group">
+              <label for="war_q2">Discussion Question 2:</label>
+              <input type="text" id="war_q2">
+            </div>
           </div>
-          <div class="form-group">
-            <label for="war_mainIdea">Main Idea Summary (Kagsumada):</label>
-            <textarea id="war_mainIdea" rows="3"></textarea>
-          </div>
-          <h4>4 Key Points (Waray)</h4>
-          <div id="war-points-container"></div>
-          <div class="form-group">
-            <label for="war_closingThought">Closing Thought (Panapos nga Hunahuna):</label>
-            <textarea id="war_closingThought" rows="2"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="war_q1">Discussion Question 1:</label>
-            <input type="text" id="war_q1">
-          </div>
-          <div class="form-group">
-            <label for="war_q2">Discussion Question 2:</label>
-            <input type="text" id="war_q2">
-          </div>
-        </div>
 
-        <button type="submit" id="lesson-submit-btn" class="btn-primary" style="width: 100%; margin-top: 20px;">
-          Save Lesson Directly to Database
-        </button>
-      </form>
+          <button type="submit" id="lesson-submit-btn" class="btn-primary" style="width: 100%; margin-top: 20px;">
+            Save Lesson Directly to Database
+          </button>
+        </form>
+      </div>
     </div>
 
     <div id="status-msg" class="status-msg"></div>
@@ -433,24 +458,50 @@
       measurementId: "G-8YES7NF8D"
     };
 
+    // Add authorized Firebase Authentication User UID(s) here
+    const ADMIN_UIDS = [
+      "YOUR_ADMIN_UID_HERE"
+    ];
+
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
     const authBtn = document.getElementById('admin-auth-btn');
-    const authStatus = document.getElementById('auth-status');
+    const gateBanner = document.getElementById('admin-gate-banner');
+    const workspace = document.getElementById('creator-workspace');
     const devoSubmitBtn = document.getElementById('devo-submit-btn');
     const lessonSubmitBtn = document.getElementById('lesson-submit-btn');
     const statusMsg = document.getElementById('status-msg');
 
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        authStatus.textContent = `Signed in as ${user.displayName || user.email}`;
-        authBtn.textContent = 'Sign Out';
-      } else {
-        authStatus.textContent = 'Publishing as DayBreak Contributor (or sign in to attach your profile)';
+    function isAuthorizedAdmin(user) {
+      return Boolean(user && ADMIN_UIDS.includes(user.uid));
+    }
+
+    function updateAdminAccessUI(user) {
+      const allowed = isAuthorizedAdmin(user);
+      workspace.classList.toggle('creator-locked', !allowed);
+      workspace.setAttribute('aria-disabled', String(!allowed));
+      devoSubmitBtn.disabled = !allowed;
+      lessonSubmitBtn.disabled = !allowed;
+
+      if (!user) {
         authBtn.textContent = 'Sign In with Google';
+        gateBanner.className = 'admin-gate-banner';
+        gateBanner.textContent = 'Admin sign-in required: Sign in with an authorized admin account to publish devotionals or lessons.';
+      } else if (!allowed) {
+        authBtn.textContent = 'Sign Out';
+        gateBanner.className = 'admin-gate-banner';
+        gateBanner.textContent = `Signed in as ${user.displayName || user.email} (UID: ${user.uid}), but this account is not listed as an admin.`;
+      } else {
+        authBtn.textContent = 'Sign Out';
+        gateBanner.className = 'admin-gate-banner authorized';
+        gateBanner.textContent = `Admin verified: Signed in as ${user.displayName || user.email}.`;
       }
+    }
+
+    onAuthStateChanged(auth, (user) => {
+      updateAdminAccessUI(user);
     });
 
     authBtn.addEventListener('click', async () => {
@@ -469,6 +520,16 @@
       statusMsg.className = `status-msg status-${type}`;
       statusMsg.style.display = "block";
       statusMsg.textContent = message;
+    }
+
+    function requireAdminBeforeSubmit() {
+      const user = auth.currentUser;
+      if (!isAuthorizedAdmin(user)) {
+        updateAdminAccessUI(user);
+        showStatus("error", "Access denied: Please sign in with an authorized admin account first.");
+        return false;
+      }
+      return true;
     }
 
     function validateFields(prefix, fields) {
@@ -498,6 +559,7 @@
     document.getElementById('devotional-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       statusMsg.style.display = "none";
+      if (!requireAdminBeforeSubmit()) return;
 
       const valid = validateFields('devo', [
         { id: 'devoDate', label: 'Devotional Date', lang: null },
@@ -519,8 +581,8 @@
         scriptureRef: document.getElementById('devoScriptureRef').value.trim(),
         scriptureQuote: document.getElementById('devoScriptureQuote').value.trim(),
         en: buildDevoLang('en'),
-        authorUid: user ? user.uid : null,
-        authorName: user ? (user.displayName || user.email.split('@')[0]) : 'DayBreak Contributor',
+        authorUid: user.uid,
+        authorName: user.displayName || user.email.split('@')[0],
         createdAt: serverTimestamp()
       };
 
@@ -542,7 +604,7 @@
         console.error("Devotional Save Error:", err);
         showStatus("error", `Error saving devotional: ${err.message}`);
       } finally {
-        devoSubmitBtn.disabled = false;
+        devoSubmitBtn.disabled = !isAuthorizedAdmin(auth.currentUser);
         devoSubmitBtn.textContent = "Publish Devotional to Database";
       }
     });
@@ -580,6 +642,7 @@
     document.getElementById('lesson-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       statusMsg.style.display = "none";
+      if (!requireAdminBeforeSubmit()) return;
 
       const valid = validateFields('lesson', [
         { id: 'lessonId', label: 'Lesson ID', lang: null },
@@ -608,7 +671,7 @@
         scriptureQuote: document.getElementById('scriptureQuote').value.trim(),
         scriptureCite: document.getElementById('scriptureCite').value.trim(),
         en: buildLessonLang('en'),
-        authorUid: user ? user.uid : null,
+        authorUid: user.uid,
         createdAt: serverTimestamp()
       };
 
@@ -625,7 +688,7 @@
         console.error("Lesson Save Error:", err);
         showStatus("error", `Error saving lesson: ${err.message}`);
       } finally {
-        lessonSubmitBtn.disabled = false;
+        lessonSubmitBtn.disabled = !isAuthorizedAdmin(auth.currentUser);
         lessonSubmitBtn.textContent = "Save Lesson Directly to Database";
       }
     });
