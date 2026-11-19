@@ -2,34 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Content Creator - DayBreak Admin</title>
+  <title>Lesson Creator - DayBreak Admin</title>
   <link rel="stylesheet" href="../style.css">
   <style>
     .admin-container { max-width: 900px; margin: 40px auto; padding: 20px; }
-    .section-selector {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-    .section-choice-btn {
-      padding: 14px 18px;
-      border: 2px solid #cbd5e1;
-      background: #f8fafc;
-      color: #0f172a;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .section-choice-btn.active {
-      border-color: #2563eb;
-      background: #eff6ff;
-      color: #1d4ed8;
-    }
-    .creator-mode { display: none; }
-    .creator-mode.active { display: block; }
     .form-group { margin-bottom: 15px; }
     .form-group label { display: block; font-weight: bold; margin-bottom: 5px; }
     .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
@@ -39,332 +15,208 @@
     .tab-btn.active { background: #5a2d82; color: white; }
     .lang-section { display: none; }
     .lang-section.active { display: block; }
-    .status-msg { margin-top: 15px; padding: 12px; border-radius: 6px; display: none; font-weight: bold; }
+    .status-msg { margin-top: 15px; padding: 10px; border-radius: 6px; display: none; font-weight: bold; }
     .status-success { background: #d4edda; color: #155724; }
     .status-error { background: #f8d7da; color: #721c24; }
-    @media screen and (max-width: 600px) {
-      .section-selector { grid-template-columns: 1fr; }
-    }
   </style>
 </head>
 <body>
   <div class="admin-container card">
-    <h2>DayBreak Content Creator</h2>
-    <p id="auth-status" style="margin-bottom: 16px; font-size: 0.95rem;">Checking sign-in status...</p>
-
-    <!-- Section Selector: Devotional vs. Sabbath School Lesson -->
-    <div class="form-group">
-      <label>Select Where to Input Content:</label>
-      <div class="section-selector" role="group" aria-label="Content Section Selector">
-        <button type="button" id="btn-mode-devotional" class="section-choice-btn active" onclick="selectCreatorSection('devotional')">
-          Daily Devotional
-        </button>
-        <button type="button" id="btn-mode-sabbath" class="section-choice-btn" onclick="selectCreatorSection('sabbath')">
-          Sabbath School Lesson
-        </button>
+    <h2>➕ Multi-Language Lesson Creator (Firebase)</h2>
+    <form id="lesson-form">
+      
+      <!-- Shared Details -->
+      <div class="form-group">
+        <label>Lesson ID (e.g., Lesson 13 or authentic-ministry):</label>
+        <input type="text" id="lessonId" required>
       </div>
-    </div>
+      <div class="form-group">
+        <label>Lesson Badge (e.g., Lesson 13):</label>
+        <input type="text" id="badge" required>
+      </div>
+      <div class="form-group">
+        <label>Title:</label>
+        <input type="text" id="title" required>
+      </div>
+      <div class="form-group">
+        <label>Key Scripture Reference:</label>
+        <input type="text" id="scriptureRef" required>
+      </div>
+      <div class="form-group">
+        <label>Scripture Quote Text:</label>
+        <textarea id="scriptureQuote" rows="2" required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Scripture Citation:</label>
+        <input type="text" id="scriptureCite" required>
+      </div>
 
-    <!-- ========================================== -->
-    <!-- MODE 1: DAILY DEVOTIONAL FORM              -->
-    <!-- ========================================== -->
-    <div id="mode-devotional" class="creator-mode active">
-      <form id="devotional-form">
+      <hr style="margin: 25px 0;">
+
+      <!-- Language Tabs -->
+      <div class="tab-buttons">
+        <button type="button" class="tab-btn active" onclick="showLang('en', this)">🇬🇧 English</button>
+        <button type="button" class="tab-btn" onclick="showLang('tl', this)">🇵🇭 Tagalog</button>
+        <button type="button" class="tab-btn" onclick="showLang('ceb', this)">🇵🇭 Cebuano</button>
+        <button type="button" class="tab-btn" onclick="showLang('ilo', this)">🇵🇭 Ilocano</button>
+        <button type="button" class="tab-btn" onclick="showLang('war', this)">🇵🇭 Waray</button>
+      </div>
+
+      <!-- English Section -->
+      <div id="lang-en" class="lang-section active">
+        <h3>English Content</h3>
         <div class="form-group">
-          <label for="devoDate">Devotional Date:</label>
-          <input type="date" id="devoDate" required>
-        </div>
-        <div class="form-group">
-          <label for="devoId">Document ID (optional, e.g., 2026-11-19 or morning-light):</label>
-          <input type="text" id="devoId" placeholder="Leave blank to auto-generate">
-        </div>
-        <div class="form-group">
-          <label for="devoScriptureRef">Scripture Reference:</label>
-          <input type="text" id="devoScriptureRef" placeholder="e.g., Psalm 23:1" required>
-        </div>
-        <div class="form-group">
-          <label for="devoScriptureQuote">Scripture Verse Text:</label>
-          <textarea id="devoScriptureQuote" rows="2" required></textarea>
-        </div>
-
-        <hr style="margin: 25px 0;">
-
-        <div class="tab-buttons" id="devo-lang-tabs">
-          <button type="button" class="tab-btn active" onclick="showLang('devo', 'en', this)">English</button>
-          <button type="button" class="tab-btn" onclick="showLang('devo', 'tl', this)">Tagalog</button>
-          <button type="button" class="tab-btn" onclick="showLang('devo', 'ceb', this)">Cebuano</button>
-          <button type="button" class="tab-btn" onclick="showLang('devo', 'ilo', this)">Ilocano</button>
-          <button type="button" class="tab-btn" onclick="showLang('devo', 'war', this)">Waray</button>
-        </div>
-
-        <div id="devo-lang-en" class="lang-section active">
-          <h3>English Devotional</h3>
-          <div class="form-group">
-            <label for="devo_en_title">Title:</label>
-            <input type="text" id="devo_en_title" required>
-          </div>
-          <div class="form-group">
-            <label for="devo_en_reflection">Reflection:</label>
-            <textarea id="devo_en_reflection" rows="6" required></textarea>
-          </div>
-          <div class="form-group">
-            <label for="devo_en_prayer">Closing Prayer:</label>
-            <textarea id="devo_en_prayer" rows="3" required></textarea>
-          </div>
-        </div>
-
-        <div id="devo-lang-tl" class="lang-section">
-          <h3>Tagalog Devotional</h3>
-          <div class="form-group">
-            <label for="devo_tl_title">Pamagat:</label>
-            <input type="text" id="devo_tl_title">
-          </div>
-          <div class="form-group">
-            <label for="devo_tl_reflection">Pagninilay:</label>
-            <textarea id="devo_tl_reflection" rows="6"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="devo_tl_prayer">Panalangin:</label>
-            <textarea id="devo_tl_prayer" rows="3"></textarea>
-          </div>
-        </div>
-
-        <div id="devo-lang-ceb" class="lang-section">
-          <h3>Cebuano Devotional</h3>
-          <div class="form-group">
-            <label for="devo_ceb_title">Ulohan:</label>
-            <input type="text" id="devo_ceb_title">
-          </div>
-          <div class="form-group">
-            <label for="devo_ceb_reflection">Pamalandong:</label>
-            <textarea id="devo_ceb_reflection" rows="6"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="devo_ceb_prayer">Pag-ampo:</label>
-            <textarea id="devo_ceb_prayer" rows="3"></textarea>
-          </div>
-        </div>
-
-        <div id="devo-lang-ilo" class="lang-section">
-          <h3>Ilocano Devotional</h3>
-          <div class="form-group">
-            <label for="devo_ilo_title">Paulo:</label>
-            <input type="text" id="devo_ilo_title">
-          </div>
-          <div class="form-group">
-            <label for="devo_ilo_reflection">Panangmennam:</label>
-            <textarea id="devo_ilo_reflection" rows="6"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="devo_ilo_prayer">Kararag:</label>
-            <textarea id="devo_ilo_prayer" rows="3"></textarea>
-          </div>
-        </div>
-
-        <div id="devo-lang-war" class="lang-section">
-          <h3>Waray Devotional</h3>
-          <div class="form-group">
-            <label for="devo_war_title">Ulohan:</label>
-            <input type="text" id="devo_war_title">
-          </div>
-          <div class="form-group">
-            <label for="devo_war_reflection">Pamalandong:</label>
-            <textarea id="devo_war_reflection" rows="6"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="devo_war_prayer">Pag-ampo:</label>
-            <textarea id="devo_war_prayer" rows="3"></textarea>
-          </div>
-        </div>
-
-        <button type="submit" id="devo-submit-btn" class="btn-primary" style="width: 100%; margin-top: 20px;">
-          Publish Devotional to Database
-        </button>
-      </form>
-    </div>
-
-    <!-- ========================================== -->
-    <!-- MODE 2: SABBATH SCHOOL LESSON FORM         -->
-    <!-- ========================================== -->
-    <div id="mode-sabbath" class="creator-mode">
-      <form id="lesson-form">
-        <div class="form-group">
-          <label for="lessonId">Lesson ID (e.g., Lesson 13 or authentic-ministry):</label>
-          <input type="text" id="lessonId" required>
+          <label>Image Path/Filename:</label>
+          <input type="text" id="en_imageSrc" placeholder="grace.png" required>
         </div>
         <div class="form-group">
-          <label for="badge">Lesson Chapter (e.g., Lesson 13):</label>
-          <input type="text" id="badge" required>
+          <label>Main Idea Summary:</label>
+          <textarea id="en_mainIdea" rows="3" required></textarea>
+        </div>
+        
+        <h4>4 Key Points (English)</h4>
+        <div id="en-points-container"></div>
+
+        <div class="form-group">
+          <label>Closing Thought:</label>
+          <textarea id="en_closingThought" rows="2" required></textarea>
         </div>
         <div class="form-group">
-          <label for="title">Title:</label>
-          <input type="text" id="title" required>
+          <label>Discussion Question 1:</label>
+          <input type="text" id="en_q1" required>
         </div>
         <div class="form-group">
-          <label for="scriptureRef">Key Scripture Reference:</label>
-          <input type="text" id="scriptureRef" required>
+          <label>Discussion Question 2:</label>
+          <input type="text" id="en_q2" required>
+        </div>
+      </div>
+
+      <!-- Tagalog Section -->
+      <div id="lang-tl" class="lang-section">
+        <h3>Tagalog Translation</h3>
+        <div class="form-group">
+          <label>Tagalog Image Path/Filename:</label>
+          <input type="text" id="tl_imageSrc" placeholder="grace-tagalog.png">
         </div>
         <div class="form-group">
-          <label for="scriptureQuote">Scripture Quote Text:</label>
-          <textarea id="scriptureQuote" rows="2" required></textarea>
+          <label>Main Idea Summary (Buod):</label>
+          <textarea id="tl_mainIdea" rows="3"></textarea>
+        </div>
+        
+        <h4>4 Key Points (Tagalog)</h4>
+        <div id="tl-points-container"></div>
+
+        <div class="form-group">
+          <label>Closing Thought (Pangwakas na Kaisipan):</label>
+          <textarea id="tl_closingThought" rows="2"></textarea>
         </div>
         <div class="form-group">
-          <label for="scriptureCite">Scripture Citation:</label>
-          <input type="text" id="scriptureCite" required>
+          <label>Discussion Question 1:</label>
+          <input type="text" id="tl_q1">
         </div>
-
-        <hr style="margin: 25px 0;">
-
-        <div class="tab-buttons" id="lesson-lang-tabs">
-          <button type="button" class="tab-btn active" onclick="showLang('lesson', 'en', this)">English</button>
-          <button type="button" class="tab-btn" onclick="showLang('lesson', 'tl', this)">Tagalog</button>
-          <button type="button" class="tab-btn" onclick="showLang('lesson', 'ceb', this)">Cebuano</button>
-          <button type="button" class="tab-btn" onclick="showLang('lesson', 'ilo', this)">Ilocano</button>
-          <button type="button" class="tab-btn" onclick="showLang('lesson', 'war', this)">Waray</button>
+        <div class="form-group">
+          <label>Discussion Question 2:</label>
+          <input type="text" id="tl_q2">
         </div>
+      </div>
 
-        <div id="lesson-lang-en" class="lang-section active">
-          <h3>English Content</h3>
-          <div class="form-group">
-            <label for="en_imageSrc">Image Path/Filename:</label>
-            <input type="text" id="en_imageSrc" placeholder="grace.png" required>
-          </div>
-          <div class="form-group">
-            <label for="en_mainIdea">Main Idea Summary:</label>
-            <textarea id="en_mainIdea" rows="3" required></textarea>
-          </div>
-          <h4>4 Key Points (English)</h4>
-          <div id="en-points-container"></div>
-          <div class="form-group">
-            <label for="en_closingThought">Closing Thought:</label>
-            <textarea id="en_closingThought" rows="2" required></textarea>
-          </div>
-          <div class="form-group">
-            <label for="en_q1">Discussion Question 1:</label>
-            <input type="text" id="en_q1" required>
-          </div>
-          <div class="form-group">
-            <label for="en_q2">Discussion Question 2:</label>
-            <input type="text" id="en_q2" required>
-          </div>
+      <!-- Cebuano Section -->
+      <div id="lang-ceb" class="lang-section">
+        <h3>Cebuano Translation</h3>
+        <div class="form-group">
+          <label>Cebuano Image Path/Filename:</label>
+          <input type="text" id="ceb_imageSrc" placeholder="cebuano.png">
         </div>
-
-        <div id="lesson-lang-tl" class="lang-section">
-          <h3>Tagalog Translation</h3>
-          <div class="form-group">
-            <label for="tl_imageSrc">Tagalog Image Path/Filename:</label>
-            <input type="text" id="tl_imageSrc" placeholder="grace-tagalog.png">
-          </div>
-          <div class="form-group">
-            <label for="tl_mainIdea">Main Idea Summary (Buod):</label>
-            <textarea id="tl_mainIdea" rows="3"></textarea>
-          </div>
-          <h4>4 Key Points (Tagalog)</h4>
-          <div id="tl-points-container"></div>
-          <div class="form-group">
-            <label for="tl_closingThought">Closing Thought (Pangwakas na Kaisipan):</label>
-            <textarea id="tl_closingThought" rows="2"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="tl_q1">Discussion Question 1:</label>
-            <input type="text" id="tl_q1">
-          </div>
-          <div class="form-group">
-            <label for="tl_q2">Discussion Question 2:</label>
-            <input type="text" id="tl_q2">
-          </div>
+        <div class="form-group">
+          <label>Main Idea Summary (Kinatibuk-an):</label>
+          <textarea id="ceb_mainIdea" rows="3"></textarea>
         </div>
+        
+        <h4>4 Key Points (Cebuano)</h4>
+        <div id="ceb-points-container"></div>
 
-        <div id="lesson-lang-ceb" class="lang-section">
-          <h3>Cebuano Translation</h3>
-          <div class="form-group">
-            <label for="ceb_imageSrc">Cebuano Image Path/Filename:</label>
-            <input type="text" id="ceb_imageSrc" placeholder="cebuano.png">
-          </div>
-          <div class="form-group">
-            <label for="ceb_mainIdea">Main Idea Summary (Kinatibuk-an):</label>
-            <textarea id="ceb_mainIdea" rows="3"></textarea>
-          </div>
-          <h4>4 Key Points (Cebuano)</h4>
-          <div id="ceb-points-container"></div>
-          <div class="form-group">
-            <label for="ceb_closingThought">Closing Thought (Panapos nga Huna-huna):</label>
-            <textarea id="ceb_closingThought" rows="2"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="ceb_q1">Discussion Question 1:</label>
-            <input type="text" id="ceb_q1">
-          </div>
-          <div class="form-group">
-            <label for="ceb_q2">Discussion Question 2:</label>
-            <input type="text" id="ceb_q2">
-          </div>
+        <div class="form-group">
+          <label>Closing Thought (Panapos nga Huna-huna):</label>
+          <textarea id="ceb_closingThought" rows="2"></textarea>
         </div>
-
-        <div id="lesson-lang-ilo" class="lang-section">
-          <h3>Ilocano Translation</h3>
-          <div class="form-group">
-            <label for="ilo_imageSrc">Ilocano Image Path/Filename:</label>
-            <input type="text" id="ilo_imageSrc" placeholder="ilocano.png">
-          </div>
-          <div class="form-group">
-            <label for="ilo_mainIdea">Main Idea Summary (Pagsingkir):</label>
-            <textarea id="ilo_mainIdea" rows="3"></textarea>
-          </div>
-          <h4>4 Key Points (Ilocano)</h4>
-          <div id="ilo-points-container"></div>
-          <div class="form-group">
-            <label for="ilo_closingThought">Closing Thought (Panungpalan a Panunot):</label>
-            <textarea id="ilo_closingThought" rows="2"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="ilo_q1">Discussion Question 1:</label>
-            <input type="text" id="ilo_q1">
-          </div>
-          <div class="form-group">
-            <label for="ilo_q2">Discussion Question 2:</label>
-            <input type="text" id="ilo_q2">
-          </div>
+        <div class="form-group">
+          <label>Discussion Question 1:</label>
+          <input type="text" id="ceb_q1">
         </div>
-
-        <div id="lesson-lang-war" class="lang-section">
-          <h3>Waray Translation</h3>
-          <div class="form-group">
-            <label for="war_imageSrc">Waray Image Path/Filename:</label>
-            <input type="text" id="war_imageSrc" placeholder="waray.png">
-          </div>
-          <div class="form-group">
-            <label for="war_mainIdea">Main Idea Summary (Kagsumada):</label>
-            <textarea id="war_mainIdea" rows="3"></textarea>
-          </div>
-          <h4>4 Key Points (Waray)</h4>
-          <div id="war-points-container"></div>
-          <div class="form-group">
-            <label for="war_closingThought">Closing Thought (Panapos nga Hunahuna):</label>
-            <textarea id="war_closingThought" rows="2"></textarea>
-          </div>
-          <div class="form-group">
-            <label for="war_q1">Discussion Question 1:</label>
-            <input type="text" id="war_q1">
-          </div>
-          <div class="form-group">
-            <label for="war_q2">Discussion Question 2:</label>
-            <input type="text" id="war_q2">
-          </div>
+        <div class="form-group">
+          <label>Discussion Question 2:</label>
+          <input type="text" id="ceb_q2">
         </div>
+      </div>
 
-        <button type="submit" id="lesson-submit-btn" class="btn-primary" style="width: 100%; margin-top: 20px;">
-          Save Lesson Directly to Database
-        </button>
-      </form>
-    </div>
+      <!-- Ilocano Section -->
+      <div id="lang-ilo" class="lang-section">
+        <h3>Ilocano Translation</h3>
+        <div class="form-group">
+          <label>Ilocano Image Path/Filename:</label>
+          <input type="text" id="ilo_imageSrc" placeholder="ilocano.png">
+        </div>
+        <div class="form-group">
+          <label>Main Idea Summary (Pagsingkir):</label>
+          <textarea id="ilo_mainIdea" rows="3"></textarea>
+        </div>
+        
+        <h4>4 Key Points (Ilocano)</h4>
+        <div id="ilo-points-container"></div>
 
-    <div id="status-msg" class="status-msg"></div>
+        <div class="form-group">
+          <label>Closing Thought (Panungpalan a Panunot):</label>
+          <textarea id="ilo_closingThought" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Discussion Question 1:</label>
+          <input type="text" id="ilo_q1">
+        </div>
+        <div class="form-group">
+          <label>Discussion Question 2:</label>
+          <input type="text" id="ilo_q2">
+        </div>
+      </div>
+
+      <!-- Waray Section -->
+      <div id="lang-war" class="lang-section">
+        <h3>Waray Translation</h3>
+        <div class="form-group">
+          <label>Waray Image Path/Filename:</label>
+          <input type="text" id="war_imageSrc" placeholder="waray.png">
+        </div>
+        <div class="form-group">
+          <label>Main Idea Summary (Kagsumada):</label>
+          <textarea id="war_mainIdea" rows="3"></textarea>
+        </div>
+        
+        <h4>4 Key Points (Waray)</h4>
+        <div id="war-points-container"></div>
+
+        <div class="form-group">
+          <label>Closing Thought (Panapos nga Hunahuna):</label>
+          <textarea id="war_closingThought" rows="2"></textarea>
+        </div>
+        <div class="form-group">
+          <label>Discussion Question 1:</label>
+          <input type="text" id="war_q1">
+        </div>
+        <div class="form-group">
+          <label>Discussion Question 2:</label>
+          <input type="text" id="war_q2">
+        </div>
+      </div>
+
+      <button type="submit" id="submit-btn" class="btn-primary" style="width: 100%; margin-top: 20px;">
+        🚀 Save Lesson Directly to Database
+      </button>
+      
+      <div id="status-msg" class="status-msg"></div>
+    </form>
   </div>
 
   <script>
-    document.getElementById('devoDate').valueAsDate = new Date();
-
+    // Build 4 Key Points input blocks dynamically for all 5 languages
     ['en', 'tl', 'ceb', 'ilo', 'war'].forEach(lang => {
       const container = document.getElementById(`${lang}-points-container`);
       if (container) {
@@ -384,28 +236,17 @@
       }
     });
 
-    function selectCreatorSection(mode) {
-      const isDevo = mode === 'devotional';
-      document.getElementById('btn-mode-devotional').classList.toggle('active', isDevo);
-      document.getElementById('btn-mode-sabbath').classList.toggle('active', !isDevo);
-      document.getElementById('mode-devotional').classList.toggle('active', isDevo);
-      document.getElementById('mode-sabbath').classList.toggle('active', !isDevo);
-      document.getElementById('status-msg').style.display = 'none';
-    }
-
-    function showLang(prefix, lang, btn) {
-      const groupId = prefix === 'devo' ? 'devo-lang-tabs' : 'lesson-lang-tabs';
-      document.querySelectorAll(`[id^="${prefix}-lang-"]`).forEach(sec => sec.classList.remove('active'));
-      document.querySelectorAll(`#${groupId} .tab-btn`).forEach(b => b.classList.remove('active'));
-      document.getElementById(`${prefix}-lang-${lang}`).classList.add('active');
+    function showLang(lang, btn) {
+      document.querySelectorAll('.lang-section').forEach(sec => sec.classList.remove('active'));
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(`lang-${lang}`).classList.add('active');
       btn.classList.add('active');
     }
   </script>
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, collection, doc, setDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAKsH40B0E-ytvtDBp5q0cCnAcrkfsDkxg",
@@ -418,155 +259,80 @@
     };
 
     const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const authStatus = document.getElementById('auth-status');
-    const devoSubmitBtn = document.getElementById('devo-submit-btn');
-    const lessonSubmitBtn = document.getElementById('lesson-submit-btn');
-    const statusMsg = document.getElementById('status-msg');
-
-    onAuthStateChanged(auth, (user) => {
-      if (user) {
-        authStatus.textContent = `Signed in as ${user.displayName || user.email}`;
-        devoSubmitBtn.disabled = false;
-        lessonSubmitBtn.disabled = false;
-      } else {
-        authStatus.textContent = "Not signed in. Please log in before saving content.";
-        devoSubmitBtn.disabled = true;
-        lessonSubmitBtn.disabled = true;
-      }
-    });
-
-    function showStatus(type, message) {
-      statusMsg.className = `status-msg status-${type}`;
-      statusMsg.style.display = "block";
-      statusMsg.textContent = message;
-    }
-
-    function buildDevoLang(lang) {
-      const title = document.getElementById(`devo_${lang}_title`)?.value.trim() || "";
-      const reflection = document.getElementById(`devo_${lang}_reflection`)?.value.trim() || "";
-      const prayer = document.getElementById(`devo_${lang}_prayer`)?.value.trim() || "";
-      if (!title && !reflection && !prayer) return null;
-      return { title, reflection, prayer };
-    }
-
-    document.getElementById('devotional-form').addEventListener('submit', async (e) => {
+    document.getElementById('lesson-form').addEventListener('submit', async function(e) {
       e.preventDefault();
-      const user = auth.currentUser;
-      if (!user) {
-        showStatus("error", "Please sign in first before saving a devotional.");
-        return;
-      }
-
-      devoSubmitBtn.disabled = true;
-      devoSubmitBtn.textContent = "Publishing Devotional...";
-      statusMsg.style.display = "none";
-
-      const customId = document.getElementById('devoId').value.trim();
-      const payload = {
-        date: document.getElementById('devoDate').value,
-        scriptureRef: document.getElementById('devoScriptureRef').value.trim(),
-        scriptureQuote: document.getElementById('devoScriptureQuote').value.trim(),
-        en: buildDevoLang('en'),
-        authorUid: user.uid,
-        authorName: user.displayName || user.email.split('@')[0],
-        createdAt: serverTimestamp()
-      };
-
-      ['tl', 'ceb', 'ilo', 'war'].forEach(lang => {
-        const block = buildDevoLang(lang);
-        if (block) payload[lang] = block;
-      });
-
-      try {
-        if (customId) {
-          await setDoc(doc(db, "devotionals", customId), payload);
-        } else {
-          await addDoc(collection(db, "devotionals"), payload);
-        }
-        showStatus("success", "Devotional saved to the devotionals collection.");
-        e.target.reset();
-        document.getElementById('devoDate').valueAsDate = new Date();
-      } catch (err) {
-        console.error("Devotional Save Error:", err);
-        showStatus("error", `Error saving devotional: ${err.message}`);
-      } finally {
-        devoSubmitBtn.disabled = false;
-        devoSubmitBtn.textContent = "Publish Devotional to Database";
-      }
-    });
-
-    function buildLessonLang(lang) {
-      const imageInput = document.getElementById(`${lang}_imageSrc`);
-      if (!imageInput) return null;
-      const imageSrc = imageInput.value.trim();
-      if (!imageSrc) return null;
-
-      const langData = {
-        imageSrc,
-        mainIdea: document.getElementById(`${lang}_mainIdea`).value,
-        closingThought: document.getElementById(`${lang}_closingThought`).value,
-        questions: [
-          document.getElementById(`${lang}_q1`).value,
-          document.getElementById(`${lang}_q2`).value
-        ],
-        points: []
-      };
-
-      for (let i = 1; i <= 4; i++) {
-        langData.points.push({
-          title: document.getElementById(`${lang}_p${i}_title`).value,
-          description: document.getElementById(`${lang}_p${i}_desc`).value,
-          takeaway: document.getElementById(`${lang}_p${i}_takeaway`).value,
-          question: document.getElementById(`${lang}_p${i}_question`).value,
-          flowLabel: document.getElementById(`${lang}_p${i}_flowLabel`).value,
-          flowText: document.getElementById(`${lang}_p${i}_flowText`).value
-        });
-      }
-      return langData;
-    }
-
-    document.getElementById('lesson-form').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const user = auth.currentUser;
-      if (!user) {
-        showStatus("error", "Please sign in first before saving a Sabbath School lesson.");
-        return;
-      }
-
-      lessonSubmitBtn.disabled = true;
-      lessonSubmitBtn.textContent = "Saving Lesson to Database...";
+      
+      const submitBtn = document.getElementById('submit-btn');
+      const statusMsg = document.getElementById('status-msg');
+      
+      submitBtn.disabled = true;
+      submitBtn.innerText = "Saving to Database...";
       statusMsg.style.display = "none";
 
       const lessonId = document.getElementById('lessonId').value.trim();
+
+      const buildLangData = (lang) => {
+        const imageInput = document.getElementById(`${lang}_imageSrc`);
+        if (!imageInput) return null;
+        
+        const imageSrc = imageInput.value.trim();
+        if (!imageSrc) return null;
+
+        const langData = {
+          imageSrc: imageSrc,
+          mainIdea: document.getElementById(`${lang}_mainIdea`).value,
+          closingThought: document.getElementById(`${lang}_closingThought`).value,
+          questions: [
+            document.getElementById(`${lang}_q1`).value,
+            document.getElementById(`${lang}_q2`).value
+          ],
+          points: []
+        };
+
+        for (let i = 1; i <= 4; i++) {
+          langData.points.push({
+            title: document.getElementById(`${lang}_p${i}_title`).value,
+            description: document.getElementById(`${lang}_p${i}_desc`).value,
+            takeaway: document.getElementById(`${lang}_p${i}_takeaway`).value,
+            question: document.getElementById(`${lang}_p${i}_question`).value,
+            flowLabel: document.getElementById(`${lang}_p${i}_flowLabel`).value,
+            flowText: document.getElementById(`${lang}_p${i}_flowText`).value
+          });
+        }
+        return langData;
+      };
+
       const newLesson = {
         badge: document.getElementById('badge').value,
         title: document.getElementById('title').value,
         scriptureRef: document.getElementById('scriptureRef').value,
         scriptureQuote: document.getElementById('scriptureQuote').value,
         scriptureCite: document.getElementById('scriptureCite').value,
-        en: buildLessonLang('en'),
-        authorUid: user.uid,
+        en: buildLangData('en'),
         createdAt: serverTimestamp()
       };
 
+      // Add optional language translations if filled out
       ['tl', 'ceb', 'ilo', 'war'].forEach(lang => {
-        const langData = buildLessonLang(lang);
+        const langData = buildLangData(lang);
         if (langData) newLesson[lang] = langData;
       });
 
       try {
         await setDoc(doc(db, "lessons", lessonId), newLesson);
-        showStatus("success", `Lesson "${lessonId}" saved to the lessons collection.`);
-        e.target.reset();
-      } catch (err) {
-        console.error("Lesson Save Error:", err);
-        showStatus("error", `Error saving lesson: ${err.message}`);
+        statusMsg.className = "status-msg status-success";
+        statusMsg.style.display = "block";
+        statusMsg.innerText = `✅ Success! Lesson "${lessonId}" saved directly to Firebase.`;
+      } catch (error) {
+        console.error("Firestore Save Error:", error);
+        statusMsg.className = "status-msg status-error";
+        statusMsg.style.display = "block";
+        statusMsg.innerText = `❌ Error saving lesson: ${error.message}`;
       } finally {
-        lessonSubmitBtn.disabled = false;
-        lessonSubmitBtn.textContent = "Save Lesson Directly to Database";
+        submitBtn.disabled = false;
+        submitBtn.innerText = "🚀 Save Lesson Directly to Database";
       }
     });
   </script>
