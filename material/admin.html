@@ -2,339 +2,268 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Lesson Creator - DayBreak Admin</title>
-  <link rel="stylesheet" href="../style.css">
-  <style>
-    .admin-container { max-width: 900px; margin: 40px auto; padding: 20px; }
-    .form-group { margin-bottom: 15px; }
-    .form-group label { display: block; font-weight: bold; margin-bottom: 5px; }
-    .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
-    .point-box { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ddd; }
-    .tab-buttons { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; flex-wrap: wrap; }
-    .tab-btn { padding: 10px 20px; border: none; background: #eee; cursor: pointer; border-radius: 6px; font-weight: bold; }
-    .tab-btn.active { background: #5a2d82; color: white; }
-    .lang-section { display: none; }
-    .lang-section.active { display: block; }
-    .status-msg { margin-top: 15px; padding: 10px; border-radius: 6px; display: none; font-weight: bold; }
-    .status-success { background: #d4edda; color: #155724; }
-    .status-error { background: #f8d7da; color: #721c24; }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#1e1e2d">
+  <meta name="mobile-web-app-capable" content="yes">
+
+  <title>DayBreak</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="admin-container card">
-    <h2>➕ Multi-Language Lesson Creator (Firebase)</h2>
-    <form id="lesson-form">
-      
-      <!-- Shared Details -->
-      <div class="form-group">
-        <label>Lesson ID (e.g., Lesson 13 or authentic-ministry):</label>
-        <input type="text" id="lessonId" required>
-      </div>
-      <div class="form-group">
-        <label>Lesson Badge (e.g., Lesson 13):</label>
-        <input type="text" id="badge" required>
-      </div>
-      <div class="form-group">
-        <label>Title:</label>
-        <input type="text" id="title" required>
-      </div>
-      <div class="form-group">
-        <label>Key Scripture Reference:</label>
-        <input type="text" id="scriptureRef" required>
-      </div>
-      <div class="form-group">
-        <label>Scripture Quote Text:</label>
-        <textarea id="scriptureQuote" rows="2" required></textarea>
-      </div>
-      <div class="form-group">
-        <label>Scripture Citation:</label>
-        <input type="text" id="scriptureCite" required>
-      </div>
 
-      <hr style="margin: 25px 0;">
+  <!-- Fixed Header Navigation -->
+  <header class="navbar">
+    <div class="nav-container">
+      <a href="#" class="logo">DayBreak</a>
+      <nav class="nav-links">
+        <button class="nav-tab active" data-target="home">Home</button>
+        <button class="nav-tab" data-target="devotional">Daily Devotional</button>
+        <button class="nav-tab" data-target="sabbath">Sabbath School</button>
+        <button class="nav-tab" data-target="resources">Resources</button>
+      </nav>
+      <button class="btn-login">Login</button>
+    </div>
+  </header>
 
-      <!-- Language Tabs -->
-      <div class="tab-buttons">
-        <button type="button" class="tab-btn active" onclick="showLang('en', this)">🇬🇧 English</button>
-        <button type="button" class="tab-btn" onclick="showLang('tl', this)">🇵🇭 Tagalog</button>
-        <button type="button" class="tab-btn" onclick="showLang('ceb', this)">🇵🇭 Cebuano</button>
-        <button type="button" class="tab-btn" onclick="showLang('ilo', this)">🇵🇭 Ilocano</button>
-        <button type="button" class="tab-btn" onclick="showLang('war', this)">🇵🇭 Waray</button>
-      </div>
-
-      <!-- English Section -->
-      <div id="lang-en" class="lang-section active">
-        <h3>English Content</h3>
-        <div class="form-group">
-          <label>Image Path/Filename:</label>
-          <input type="text" id="en_imageSrc" placeholder="grace.png" required>
-        </div>
-        <div class="form-group">
-          <label>Main Idea Summary:</label>
-          <textarea id="en_mainIdea" rows="3" required></textarea>
-        </div>
-        
-        <h4>4 Key Points (English)</h4>
-        <div id="en-points-container"></div>
-
-        <div class="form-group">
-          <label>Closing Thought:</label>
-          <textarea id="en_closingThought" rows="2" required></textarea>
-        </div>
-        <div class="form-group">
-          <label>Discussion Question 1:</label>
-          <input type="text" id="en_q1" required>
-        </div>
-        <div class="form-group">
-          <label>Discussion Question 2:</label>
-          <input type="text" id="en_q2" required>
-        </div>
-      </div>
-
-      <!-- Tagalog Section -->
-      <div id="lang-tl" class="lang-section">
-        <h3>Tagalog Translation</h3>
-        <div class="form-group">
-          <label>Tagalog Image Path/Filename:</label>
-          <input type="text" id="tl_imageSrc" placeholder="grace-tagalog.png">
-        </div>
-        <div class="form-group">
-          <label>Main Idea Summary (Buod):</label>
-          <textarea id="tl_mainIdea" rows="3"></textarea>
-        </div>
-        
-        <h4>4 Key Points (Tagalog)</h4>
-        <div id="tl-points-container"></div>
-
-        <div class="form-group">
-          <label>Closing Thought (Pangwakas na Kaisipan):</label>
-          <textarea id="tl_closingThought" rows="2"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Discussion Question 1:</label>
-          <input type="text" id="tl_q1">
-        </div>
-        <div class="form-group">
-          <label>Discussion Question 2:</label>
-          <input type="text" id="tl_q2">
-        </div>
-      </div>
-
-      <!-- Cebuano Section -->
-      <div id="lang-ceb" class="lang-section">
-        <h3>Cebuano Translation</h3>
-        <div class="form-group">
-          <label>Cebuano Image Path/Filename:</label>
-          <input type="text" id="ceb_imageSrc" placeholder="cebuano.png">
-        </div>
-        <div class="form-group">
-          <label>Main Idea Summary (Kinatibuk-an):</label>
-          <textarea id="ceb_mainIdea" rows="3"></textarea>
-        </div>
-        
-        <h4>4 Key Points (Cebuano)</h4>
-        <div id="ceb-points-container"></div>
-
-        <div class="form-group">
-          <label>Closing Thought (Panapos nga Huna-huna):</label>
-          <textarea id="ceb_closingThought" rows="2"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Discussion Question 1:</label>
-          <input type="text" id="ceb_q1">
-        </div>
-        <div class="form-group">
-          <label>Discussion Question 2:</label>
-          <input type="text" id="ceb_q2">
-        </div>
-      </div>
-
-      <!-- Ilocano Section -->
-      <div id="lang-ilo" class="lang-section">
-        <h3>Ilocano Translation</h3>
-        <div class="form-group">
-          <label>Ilocano Image Path/Filename:</label>
-          <input type="text" id="ilo_imageSrc" placeholder="ilocano.png">
-        </div>
-        <div class="form-group">
-          <label>Main Idea Summary (Pagsingkir):</label>
-          <textarea id="ilo_mainIdea" rows="3"></textarea>
-        </div>
-        
-        <h4>4 Key Points (Ilocano)</h4>
-        <div id="ilo-points-container"></div>
-
-        <div class="form-group">
-          <label>Closing Thought (Panungpalan a Panunot):</label>
-          <textarea id="ilo_closingThought" rows="2"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Discussion Question 1:</label>
-          <input type="text" id="ilo_q1">
-        </div>
-        <div class="form-group">
-          <label>Discussion Question 2:</label>
-          <input type="text" id="ilo_q2">
-        </div>
-      </div>
-
-      <!-- Waray Section -->
-      <div id="lang-war" class="lang-section">
-        <h3>Waray Translation</h3>
-        <div class="form-group">
-          <label>Waray Image Path/Filename:</label>
-          <input type="text" id="war_imageSrc" placeholder="waray.png">
-        </div>
-        <div class="form-group">
-          <label>Main Idea Summary (Kagsumada):</label>
-          <textarea id="war_mainIdea" rows="3"></textarea>
-        </div>
-        
-        <h4>4 Key Points (Waray)</h4>
-        <div id="war-points-container"></div>
-
-        <div class="form-group">
-          <label>Closing Thought (Panapos nga Hunahuna):</label>
-          <textarea id="war_closingThought" rows="2"></textarea>
-        </div>
-        <div class="form-group">
-          <label>Discussion Question 1:</label>
-          <input type="text" id="war_q1">
-        </div>
-        <div class="form-group">
-          <label>Discussion Question 2:</label>
-          <input type="text" id="war_q2">
-        </div>
-      </div>
-
-      <button type="submit" id="submit-btn" class="btn-primary" style="width: 100%; margin-top: 20px;">
-        🚀 Save Lesson Directly to Database
+  <!-- Hamburger Menu Wrapper for Hover & Click Activation -->
+  <div class="hamburger-wrapper">
+    <div class="hamburger-bar">
+      <button id="hamburger-btn" class="hamburger-btn" aria-label="Toggle Menu" aria-expanded="false">
+        <span></span>
+        <span></span>
+        <span></span>
       </button>
+      <span class="current-section-label" id="mobile-section-label">Menu</span>
+    </div>
+
+    <aside id="hamburger-drawer" class="hamburger-drawer">
+      <nav class="drawer-menu">
+        
+        <!-- Learn Section -->
+        <div class="drawer-category">
+          <button class="drawer-category-btn" data-category="learn">
+            <span>Learn</span>
+            <svg class="chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="drawer-sublinks">
+            <button class="drawer-sub-tab" data-target="sabbath">Sabbath School</button>
+            <button class="drawer-sub-tab" data-target="devotional">Daily Devotional</button>
+          </div>
+        </div>
+
+        <!-- Connect Section -->
+        <div class="drawer-category">
+          <button class="drawer-category-btn" data-category="connect">
+            <span>Connect</span>
+            <svg class="chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="drawer-sublinks">
+            <button class="drawer-sub-tab" data-target="home">Home & Community</button>
+            <button class="drawer-sub-tab" id="drawer-login-trigger">Member Login</button>
+          </div>
+        </div>
+
+        <!-- Go Section -->
+        <div class="drawer-category">
+          <button class="drawer-category-btn" data-category="go">
+            <span>Go</span>
+            <svg class="chevron" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 9l6 6 6-6"/></svg>
+          </button>
+          <div class="drawer-sublinks">
+            <button class="drawer-sub-tab" data-target="resources">Resources & Downloads</button>
+            <button class="drawer-sub-tab" onclick="window.location.href='material/admin.html'">Creator Studio</button>
+          </div>
+        </div>
+
+      </nav>
+    </aside>
+  </div>
+  
+  <!-- Centered Content Container -->
+  <main class="content-container">
+    
+    <!-- Home Tab -->
+    <section id="home" class="tab-panel active">
+      <div class="hero-section">
+        <h1>Deepen Your Faith. Find Your Peace.</h1>
+        <p>Daily guidance, scripture, and lessons for your spiritual journey.</p>
+        <div class="hero-buttons">
+          <button class="btn-primary" onclick="switchTab('sabbath')">Read Today's Lesson</button>
+          <button class="btn-secondary" onclick="switchTab('devotional')">Start the Devotional</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Devotional Tab -->
+    <section id="devotional" class="tab-panel">
+      <h2>Daily Devotional</h2>
+      <p class="subtitle">Scripture, reflections, and prayers for your morning quiet time.</p>
+      <div id="devotional-feed" style="width: 100%; text-align: left;">
+        <div class="card"><p>Loading daily devotionals...</p></div>
+      </div>
+    </section>
+
+    <!-- Sabbath School Tab -->
+    <section id="sabbath" class="tab-panel">
+      <h2>Sabbath School Lessons</h2>
+      <p class="subtitle">Structured Bible studies and discussion materials for this quarter.</p>
       
-      <div id="status-msg" class="status-msg"></div>
-    </form>
+      <div class="card">
+        <ul class="sabbath-school-list" id="sabbath-school-list">
+          <p class="loading-text" style="padding: 10px; text-align: center;">Loading lessons from database...</p>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Resources Tab -->
+    <section id="resources" class="tab-panel">
+      <h2>Resources</h2>
+      <p class="subtitle">Downloadable guides, reading plans, and extra study materials.</p>
+      <div class="card">
+        <h3>Study Guides & PDF Downloads</h3>
+        <p>Access supplementary tools and printable worksheets.</p>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <p>&copy; 2026 Daybreak Lessons. All rights reserved.</p>
+  </footer>
+
+  <!-- Login Modal Overlay -->
+  <div id="login-modal" class="modal-overlay">
+    <div class="modal-card">
+      <button class="modal-close" id="close-login">&times;</button>
+
+      <h2 id="modal-title">Welcome Back</h2>
+      <p class="subtitle" id="modal-subtitle">Sign in to react and join the discussion.</p>
+
+      <div class="social-login-group">
+        <button class="btn-social btn-google" id="google-login">
+          <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M23.745 12.27c0-.7-.06-1.4-.19-2.07H12v4.51h6.6c-.29 1.52-1.14 2.82-2.4 3.68v3h3.88c2.27-2.09 3.665-5.17 3.665-9.12z"/><path fill="#34A853" d="M12 24c3.24 0 5.95-1.08 7.93-2.91l-3.88-3c-1.08.72-2.45 1.16-4.05 1.16-3.12 0-5.77-2.11-6.72-4.96H1.26v3.09C3.25 21.3 7.31 24 12 24z"/><path fill="#FBBC05" d="M5.28 14.29c-.25-.72-.38-1.49-.38-2.29s.13-1.57.38-2.29V6.62H1.26C.46 8.22 0 10.06 0 12s.46 3.78 1.26 5.38l4.02-3.09z"/><path fill="#EA4335" d="M12 4.75c1.77 0 3.35.61 4.6 1.8l3.42-3.42C17.95 1.19 15.24 0 12 0 7.31 0 3.25 2.7 1.26 6.62l4.02 3.09c.95-2.85 3.6-4.96 6.72-4.96z"/></svg>
+          Continue with Google
+        </button>
+
+        <button class="btn-social btn-facebook" id="facebook-login">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#ffffff"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+          Continue with Facebook
+        </button>
+      </div>
+
+      <div class="divider">
+        <span>or use email</span>
+      </div>
+
+      <form id="login-form">
+        <div class="form-group">
+          <label for="email">Email Address</label>
+          <input type="email" id="email" required placeholder="you@example.com">
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input type="password" id="password" required placeholder="••••••••">
+        </div>
+        <button type="submit" id="form-submit-btn" class="btn-primary btn-full">Sign In</button>
+      </form>
+
+      <div class="auth-toggle">
+        <span id="toggle-text">Don't have an account?</span>
+        <button id="toggle-auth-btn" class="btn-link">Create one</button>
+      </div>
+    </div>
   </div>
 
-  <script>
-    // Build 4 Key Points input blocks dynamically for all 5 languages
-    ['en', 'tl', 'ceb', 'ilo', 'war'].forEach(lang => {
-      const container = document.getElementById(`${lang}-points-container`);
-      if (container) {
-        for (let i = 1; i <= 4; i++) {
-          container.innerHTML += `
-            <div class="point-box">
-              <h5>Point ${i} (${lang.toUpperCase()})</h5>
-              <div class="form-group"><label>Title:</label><input type="text" id="${lang}_p${i}_title"></div>
-              <div class="form-group"><label>Description:</label><textarea id="${lang}_p${i}_desc" rows="2"></textarea></div>
-              <div class="form-group"><label>Takeaway Note:</label><input type="text" id="${lang}_p${i}_takeaway"></div>
-              <div class="form-group"><label>Question:</label><input type="text" id="${lang}_p${i}_question"></div>
-              <div class="form-group"><label>Flow Label (e.g., ${i}. Transformation):</label><input type="text" id="${lang}_p${i}_flowLabel"></div>
-              <div class="form-group"><label>Flow Summary Text:</label><input type="text" id="${lang}_p${i}_flowText"></div>
-            </div>
-          `;
-        }
-      }
-    });
+  <script type="module" src="script.js"></script>
 
-    function showLang(lang, btn) {
-      document.querySelectorAll('.lang-section').forEach(sec => sec.classList.remove('active'));
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(`lang-${lang}`).classList.add('active');
-      btn.classList.add('active');
-    }
-  </script>
-
+  <!-- Dynamic Firebase Lesson & Devotional Loader -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import { db } from './material/lessons-data.js';
+    import { collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
-    const firebaseConfig = {
-      apiKey: "AIzaSyAKsH40B0E-ytvtDBp5q0cCnAcrkfsDkxg",
-      authDomain: "day-break-7a1d2.firebaseapp.com",
-      projectId: "day-break-7a1d2",
-      storageBucket: "day-break-7a1d2.firebasestorage.app",
-      messagingSenderId: "374552344821",
-      appId: "1:374552344821:web:eb18d503f6eca8d7722dbc",
-      measurementId: "G-8YES7NF8D"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    document.getElementById('lesson-form').addEventListener('submit', async function(e) {
-      e.preventDefault();
-      
-      const submitBtn = document.getElementById('submit-btn');
-      const statusMsg = document.getElementById('status-msg');
-      
-      submitBtn.disabled = true;
-      submitBtn.innerText = "Saving to Database...";
-      statusMsg.style.display = "none";
-
-      const lessonId = document.getElementById('lessonId').value.trim();
-
-      const buildLangData = (lang) => {
-        const imageInput = document.getElementById(`${lang}_imageSrc`);
-        if (!imageInput) return null;
-        
-        const imageSrc = imageInput.value.trim();
-        if (!imageSrc) return null;
-
-        const langData = {
-          imageSrc: imageSrc,
-          mainIdea: document.getElementById(`${lang}_mainIdea`).value,
-          closingThought: document.getElementById(`${lang}_closingThought`).value,
-          questions: [
-            document.getElementById(`${lang}_q1`).value,
-            document.getElementById(`${lang}_q2`).value
-          ],
-          points: []
-        };
-
-        for (let i = 1; i <= 4; i++) {
-          langData.points.push({
-            title: document.getElementById(`${lang}_p${i}_title`).value,
-            description: document.getElementById(`${lang}_p${i}_desc`).value,
-            takeaway: document.getElementById(`${lang}_p${i}_takeaway`).value,
-            question: document.getElementById(`${lang}_p${i}_question`).value,
-            flowLabel: document.getElementById(`${lang}_p${i}_flowLabel`).value,
-            flowText: document.getElementById(`${lang}_p${i}_flowText`).value
-          });
-        }
-        return langData;
-      };
-
-      const newLesson = {
-        badge: document.getElementById('badge').value,
-        title: document.getElementById('title').value,
-        scriptureRef: document.getElementById('scriptureRef').value,
-        scriptureQuote: document.getElementById('scriptureQuote').value,
-        scriptureCite: document.getElementById('scriptureCite').value,
-        en: buildLangData('en'),
-        createdAt: serverTimestamp()
-      };
-
-      // Add optional language translations if filled out
-      ['tl', 'ceb', 'ilo', 'war'].forEach(lang => {
-        const langData = buildLangData(lang);
-        if (langData) newLesson[lang] = langData;
-      });
+    async function loadDynamicLessons() {
+      const listContainer = document.getElementById('sabbath-school-list');
 
       try {
-        await setDoc(doc(db, "lessons", lessonId), newLesson);
-        statusMsg.className = "status-msg status-success";
-        statusMsg.style.display = "block";
-        statusMsg.innerText = `✅ Success! Lesson "${lessonId}" saved directly to Firebase.`;
+        const querySnapshot = await getDocs(collection(db, "lessons"));
+
+        if (querySnapshot.empty) {
+          listContainer.innerHTML = `
+            <li class="lesson-card-item">
+              <a href="material/lesson.html?id=Lesson%2013" class="lesson-card-link">
+                <span class="lesson-card-title">Grace, Love, and Fellowship</span>
+                <span class="lesson-card-ref">2 Cor. 13:14</span>
+              </a>
+            </li>`;
+          return;
+        }
+
+        listContainer.innerHTML = '';
+
+        querySnapshot.forEach((docSnap) => {
+          const lessonId = docSnap.id;
+          const lesson = docSnap.data();
+
+          const li = document.createElement('li');
+          li.className = 'lesson-card-item';
+          li.innerHTML = `
+            <a href="material/lesson.html?id=${encodeURIComponent(lessonId)}" class="lesson-card-link">
+              <span class="lesson-card-title">${lesson.title || 'Untitled Lesson'}</span>
+              <span class="lesson-card-ref">${lesson.scriptureRef || ''}</span>
+            </a>
+          `;
+          listContainer.appendChild(li);
+        });
+
       } catch (error) {
-        console.error("Firestore Save Error:", error);
-        statusMsg.className = "status-msg status-error";
-        statusMsg.style.display = "block";
-        statusMsg.innerText = `❌ Error saving lesson: ${error.message}`;
-      } finally {
-        submitBtn.disabled = false;
-        submitBtn.innerText = "🚀 Save Lesson Directly to Database";
+        console.error("Error loading dynamic lessons:", error);
+        listContainer.innerHTML = `<p style="padding: 10px; color: red;">Failed to load dynamic lessons from database.</p>`;
       }
-    });
+    }
+
+    async function loadDynamicDevotionals() {
+      const feedContainer = document.getElementById('devotional-feed');
+      if (!feedContainer) return;
+
+      try {
+        const q = query(collection(db, "devotionals"), orderBy("date", "desc"));
+        const snapshot = await getDocs(q);
+
+        if (snapshot.empty) {
+          feedContainer.innerHTML = `<div class="card"><p>No devotionals published yet.</p></div>`;
+          return;
+        }
+
+        feedContainer.innerHTML = '';
+
+        snapshot.forEach((docSnap) => {
+          const d = docSnap.data();
+          const langBlock = d.en || {};
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.style.textAlign = 'left';
+          card.innerHTML = `
+            <span class="badge">${d.date || 'Daily Reading'}</span>
+            <h3 style="margin: 0.75rem 0 0.25rem 0;">${langBlock.title || d.title || 'Untitled Devotional'}</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">By ${d.authorName || 'DayBreak Contributor'}</p>
+            <blockquote style="background: var(--bg-main); border-left: 4px solid var(--accent); padding: 0.85rem 1rem; margin-bottom: 1rem; font-style: italic;">
+              <strong>${d.scriptureRef || ''}</strong>${d.scriptureQuote ? ` — "${d.scriptureQuote}"` : ''}
+            </blockquote>
+            <p style="white-space: pre-wrap; margin-bottom: 1.25rem;">${langBlock.reflection || ''}</p>
+            <div style="background: #F1F5F9; padding: 0.85rem 1rem; border-radius: 8px; font-size: 0.92rem;">
+              <strong>Prayer:</strong> ${langBlock.prayer || ''}
+            </div>
+          `;
+          feedContainer.appendChild(card);
+        });
+      } catch (error) {
+        console.error("Error loading dynamic devotionals:", error);
+        feedContainer.innerHTML = `<div class="card"><p style="color: red;">Failed to load devotionals from database.</p></div>`;
+      }
+    }
+
+    loadDynamicLessons();
+    loadDynamicDevotionals();
   </script>
 </body>
 </html>
