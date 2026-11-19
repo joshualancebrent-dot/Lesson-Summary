@@ -84,6 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const loginForm = document.getElementById('login-form');
   const emailInput = document.getElementById('email');
   const passwordInput = document.getElementById('password');
+  const confirmPasswordGroup = document.getElementById('confirm-password-group');
+  const confirmPasswordInput = document.getElementById('confirm-password');
   const forgotPasswordBtn = document.getElementById('forgot-password-btn');
   const authFeedback = document.getElementById('auth-feedback');
   const googleBtn = document.getElementById('google-login');
@@ -115,6 +117,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  function syncAuthModeUI() {
+    if (confirmPasswordGroup) {
+      confirmPasswordGroup.style.display = isSignUpMode ? 'block' : 'none';
+    }
+    if (confirmPasswordInput) {
+      confirmPasswordInput.required = isSignUpMode;
+      if (!isSignUpMode) {
+        confirmPasswordInput.value = '';
+      }
+    }
+    if (forgotPasswordBtn) {
+      forgotPasswordBtn.style.display = isSignUpMode ? 'none' : 'inline';
+    }
+  }
+
   if (toggleAuthBtn) {
     toggleAuthBtn.addEventListener('click', () => {
       isSignUpMode = !isSignUpMode;
@@ -123,8 +140,11 @@ document.addEventListener('DOMContentLoaded', () => {
       document.getElementById('form-submit-btn').textContent = isSignUpMode ? 'Create Account' : 'Sign In';
       document.getElementById('toggle-text').textContent = isSignUpMode ? 'Already have an account?' : "Don't have an account?";
       toggleAuthBtn.textContent = isSignUpMode ? 'Sign In' : 'Create one';
+      syncAuthModeUI();
     });
   }
+
+  syncAuthModeUI();
 
   if (auth) {
     onAuthStateChanged(auth, (user) => {
@@ -197,6 +217,15 @@ document.addEventListener('DOMContentLoaded', () => {
       const email = emailInput.value.trim();
       const password = passwordInput.value;
 
+      if (isSignUpMode) {
+        const repeatPassword = confirmPasswordInput ? confirmPasswordInput.value : '';
+        if (password !== repeatPassword) {
+          confirmPasswordInput?.focus();
+          setAuthFeedback("Passwords do not match. Please repeat the same password.", true);
+          return;
+        }
+      }
+
       try {
         if (isSignUpMode) {
           await createUserWithEmailAndPassword(auth, email, password);
@@ -204,6 +233,14 @@ document.addEventListener('DOMContentLoaded', () => {
           await signInWithEmailAndPassword(auth, email, password);
         }
         loginForm.reset();
+        if (isSignUpMode) {
+          isSignUpMode = false;
+          document.getElementById('modal-title').textContent = 'Welcome Back';
+          document.getElementById('form-submit-btn').textContent = 'Sign In';
+          document.getElementById('toggle-text').textContent = "Don't have an account?";
+          toggleAuthBtn.textContent = 'Create one';
+          syncAuthModeUI();
+        }
       } catch (err) {
         setAuthFeedback("Authentication Error: " + err.message, true);
       }
