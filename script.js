@@ -5,6 +5,7 @@ import {
   signOut,
   signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
+  sendPasswordResetEmail,
   signInWithPopup,
   GoogleAuthProvider,
   FacebookAuthProvider
@@ -81,17 +82,46 @@ document.addEventListener('DOMContentLoaded', () => {
   const modal = document.getElementById('login-modal');
   const closeBtn = document.getElementById('close-login');
   const loginForm = document.getElementById('login-form');
+  const emailInput = document.getElementById('email');
+  const passwordInput = document.getElementById('password');
+  const forgotPasswordBtn = document.getElementById('forgot-password-btn');
+  const authFeedback = document.getElementById('auth-feedback');
   const googleBtn = document.getElementById('google-login');
   const facebookBtn = document.getElementById('facebook-login');
   const toggleAuthBtn = document.getElementById('toggle-auth-btn');
 
   let isSignUpMode = false;
 
+  function setAuthFeedback(message, isError = false) {
+    if (!authFeedback) {
+      alert(message);
+      return;
+    }
+    authFeedback.textContent = message;
+    authFeedback.style.display = 'block';
+    authFeedback.style.color = isError ? '#b91c1c' : '#166534';
+    authFeedback.style.background = isError ? '#fef2f2' : '#f0fdf4';
+    authFeedback.style.border = `1px solid ${isError ? '#fecaca' : '#bbf7d0'}`;
+    authFeedback.style.padding = '8px 10px';
+    authFeedback.style.borderRadius = '6px';
+    authFeedback.style.fontSize = '0.85rem';
+    authFeedback.style.marginBottom = '10px';
+  }
+
+  function clearAuthFeedback() {
+    if (authFeedback) {
+      authFeedback.textContent = '';
+      authFeedback.style.display = 'none';
+    }
+  }
+
   if (toggleAuthBtn) {
     toggleAuthBtn.addEventListener('click', () => {
       isSignUpMode = !isSignUpMode;
+      clearAuthFeedback();
       document.getElementById('modal-title').textContent = isSignUpMode ? 'Create an Account' : 'Welcome Back';
       document.getElementById('form-submit-btn').textContent = isSignUpMode ? 'Create Account' : 'Sign In';
+      document.getElementById('toggle-text').textContent = isSignUpMode ? 'Already have an account?' : "Don't have an account?";
       toggleAuthBtn.textContent = isSignUpMode ? 'Sign In' : 'Create one';
     });
   }
@@ -101,7 +131,10 @@ document.addEventListener('DOMContentLoaded', () => {
       if (loginBtn) {
         loginBtn.textContent = user ? 'Logout' : 'Login';
       }
-      if (user && modal) modal.classList.remove('active');
+      if (user && modal) {
+        clearAuthFeedback();
+        modal.classList.remove('active');
+      }
     });
   }
 
@@ -110,23 +143,59 @@ document.addEventListener('DOMContentLoaded', () => {
       if (auth && auth.currentUser) {
         signOut(auth).then(() => alert('Successfully logged out.'));
       } else if (modal) {
+        clearAuthFeedback();
         modal.classList.add('active');
       }
     });
   }
 
   if (closeBtn && modal) {
-    closeBtn.addEventListener('click', () => modal.classList.remove('active'));
+    closeBtn.addEventListener('click', () => {
+      clearAuthFeedback();
+      modal.classList.remove('active');
+    });
     modal.addEventListener('click', (e) => {
-      if (e.target === modal) modal.classList.remove('active');
+      if (e.target === modal) {
+        clearAuthFeedback();
+        modal.classList.remove('active');
+      }
+    });
+  }
+
+  window.sendPasswordReset = async function() {
+    clearAuthFeedback();
+    if (!auth) {
+      setAuthFeedback("Authentication service is unavailable.", true);
+      return;
+    }
+
+    const email = (emailInput?.value || '').trim();
+    if (!email) {
+      emailInput?.focus();
+      setAuthFeedback("Enter your email address above first, then click Forgot password?.", true);
+      return;
+    }
+
+    try {
+      await sendPasswordResetEmail(auth, email);
+      setAuthFeedback(`Password reset link sent to ${email}. Check your inbox and spam folder.`);
+    } catch (err) {
+      setAuthFeedback(`Password Reset Error: ${err.message}`, true);
+    }
+  };
+
+  if (forgotPasswordBtn) {
+    forgotPasswordBtn.addEventListener('click', () => {
+      window.sendPasswordReset();
     });
   }
 
   if (loginForm && auth) {
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = document.getElementById('email').value;
-      const password = document.getElementById('password').value;
+      clearAuthFeedback();
+      const email = emailInput.value.trim();
+      const password = passwordInput.value;
 
       try {
         if (isSignUpMode) {
@@ -136,27 +205,29 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         loginForm.reset();
       } catch (err) {
-        alert("Authentication Error: " + err.message);
+        setAuthFeedback("Authentication Error: " + err.message, true);
       }
     });
   }
 
   if (googleBtn && auth) {
     googleBtn.addEventListener('click', async () => {
+      clearAuthFeedback();
       try {
         await signInWithPopup(auth, new GoogleAuthProvider());
       } catch (err) {
-        alert("Google Login Error: " + err.message);
+        setAuthFeedback("Google Login Error: " + err.message, true);
       }
     });
   }
 
   if (facebookBtn && auth) {
     facebookBtn.addEventListener('click', async () => {
+      clearAuthFeedback();
       try {
         await signInWithPopup(auth, new FacebookAuthProvider());
       } catch (err) {
-        alert("Facebook Login Error: " + err.message);
+        setAuthFeedback("Facebook Login Error: " + err.message, true);
       }
     });
   }
@@ -325,6 +396,7 @@ document.addEventListener('DOMContentLoaded', () => {
             switchTab(targetId);
           }
         } else if (tab.id === 'drawer-login-trigger' && modal) {
+          clearAuthFeedback();
           modal.classList.add('active');
         }
 
