@@ -177,6 +177,7 @@
   <script type="module" src="script.js"></script>
 
   <!-- Dynamic Firebase Lesson & Devotional Loader -->
+ <!-- Dynamic Firebase Lesson & Devotional Loader -->
   <script type="module">
     import { db } from './material/lessons-data.js';
     import { collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
@@ -249,6 +250,13 @@
       return `${year}-${month}-${day}`;
     }
 
+    function getCreatedAtMillis(d) {
+      if (!d.createdAt) return 0;
+      if (typeof d.createdAt.toMillis === 'function') return d.createdAt.toMillis();
+      if (typeof d.createdAt.seconds === 'number') return d.createdAt.seconds * 1000;
+      return 0;
+    }
+
     async function loadDynamicDevotionals() {
       const feedContainer = document.getElementById('devotional-feed');
       if (!feedContainer) return;
@@ -262,30 +270,128 @@
           return;
         }
 
-        const allDevotionals = snapshot.docs.map(docSnap => docSnap.data());
+        const allDevotionals = snapshot.docs
+          .map(docSnap => docSnap.data())
+          .sort((a, b) => {
+            const dateA = a.date || '';
+            const dateB = b.date || '';
+            if (dateA !== dateB) return dateB.localeCompare(dateA);
+            return getCreatedAtMillis(b) - getCreatedAtMillis(a);
+          });
+
         const todayStr = getLocalTodayString();
-
-        const todaysDevotionals = allDevotionals.filter(d => d.date === todayStr);
-        let featuredList = [];
-        let previousList = [];
-
-        if (todaysDevotionals.length > 0) {
-          featuredList = todaysDevotionals;
-          previousList = allDevotionals.filter(d => d.date !== todayStr);
-        } else {
-          featuredList = [allDevotionals[0]];
-          previousList = allDevotionals.slice(1);
-        }
+        const latestDevotional = allDevotionals[0];
+        const previousList = allDevotionals.slice(1);
 
         feedContainer.innerHTML = '';
 
-        featuredList.forEach(d => {
-          const badgeLabel = d.date === todayStr
-            ? `Today • ${d.date}`
-            : `Latest • ${d.date || 'Daily Reading'}`;
-          feedContainer.appendChild(createDevotionalCard(d, badgeLabel));
+        // Top Toolbar: Status on left, Jump to Date on right
+        const toolbar = document.createElement('div');
+        toolbar.style.display = 'flex';
+        toolbar.style.justifyContent = 'space-between';
+        toolbar.style.alignItems = 'center';
+        toolbar.style.flexWrap = 'wrap';
+        toolbar.style.gap = '10px';
+        toolbar.style.marginBottom = '1rem';
+
+        const viewStatus = document.createElement('span');
+        viewStatus.id = 'devo-view-status';
+        viewStatus.style.fontSize = '0.9rem';
+        viewStatus.style.fontWeight = '600';
+        viewStatus.style.color = 'var(--text-muted)';
+        viewStatus.textContent = `Showing Latest Devotional (${latestDevotional.date || 'Daily Reading'})`;
+
+        const jumpGroup = document.createElement('div');
+        jumpGroup.style.display = 'flex';
+        jumpGroup.style.alignItems = 'center';
+        jumpGroup.style.gap = '8px';
+        jumpGroup.style.marginLeft = 'auto';
+
+        const jumpLabel = document.createElement('label');
+        jumpLabel.htmlFor = 'jump-to-date-input';
+        jumpLabel.textContent = 'Jump to Date:';
+        jumpLabel.style.fontSize = '0.88rem';
+        jumpLabel.style.fontWeight = '700';
+
+        const dateInput = document.createElement('input');
+        dateInput.type = 'date';
+        dateInput.id = 'jump-to-date-input';
+        dateInput.value = latestDevotional.date || todayStr;
+        dateInput.style.padding = '6px 10px';
+        dateInput.style.border = '1px solid var(--border-color)';
+        dateInput.style.borderRadius = '8px';
+        dateInput.style.background = '#FFFFFF';
+        dateInput.style.fontSize = '0.88rem';
+
+        const resetBtn = document.createElement('button');
+        resetBtn.type = 'button';
+        resetBtn.id = 'reset-latest-devo-btn';
+        resetBtn.className = 'btn-secondary';
+        resetBtn.textContent = 'Latest';
+        resetBtn.style.display = 'none';
+        resetBtn.style.padding = '6px 12px';
+        resetBtn.style.color = 'var(--text-main)';
+        resetBtn.style.borderColor = 'var(--border-color)';
+        resetBtn.style.background = '#FFFFFF';
+
+        jumpGroup.appendChild(jumpLabel);
+        jumpGroup.appendChild(dateInput);
+        jumpGroup.appendChild(resetBtn);
+
+        toolbar.appendChild(viewStatus);
+        toolbar.appendChild(jumpGroup);
+        feedContainer.appendChild(toolbar);
+
+        // Main Display Container (single latest devotional by default)
+        const activeDevoContainer = document.createElement('div');
+        activeDevoContainer.id = 'active-devotional-container';
+        feedContainer.appendChild(activeDevoContainer);
+
+        function renderLatestView() {
+          activeDevoContainer.innerHTML = '';
+          resetBtn.style.display = 'none';
+          viewStatus.textContent = `Showing Latest Devotional (${latestDevotional.date || 'Daily Reading'})`;
+          const badgeLabel = latestDevotional.date === todayStr
+            ? `Latest Today • ${latestDevotional.date}`
+            : `Latest • ${latestDevotional.date || 'Daily Reading'}`;
+          activeDevoContainer.appendChild(createDevotionalCard(latestDevotional, badgeLabel));
+        }
+
+        function renderDateView(selectedDate) {
+          if (!selectedDate) {
+            renderLatestView();
+            return;
+          }
+          const matches = allDevotionals.filter(d => d.date === selectedDate);
+          activeDevoContainer.innerHTML = '';
+          resetBtn.style.display = 'inline-block';
+          viewStatus.textContent = `Jumped to Date: ${selectedDate}`;
+
+          if (matches.length === 0) {
+            activeDevoContainer.innerHTML = `
+              <div class="card">
+                <p>No devotional found for <strong>${selectedDate}</strong>.</p>
+              </div>`;
+            return;
+          }
+
+          matches.forEach(d => {
+            activeDevoContainer.appendChild(createDevotionalCard(d, `Date • ${d.date}`));
+          });
+        }
+
+        dateInput.addEventListener('change', () => {
+          renderDateView(dateInput.value);
         });
 
+        resetBtn.addEventListener('click', () => {
+          dateInput.value = latestDevotional.date || todayStr;
+          renderLatestView();
+        });
+
+        renderLatestView();
+
+        // Previous Devotionals Toggle
         if (previousList.length > 0) {
           const toggleWrapper = document.createElement('div');
           toggleWrapper.style.textAlign = 'center';
