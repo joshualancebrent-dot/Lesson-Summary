@@ -233,6 +233,94 @@
     }
 
     loadDynamicLessons();
+
+    type="module">
+    import { db } from './material/lessons-data.js';
+    import { collection, getDocs, query, orderBy } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+
+    async function loadDynamicLessons() {
+      const listContainer = document.getElementById('sabbath-school-list');
+
+      try {
+        const querySnapshot = await getDocs(collection(db, "lessons"));
+
+        if (querySnapshot.empty) {
+          listContainer.innerHTML = `
+            <li class="lesson-card-item">
+              <a href="material/lesson.html?id=Lesson%2013" class="lesson-card-link">
+                <span class="lesson-card-title">Grace, Love, and Fellowship</span>
+                <span class="lesson-card-ref">2 Cor. 13:14</span>
+              </a>
+            </li>`;
+          return;
+        }
+
+        listContainer.innerHTML = '';
+
+        querySnapshot.forEach((docSnap) => {
+          const lessonId = docSnap.id;
+          const lesson = docSnap.data();
+
+          const li = document.createElement('li');
+          li.className = 'lesson-card-item';
+          li.innerHTML = `
+            <a href="material/lesson.html?id=${encodeURIComponent(lessonId)}" class="lesson-card-link">
+              <span class="lesson-card-title">${lesson.title || 'Untitled Lesson'}</span>
+              <span class="lesson-card-ref">${lesson.scriptureRef || ''}</span>
+            </a>
+          `;
+          listContainer.appendChild(li);
+        });
+
+      } catch (error) {
+        console.error("Error loading dynamic lessons:", error);
+        listContainer.innerHTML = `<p style="padding: 10px; color: red;">Failed to load dynamic lessons from database.</p>`;
+      }
+    }
+
+    async function loadDynamicDevotionals() {
+      const feedContainer = document.getElementById('devotional-feed');
+      if (!feedContainer) return;
+
+      try {
+        const q = query(collection(db, "devotionals"), orderBy("date", "desc"));
+        const snapshot = await getDocs(q);
+
+        if (snapshot.empty) {
+          feedContainer.innerHTML = `<div class="card"><p>No devotionals published yet.</p></div>`;
+          return;
+        }
+
+        feedContainer.innerHTML = '';
+
+        snapshot.forEach((docSnap) => {
+          const d = docSnap.data();
+          const langBlock = d.en || {};
+          const card = document.createElement('div');
+          card.className = 'card';
+          card.style.textAlign = 'left';
+          card.innerHTML = `
+            <span class="badge">${d.date || 'Daily Reading'}</span>
+            <h3 style="margin: 0.75rem 0 0.25rem 0;">${langBlock.title || 'Untitled Devotional'}</h3>
+            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">By ${d.authorName || 'DayBreak Contributor'}</p>
+            <blockquote style="background: var(--bg-main); border-left: 4px solid var(--accent); padding: 0.85rem 1rem; margin-bottom: 1rem; font-style: italic;">
+              <strong>${d.scriptureRef || ''}</strong>${d.scriptureQuote ? ` — "${d.scriptureQuote}"` : ''}
+            </blockquote>
+            <p style="white-space: pre-wrap; margin-bottom: 1.25rem;">${langBlock.reflection || ''}</p>
+            <div style="background: #F1F5F9; padding: 0.85rem 1rem; border-radius: 8px; font-size: 0.92rem;">
+              <strong>Prayer:</strong> ${langBlock.prayer || ''}
+            </div>
+          `;
+          feedContainer.appendChild(card);
+        });
+      } catch (error) {
+        console.error("Error loading dynamic devotionals:", error);
+        feedContainer.innerHTML = `<div class="card"><p style="color: red;">Failed to load devotionals from database.</p></div>`;
+      }
+    }
+
+    loadDynamicLessons();
+    loadDynamicDevotionals();
   </script>
 </body>
 </html>
