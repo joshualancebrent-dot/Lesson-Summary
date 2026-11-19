@@ -371,7 +371,15 @@
   </div>
 
   <script>
-    document.getElementById('devoDate').valueAsDate = new Date();
+    function getLocalTodayValue() {
+      const now = new Date();
+      const year = now.getFullYear();
+      const month = String(now.getMonth() + 1).padStart(2, '0');
+      const day = String(now.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    }
+
+    document.getElementById('devoDate').value = getLocalTodayValue();
 
     ['en', 'tl', 'ceb', 'ilo', 'war'].forEach(lang => {
       const container = document.getElementById(`${lang}-points-container`);
@@ -529,7 +537,7 @@
         }
         showStatus("success", "Devotional saved to the devotionals collection.");
         e.target.reset();
-        document.getElementById('devoDate').valueAsDate = new Date();
+        document.getElementById('devoDate').value = getLocalTodayValue();
       } catch (err) {
         console.error("Devotional Save Error:", err);
         showStatus("error", `Error saving devotional: ${err.message}`);
