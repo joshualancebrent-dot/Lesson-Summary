@@ -1,21 +1,21 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-import { 
-  getAuth, 
-  onAuthStateChanged, 
-  signOut, 
-  signInWithEmailAndPassword, 
+import {
+  getAuth,
+  onAuthStateChanged,
+  signOut,
+  signInWithEmailAndPassword,
   createUserWithEmailAndPassword,
-  signInWithPopup, 
-  GoogleAuthProvider, 
-  FacebookAuthProvider 
+  signInWithPopup,
+  GoogleAuthProvider,
+  FacebookAuthProvider
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-import { 
-  getFirestore, 
-  collection, 
-  addDoc, 
-  onSnapshot, 
-  query, 
-  orderBy, 
+import {
+  getFirestore,
+  collection,
+  addDoc,
+  onSnapshot,
+  query,
+  orderBy,
   serverTimestamp,
   doc,
   setDoc
@@ -37,18 +37,20 @@ window.switchTab = function(targetId) {
   const currentActive = document.querySelector('.tab-panel.active');
   const targetPanel = document.getElementById(targetId);
   const tabs = document.querySelectorAll('.nav-tab');
+  const sectionLabel = document.getElementById('mobile-section-label');
 
-  if (!targetPanel || currentActive === targetPanel) return;
+  if (!targetPanel) return;
 
   tabs.forEach(tab => {
     if (tab.getAttribute('data-target') === targetId) {
       tab.classList.add('active');
+      if (sectionLabel) sectionLabel.textContent = tab.textContent;
     } else {
       tab.classList.remove('active');
     }
   });
 
-  if (currentActive) {
+  if (currentActive && currentActive !== targetPanel) {
     currentActive.classList.remove('active');
   }
 
@@ -342,7 +344,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // Global Utilities (Outside DOMContentLoaded)
 window.copyLessonText = function() {
   const content = document.getElementById("lesson-content") || document.getElementById("ministry-content");
-  
+
   if (!content) {
     console.error("Could not find the content to copy.");
     return;
@@ -359,7 +361,7 @@ window.copyLessonText = function() {
   if (navigator.clipboard && window.isSecureContext) {
     navigator.clipboard.writeText(textToCopy)
       .then(showSuccess)
-      .catch(() => fallbackCopy(textToCopy)); 
+      .catch(() => fallbackCopy(textToCopy));
   } else {
     fallbackCopy(textToCopy);
   }
@@ -370,11 +372,11 @@ window.copyLessonText = function() {
     textArea.style.position = "fixed";
     textArea.style.top = "0";
     textArea.style.left = "0";
-    textArea.style.opacity = "0"; 
+    textArea.style.opacity = "0";
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
-    
+
     try {
       document.execCommand('copy');
       showSuccess();
@@ -387,13 +389,13 @@ window.copyLessonText = function() {
   function showSuccess() {
     const btn = document.getElementById("copy-btn");
     if (!btn) return;
-    const originalText = "📋 Copy Text"; 
+    const originalText = "📋 Copy Text";
     btn.innerHTML = "✅ Copied!";
-    btn.style.backgroundColor = "#10B981"; 
-    
+    btn.style.backgroundColor = "#10B981";
+
     setTimeout(() => {
       btn.innerHTML = originalText;
-      btn.style.backgroundColor = ""; 
+      btn.style.backgroundColor = "";
     }, 2000);
   }
 };
