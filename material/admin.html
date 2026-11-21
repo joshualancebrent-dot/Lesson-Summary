@@ -3,58 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Content Creator - DayBreak Admin</title>
+  <title>Creator Studio Access - DayBreak</title>
   <link rel="stylesheet" href="../style.css">
   <style>
-    .admin-container { max-width: 900px; margin: 40px auto; padding: 20px; }
-    .top-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 16px; }
-    .admin-gate-banner {
-      padding: 12px 16px;
-      border-radius: 8px;
-      margin-bottom: 18px;
-      font-size: 0.92rem;
-      font-weight: 600;
-      border: 1px solid #fecaca;
-      background: #fef2f2;
-      color: #991b1b;
-    }
-    .admin-gate-banner.authorized {
-      border-color: #bbf7d0;
-      background: #f0fdf4;
-      color: #166534;
-    }
-    .creator-locked {
-      opacity: 0.55;
-      pointer-events: none;
-      user-select: none;
-    }
-    .section-selector {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 24px;
-    }
-    .section-choice-btn {
-      padding: 14px 18px;
-      border: 2px solid #cbd5e1;
-      background: #f8fafc;
-      color: #0f172a;
-      border-radius: 10px;
-      font-weight: 700;
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .section-choice-btn.active {
-      border-color: #2563eb;
-      background: #eff6ff;
-      color: #1d4ed8;
-    }
-    .creator-mode { display: none; }
-    .creator-mode.active { display: block; }
+    .admin-container { max-width: 900px; margin: 40px auto; padding: 24px; }
+    .top-bar { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+    .gate-card { max-width: 540px; margin: 24px auto; padding: 24px; border: 1px solid #e2e8f0; border-radius: 12px; background: #ffffff; }
+    .mode-switch { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+    .mode-tab { padding: 10px 14px; border: 1px solid #cbd5e1; background: #f8fafc; color: #0f172a; border-radius: 8px; font-weight: 700; cursor: pointer; }
+    .mode-tab.active { background: #1e1e2d; color: #ffffff; border-color: #1e1e2d; }
     .form-group { margin-bottom: 15px; }
     .form-group label { display: block; font-weight: bold; margin-bottom: 5px; }
-    .form-group input, .form-group textarea { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 6px; font-family: inherit; }
+    .section-selector { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 24px; }
+    .section-choice-btn { padding: 14px 18px; border: 2px solid #cbd5e1; background: #f8fafc; color: #0f172a; border-radius: 10px; font-weight: 700; font-size: 0.95rem; cursor: pointer; }
+    .section-choice-btn.active { border-color: #2563eb; background: #eff6ff; color: #1d4ed8; }
+    .creator-mode { display: none; }
+    .creator-mode.active { display: block; }
     .point-box { background: #f9f9f9; padding: 15px; border-radius: 8px; margin-bottom: 20px; border: 1px solid #ddd; }
     .tab-buttons { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #ddd; padding-bottom: 10px; flex-wrap: wrap; }
     .tab-btn { padding: 10px 20px; border: none; background: #eee; cursor: pointer; border-radius: 6px; font-weight: bold; }
@@ -64,27 +29,112 @@
     .status-msg { margin-top: 15px; padding: 12px; border-radius: 6px; display: none; font-weight: bold; }
     .status-success { background: #d4edda; color: #155724; }
     .status-error { background: #f8d7da; color: #721c24; }
+    .status-info { background: #e0f2fe; color: #075985; }
+    #studio-workspace { display: none; }
+    #studio-workspace.unlocked { display: block; }
     @media screen and (max-width: 600px) {
-      .section-selector { grid-template-columns: 1fr; }
+      .mode-switch, .section-selector { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
   <div class="admin-container card">
     <div class="top-bar">
-      <h2>DayBreak Content Creator</h2>
-      <div style="display: flex; gap: 8px; align-items: center;">
+      <h2>DayBreak Creator Studio</h2>
+      <div style="display: flex; gap: 10px; align-items: center;">
         <a href="../index.html" style="text-decoration: none; font-weight: 600; color: #2563eb;">Back to Home</a>
-        <button type="button" id="admin-auth-btn" class="btn-secondary" style="padding: 8px 14px;">Sign In with Google</button>
+        <button type="button" id="sign-out-btn" class="btn-secondary" style="display: none; padding: 8px 14px;">Sign Out</button>
       </div>
     </div>
 
-    <div id="admin-gate-banner" class="admin-gate-banner">
-      Admin sign-in required: Please sign in with an authorized admin account to publish or edit content.
+    <!-- ========================================== -->
+    <!-- ACCESS GATE: ADMIN LOGIN OR APPLY          -->
+    <!-- ========================================== -->
+    <div id="access-gate" class="gate-card">
+      <div class="mode-switch" role="tablist">
+        <button type="button" id="tab-login-view" class="mode-tab active" onclick="switchGateView('login')">
+          Admin / Creator Login
+        </button>
+        <button type="button" id="tab-apply-view" class="mode-tab" onclick="switchGateView('apply')">
+          Apply to Be a Creator
+        </button>
+      </div>
+
+      <!-- Existing Account Login -->
+      <div id="gate-login-panel">
+        <h3 style="margin-bottom: 6px;">Sign In to Creator Studio</h3>
+        <p style="font-size: 0.9rem; color: #475569; margin-bottom: 16px;">
+          Use your approved admin or creator account to publish devotionals and Sabbath School lessons.
+        </p>
+
+        <form id="admin-login-form" novalidate>
+          <div class="form-group">
+            <label for="adminEmail">Email Address</label>
+            <input type="email" id="adminEmail" placeholder="creator@example.com">
+          </div>
+          <div class="form-group">
+            <label for="adminPassword">Password</label>
+            <input type="password" id="adminPassword" placeholder="••••••••">
+          </div>
+          <button type="submit" id="admin-email-login-btn" class="btn-primary" style="width: 100%;">
+            Sign In with Email
+          </button>
+        </form>
+
+        <div style="margin: 14px 0; text-align: center; font-size: 0.85rem; color: #64748b;">or</div>
+
+        <button type="button" id="admin-google-btn" class="btn-secondary" style="width: 100%;">
+          Continue with Google
+        </button>
+      </div>
+
+      <!-- Creator Application Form -->
+      <div id="gate-apply-panel" style="display: none;">
+        <h3 style="margin-bottom: 6px;">Apply for a Creator Account</h3>
+        <p style="font-size: 0.9rem; color: #475569; margin-bottom: 16px;">
+          Don't have creator access yet? Submit your details below and an admin will review your request.
+        </p>
+
+        <form id="creator-apply-form" novalidate>
+          <div class="form-group">
+            <label for="applyName">Full Name</label>
+            <input type="text" id="applyName" placeholder="Your full name">
+          </div>
+          <div class="form-group">
+            <label for="applyEmail">Email Address</label>
+            <input type="email" id="applyEmail" placeholder="you@example.com">
+          </div>
+          <div class="form-group">
+            <label for="applyTrack">Content Focus</label>
+            <select id="applyTrack">
+              <option value="both">Daily Devotionals & Sabbath School Lessons</option>
+              <option value="devotional">Daily Devotionals</option>
+              <option value="sabbath">Sabbath School Lessons</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="applyLanguages">Preferred Languages</label>
+            <input type="text" id="applyLanguages" placeholder="e.g., English, Tagalog, Cebuano">
+          </div>
+          <div class="form-group">
+            <label for="applyNotes">Ministry / Writing Background</label>
+            <textarea id="applyNotes" rows="3" placeholder="Share a brief note about your experience or local church/group."></textarea>
+          </div>
+          <button type="submit" id="apply-submit-btn" class="btn-primary" style="width: 100%;">
+            Submit Creator Application
+          </button>
+        </form>
+      </div>
+
+      <div id="gate-status" class="status-msg"></div>
     </div>
 
-    <div id="creator-workspace" class="creator-locked" aria-disabled="true">
-      <!-- Section Selector: Devotional vs. Sabbath School Lesson -->
+    <!-- ========================================== -->
+    <!-- UNLOCKED CREATOR STUDIO WORKSPACE          -->
+    <!-- ========================================== -->
+    <div id="studio-workspace">
+      <p id="studio-user-banner" style="margin-bottom: 18px; font-size: 0.95rem; color: #334155;"></p>
+
       <div class="form-group">
         <label>Select Where to Input Content:</label>
         <div class="section-selector" role="group" aria-label="Content Section Selector">
@@ -97,9 +147,7 @@
         </div>
       </div>
 
-      <!-- ========================================== -->
-      <!-- MODE 1: DAILY DEVOTIONAL FORM              -->
-      <!-- ========================================== -->
+      <!-- MODE 1: DAILY DEVOTIONAL FORM -->
       <div id="mode-devotional" class="creator-mode active">
         <form id="devotional-form" novalidate>
           <div class="form-group">
@@ -107,7 +155,7 @@
             <input type="date" id="devoDate">
           </div>
           <div class="form-group">
-            <label for="devoId">Document ID (optional, e.g., 2026-11-19 or morning-light):</label>
+            <label for="devoId">Document ID (optional, e.g., 2026-11-21 or morning-light):</label>
             <input type="text" id="devoId" placeholder="Leave blank to auto-generate">
           </div>
           <div class="form-group">
@@ -215,9 +263,7 @@
         </form>
       </div>
 
-      <!-- ========================================== -->
-      <!-- MODE 2: SABBATH SCHOOL LESSON FORM         -->
-      <!-- ========================================== -->
+      <!-- MODE 2: SABBATH SCHOOL LESSON FORM -->
       <div id="mode-sabbath" class="creator-mode">
         <form id="lesson-form" novalidate>
           <div class="form-group">
@@ -390,21 +436,13 @@
           </button>
         </form>
       </div>
-    </div>
 
-    <div id="status-msg" class="status-msg"></div>
+      <div id="status-msg" class="status-msg"></div>
+    </div>
   </div>
 
   <script>
-    function getLocalTodayValue() {
-      const now = new Date();
-      const year = now.getFullYear();
-      const month = String(now.getMonth() + 1).padStart(2, '0');
-      const day = String(now.getDate()).padStart(2, '0');
-      return `${year}-${month}-${day}`;
-    }
-
-    document.getElementById('devoDate').value = getLocalTodayValue();
+    document.getElementById('devoDate').valueAsDate = new Date();
 
     ['en', 'tl', 'ceb', 'ilo', 'war'].forEach(lang => {
       const container = document.getElementById(`${lang}-points-container`);
@@ -424,6 +462,15 @@
         }
       }
     });
+
+    function switchGateView(view) {
+      const isLogin = view === 'login';
+      document.getElementById('tab-login-view').classList.toggle('active', isLogin);
+      document.getElementById('tab-apply-view').classList.toggle('active', !isLogin);
+      document.getElementById('gate-login-panel').style.display = isLogin ? 'block' : 'none';
+      document.getElementById('gate-apply-panel').style.display = !isLogin ? 'block' : 'none';
+      document.getElementById('gate-status').style.display = 'none';
+    }
 
     function selectCreatorSection(mode) {
       const isDevo = mode === 'devotional';
@@ -445,8 +492,23 @@
 
   <script type="module">
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
-    import { getAuth, onAuthStateChanged, signInWithPopup, GoogleAuthProvider, signOut } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
-    import { getFirestore, collection, doc, setDoc, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
+    import {
+      getAuth,
+      onAuthStateChanged,
+      signInWithEmailAndPassword,
+      signInWithPopup,
+      GoogleAuthProvider,
+      signOut
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+    import {
+      getFirestore,
+      collection,
+      doc,
+      getDoc,
+      setDoc,
+      addDoc,
+      serverTimestamp
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
     const firebaseConfig = {
       apiKey: "AIzaSyAKsH40B0E-ytvtDBp5q0cCnAcrkfsDkxg",
@@ -458,63 +520,24 @@
       measurementId: "G-8YES7NF8D"
     };
 
-    // Add authorized Firebase Authentication User UID(s) here
-    const ADMIN_UIDS = [
-      "vzTOt7hGQUfkokIbXpA9tjAVW3z2"
-    ];
-
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
 
-    const authBtn = document.getElementById('admin-auth-btn');
-    const gateBanner = document.getElementById('admin-gate-banner');
-    const workspace = document.getElementById('creator-workspace');
+    const accessGate = document.getElementById('access-gate');
+    const studioWorkspace = document.getElementById('studio-workspace');
+    const studioUserBanner = document.getElementById('studio-user-banner');
+    const signOutBtn = document.getElementById('sign-out-btn');
+    const gateStatus = document.getElementById('gate-status');
+    const statusMsg = document.getElementById('status-msg');
     const devoSubmitBtn = document.getElementById('devo-submit-btn');
     const lessonSubmitBtn = document.getElementById('lesson-submit-btn');
-    const statusMsg = document.getElementById('status-msg');
 
-    function isAuthorizedAdmin(user) {
-      return Boolean(user && ADMIN_UIDS.includes(user.uid));
+    function showGateStatus(type, message) {
+      gateStatus.className = `status-msg status-${type}`;
+      gateStatus.style.display = "block";
+      gateStatus.textContent = message;
     }
-
-    function updateAdminAccessUI(user) {
-      const allowed = isAuthorizedAdmin(user);
-      workspace.classList.toggle('creator-locked', !allowed);
-      workspace.setAttribute('aria-disabled', String(!allowed));
-      devoSubmitBtn.disabled = !allowed;
-      lessonSubmitBtn.disabled = !allowed;
-
-      if (!user) {
-        authBtn.textContent = 'Sign In with Google';
-        gateBanner.className = 'admin-gate-banner';
-        gateBanner.textContent = 'Admin sign-in required: Sign in with an authorized admin account to publish devotionals or lessons.';
-      } else if (!allowed) {
-        authBtn.textContent = 'Sign Out';
-        gateBanner.className = 'admin-gate-banner';
-        gateBanner.textContent = `Signed in as ${user.displayName || user.email} (UID: ${user.uid}), but this account is not listed as an admin.`;
-      } else {
-        authBtn.textContent = 'Sign Out';
-        gateBanner.className = 'admin-gate-banner authorized';
-        gateBanner.textContent = `Admin verified: Signed in as ${user.displayName || user.email}.`;
-      }
-    }
-
-    onAuthStateChanged(auth, (user) => {
-      updateAdminAccessUI(user);
-    });
-
-    authBtn.addEventListener('click', async () => {
-      try {
-        if (auth.currentUser) {
-          await signOut(auth);
-        } else {
-          await signInWithPopup(auth, new GoogleAuthProvider());
-        }
-      } catch (err) {
-        showStatus('error', `Sign-in error: ${err.message}`);
-      }
-    });
 
     function showStatus(type, message) {
       statusMsg.className = `status-msg status-${type}`;
@@ -522,15 +545,141 @@
       statusMsg.textContent = message;
     }
 
-    function requireAdminBeforeSubmit() {
-      const user = auth.currentUser;
-      if (!isAuthorizedAdmin(user)) {
-        updateAdminAccessUI(user);
-        showStatus("error", "Access denied: Please sign in with an authorized admin account first.");
-        return false;
+    async function checkCreatorRole(user) {
+      if (!user) return { allowed: false, role: null };
+      try {
+        const snap = await getDoc(doc(db, "creators", user.uid));
+        if (snap.exists()) {
+          const data = snap.data();
+          const role = data.role || "";
+          const active = data.active !== false && data.status !== "pending";
+          if (active && (role === "admin" || role === "creator" || data.approved === true)) {
+            return { allowed: true, role: role || "creator" };
+          }
+          return { allowed: false, role: data.status || "pending" };
+        }
+        return { allowed: false, role: null };
+      } catch (err) {
+        console.error("Error checking creator role:", err);
+        return { allowed: false, role: null, error: err.message };
       }
-      return true;
     }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        studioWorkspace.classList.remove('unlocked');
+        accessGate.style.display = 'block';
+        signOutBtn.style.display = 'none';
+        return;
+      }
+
+      signOutBtn.style.display = 'inline-block';
+      const check = await checkCreatorRole(user);
+
+      if (check.allowed) {
+        accessGate.style.display = 'none';
+        studioWorkspace.classList.add('unlocked');
+        studioUserBanner.textContent = `Signed in as ${user.displayName || user.email} (${check.role})`;
+      } else if (check.role === "pending") {
+        studioWorkspace.classList.remove('unlocked');
+        accessGate.style.display = 'block';
+        switchGateView('apply');
+        showGateStatus("info", `Your creator application for ${user.email} is currently pending admin approval.`);
+      } else {
+        studioWorkspace.classList.remove('unlocked');
+        accessGate.style.display = 'block';
+        switchGateView('apply');
+        document.getElementById('applyEmail').value = user.email || "";
+        document.getElementById('applyName').value = user.displayName || "";
+        showGateStatus(
+          "info",
+          check.error
+            ? `Could not verify creator access (${check.error}). You can still submit an application below.`
+            : `Signed in as ${user.email}, which does not have an approved creator account yet. Apply below or sign in with an approved admin account.`
+        );
+      }
+    });
+
+    signOutBtn.addEventListener('click', async () => {
+      await signOut(auth);
+      gateStatus.style.display = "none";
+    });
+
+    document.getElementById('admin-login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = document.getElementById('adminEmail').value.trim();
+      const password = document.getElementById('adminPassword').value;
+
+      if (!email || !password) {
+        showGateStatus("error", "Please enter both your email address and password.");
+        return;
+      }
+
+      try {
+        await signInWithEmailAndPassword(auth, email, password);
+      } catch (err) {
+        showGateStatus("error", `Sign-in failed: ${err.message}`);
+      }
+    });
+
+    document.getElementById('admin-google-btn').addEventListener('click', async () => {
+      try {
+        await signInWithPopup(auth, new GoogleAuthProvider());
+      } catch (err) {
+        showGateStatus("error", `Google sign-in failed: ${err.message}`);
+      }
+    });
+
+    document.getElementById('creator-apply-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fullName = document.getElementById('applyName').value.trim();
+      const email = document.getElementById('applyEmail').value.trim();
+      const track = document.getElementById('applyTrack').value;
+      const languages = document.getElementById('applyLanguages').value.trim();
+      const notes = document.getElementById('applyNotes').value.trim();
+
+      if (!fullName || !email) {
+        showGateStatus("error", "Please provide your name and email address to apply.");
+        return;
+      }
+
+      const applyBtn = document.getElementById('apply-submit-btn');
+      applyBtn.disabled = true;
+      applyBtn.textContent = "Submitting Application...";
+
+      try {
+        const currentUser = auth.currentUser;
+        await addDoc(collection(db, "creatorApplications"), {
+          fullName,
+          email,
+          track,
+          languages,
+          notes,
+          applicantUid: currentUser ? currentUser.uid : null,
+          status: "pending",
+          submittedAt: serverTimestamp()
+        });
+
+        if (currentUser) {
+          await setDoc(doc(db, "creators", currentUser.uid), {
+            email,
+            fullName,
+            role: "applicant",
+            status: "pending",
+            approved: false,
+            updatedAt: serverTimestamp()
+          }, { merge: true });
+        }
+
+        showGateStatus("success", "Application submitted. An admin will review your creator request.");
+        e.target.reset();
+      } catch (err) {
+        showGateStatus("error", `Could not submit application: ${err.message}`);
+      } finally {
+        applyBtn.disabled = false;
+        applyBtn.textContent = "Submit Creator Application";
+      }
+    });
 
     function validateFields(prefix, fields) {
       for (const field of fields) {
@@ -559,7 +708,12 @@
     document.getElementById('devotional-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       statusMsg.style.display = "none";
-      if (!requireAdminBeforeSubmit()) return;
+
+      const user = auth.currentUser;
+      if (!user) {
+        showStatus("error", "You must be signed in as an approved creator to publish.");
+        return;
+      }
 
       const valid = validateFields('devo', [
         { id: 'devoDate', label: 'Devotional Date', lang: null },
@@ -574,7 +728,6 @@
       devoSubmitBtn.disabled = true;
       devoSubmitBtn.textContent = "Publishing Devotional...";
 
-      const user = auth.currentUser;
       const customId = document.getElementById('devoId').value.trim().replace(/\//g, '-');
       const payload = {
         date: document.getElementById('devoDate').value,
@@ -599,12 +752,12 @@
         }
         showStatus("success", "Devotional saved to the devotionals collection.");
         e.target.reset();
-        document.getElementById('devoDate').value = getLocalTodayValue();
+        document.getElementById('devoDate').valueAsDate = new Date();
       } catch (err) {
         console.error("Devotional Save Error:", err);
         showStatus("error", `Error saving devotional: ${err.message}`);
       } finally {
-        devoSubmitBtn.disabled = !isAuthorizedAdmin(auth.currentUser);
+        devoSubmitBtn.disabled = false;
         devoSubmitBtn.textContent = "Publish Devotional to Database";
       }
     });
@@ -642,7 +795,12 @@
     document.getElementById('lesson-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       statusMsg.style.display = "none";
-      if (!requireAdminBeforeSubmit()) return;
+
+      const user = auth.currentUser;
+      if (!user) {
+        showStatus("error", "You must be signed in as an approved creator to save a lesson.");
+        return;
+      }
 
       const valid = validateFields('lesson', [
         { id: 'lessonId', label: 'Lesson ID', lang: null },
@@ -662,7 +820,6 @@
       lessonSubmitBtn.disabled = true;
       lessonSubmitBtn.textContent = "Saving Lesson to Database...";
 
-      const user = auth.currentUser;
       const lessonId = document.getElementById('lessonId').value.trim().replace(/\//g, '-');
       const newLesson = {
         badge: document.getElementById('badge').value.trim(),
@@ -688,7 +845,7 @@
         console.error("Lesson Save Error:", err);
         showStatus("error", `Error saving lesson: ${err.message}`);
       } finally {
-        lessonSubmitBtn.disabled = !isAuthorizedAdmin(auth.currentUser);
+        lessonSubmitBtn.disabled = false;
         lessonSubmitBtn.textContent = "Save Lesson Directly to Database";
       }
     });
