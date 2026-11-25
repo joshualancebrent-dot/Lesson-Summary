@@ -36,6 +36,12 @@
       .mode-switch, .section-selector { grid-template-columns: 1fr; }
     }
   </style>
+
+  <!-- EmailJS SDK -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    emailjs.init("YOUR_PUBLIC_KEY");
+  </script>
 </head>
 <body>
   <div class="admin-container card">
@@ -133,6 +139,14 @@
     <!-- UNLOCKED CREATOR STUDIO WORKSPACE          -->
     <!-- ========================================== -->
     <div id="studio-workspace">
+      <!-- ADMIN ONLY: PENDING APPLICATIONS -->
+      <div id="admin-applications-panel" style="display: none; background: #f8fafc; border: 2px solid #cbd5e1; border-radius: 10px; padding: 16px; margin-bottom: 24px;">
+        <h3 style="margin-top: 0; color: #0f172a;">Pending Creator Applications</h3>
+        <div id="applications-list" style="display: flex; flex-direction: column; gap: 12px;">
+          <p style="color: #64748b; font-size: 0.9rem;">Loading applications...</p>
+        </div>
+      </div>
+
       <p id="studio-user-banner" style="margin-bottom: 18px; font-size: 0.95rem; color: #334155;"></p>
 
       <div class="form-group">
@@ -505,8 +519,12 @@
       collection,
       doc,
       getDoc,
+      getDocs,
       setDoc,
       addDoc,
+      updateDoc,
+      query,
+      where,
       serverTimestamp
     } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
@@ -523,6 +541,10 @@
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const db = getFirestore(app);
+
+    const ADMIN_UID = 'vzTOt7hGQUfkokIbXpA9tjAVW3z2';
+    const EMAILJS_SERVICE_ID = 'YOUR_SERVICE_ID';
+    const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
 
     const accessGate = document.getElementById('access-gate');
     const studioWorkspace = document.getElementById('studio-workspace');
@@ -545,8 +567,110 @@
       statusMsg.textContent = message;
     }
 
+    async function loadPendingApplications() {
+      const adminPanel = document.getElementById('admin-applications-panel');
+      const listContainer = document.getElementById('applications-list');
+
+      if (auth.currentUser?.uid !== ADMIN_UID) {
+        adminPanel.style.display = 'none';
+        return;
+      }
+
+      adminPanel.style.display = 'block';
+      try {
+        const q = query(collection(db, "creatorApplications"), where("status", "==", "pending"));
+        const snapshot = await getDocs(q);
+
+        if (snapshot.empty) {
+          listContainer.innerHTML = '<p style="color: #64748b; font-size: 0.9rem;">No pending applications right now.</p>';
+          return;
+        }
+
+        listContainer.innerHTML = '';
+        snapshot.forEach((appDoc) => {
+          const data = appDoc.data();
+          const card = document.createElement('div');
+          card.style.cssText = "background: white; padding: 12px; border-radius: 8px; border: 1px solid #e2e8f0; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;";
+
+          const infoDiv = document.createElement('div');
+          const nameStrong = document.createElement('strong');
+          nameStrong.textContent = data.fullName || 'Unnamed Applicant';
+          infoDiv.appendChild(nameStrong);
+          infoDiv.append(` (${data.email || 'No email'})`);
+          infoDiv.appendChild(document.createElement('br'));
+
+          const metaSmall = document.createElement('small');
+          metaSmall.style.color = '#475569';
+          metaSmall.textContent = `Focus: ${data.track || 'both'} | Languages: ${data.languages || 'Any'}`;
+          infoDiv.appendChild(metaSmall);
+          infoDiv.appendChild(document.createElement('br'));
+
+          const notesSmall = document.createElement('small');
+          notesSmall.style.color = '#64748b';
+          notesSmall.textContent = `Note: ${data.notes || 'None'}`;
+          infoDiv.appendChild(notesSmall);
+
+          const approveBtn = document.createElement('button');
+          approveBtn.type = 'button';
+          approveBtn.className = 'btn-primary approve-btn';
+          approveBtn.style.cssText = 'padding: 8px 14px; font-size: 0.85rem;';
+          approveBtn.textContent = 'Approve & Send Email';
+
+          approveBtn.addEventListener('click', async () => {
+            approveBtn.disabled = true;
+            approveBtn.textContent = "Approving...";
+
+            try {
+              await updateDoc(doc(db, "creatorApplications", appDoc.id), {
+                status: "approved",
+                approvedAt: serverTimestamp()
+              });
+
+              if (data.applicantUid) {
+                await setDoc(doc(db, "creators", data.applicantUid), {
+                  email: data.email,
+                  fullName: data.fullName,
+                  role: "creator",
+                  status: "approved",
+                  approved: true,
+                  active: true,
+                  updatedAt: serverTimestamp()
+                }, { merge: true });
+              }
+
+              await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                to_name: data.fullName,
+                to_email: data.email
+              });
+
+              card.remove();
+              if (!listContainer.children.length) {
+                listContainer.innerHTML = '<p style="color: #64748b; font-size: 0.9rem;">No pending applications right now.</p>';
+              }
+              showStatus("success", `Approved ${data.fullName} and automatically sent login email to ${data.email}.`);
+            } catch (err) {
+              console.error("Approval error:", err);
+              approveBtn.disabled = false;
+              approveBtn.textContent = "Approve & Send Email";
+              showStatus("error", `Error: ${err.message || err.text}`);
+            }
+          });
+
+          card.appendChild(infoDiv);
+          card.appendChild(approveBtn);
+          listContainer.appendChild(card);
+        });
+      } catch (err) {
+        console.error("Failed to load applications:", err);
+        listContainer.innerHTML = `<p style="color: #721c24; font-size: 0.9rem;">Error loading applications: ${err.message}</p>`;
+      }
+    }
+
     async function checkCreatorRole(user) {
       if (!user) return { allowed: false, role: null };
+      if (user.uid === ADMIN_UID) {
+        return { allowed: true, role: "admin" };
+      }
       try {
         const snap = await getDoc(doc(db, "creators", user.uid));
         if (snap.exists()) {
@@ -568,6 +692,7 @@
     onAuthStateChanged(auth, async (user) => {
       if (!user) {
         studioWorkspace.classList.remove('unlocked');
+        document.getElementById('admin-applications-panel').style.display = 'none';
         accessGate.style.display = 'block';
         signOutBtn.style.display = 'none';
         return;
@@ -580,6 +705,7 @@
         accessGate.style.display = 'none';
         studioWorkspace.classList.add('unlocked');
         studioUserBanner.textContent = `Signed in as ${user.displayName || user.email} (${check.role})`;
+        loadPendingApplications();
       } else if (check.role === "pending") {
         studioWorkspace.classList.remove('unlocked');
         accessGate.style.display = 'block';
